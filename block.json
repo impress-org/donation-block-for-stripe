@@ -1,0 +1,17 @@
+{
+	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "givewp/donation-form-block",
+	"version": "0.1.0",
+	"title": "Donation Form Block for Stripe",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "donation-form-block",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}
