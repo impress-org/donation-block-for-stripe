@@ -3,7 +3,8 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-import { registerBlockType } from '@wordpress/blocks';
+import {registerBlockType} from '@wordpress/blocks';
+import {__} from '@wordpress/i18n';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -18,7 +19,10 @@ import './style.scss';
  * Internal dependencies
  */
 import Edit from './edit';
-import save from './save';
+
+import DonationForm from './donationForm';
+import domReady from '@wordpress/dom-ready';
+import {render} from '@wordpress/element';
 
 /**
  * Register the Block.
@@ -26,6 +30,9 @@ import save from './save';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType('givewp/donation-form-block', {
+
+	title: __('Donation Form Block', 'donation-form-block'),
+
 	/**
 	 * @see ./edit.js
 	 */
@@ -34,5 +41,26 @@ registerBlockType('givewp/donation-form-block', {
 	/**
 	 * @see ./save.js
 	 */
-	save,
+	save: () => {
+		return null;
+	}
+
+});
+
+domReady(function () {
+
+	// Don't run when Gutenberg / Block editor is active.
+	if (document.body.classList.contains('block-editor-page')) {
+		return;
+	}
+
+	const blockLauncherElement = document.querySelector('#root-donation-block');
+	const attributes = blockLauncherElement.dataset;
+
+	if (blockLauncherElement) {
+		render(
+			<DonationForm attributes={attributes}/>,
+			blockLauncherElement
+		);
+	}
 });

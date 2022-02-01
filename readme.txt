@@ -1,8 +1,8 @@
 === Donation Blocks for Stripe by GiveWP ===
-Contributors:      dlocc, givewp
+Contributors:      dlocc, jasontheadams, givewp
 Tags:              block
 Tested up to:      5.9.0
-Stable tag:        0.1.0
+Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,5 +38,5 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
-= 0.1.0 =
+= 1.0.0 =
 * Initial Release. Yippee!

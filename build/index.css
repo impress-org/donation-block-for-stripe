@@ -1,1 +1,32 @@
-.wp-block-create-block-gutenpride{border:1px dotted red}
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/editor.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.dfb-media-uploader {
+  width: 200px;
+}
+
+.dfb-replace-image-btn {
+  margin-right: 10px;
+}
+
+.dfb-background-btns {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.dfb-label {
+  margin: 0 0 10px;
+}
+
+.dfb-help-text {
+  font-size: 12px;
+  font-style: normal;
+  color: #757575;
+}
+
+/*# sourceMappingURL=index.css.map*/

@@ -16,9 +16,14 @@
 	"dependencies": {
 		"@wordpress/block-editor": "^8.0.13",
 		"@wordpress/blocks": "^11.1.5",
-		"@wordpress/i18n": "^4.2.4"
+		"@wordpress/dom-ready": "^3.3.0",
+		"@wordpress/i18n": "^4.2.4",
+		"classnames": "^2.3.1"
 	},
 	"devDependencies": {
+		"@wordpress/components": "^19.3.0",
+		"@wordpress/data": "^6.2.0",
+		"@wordpress/element": "^4.1.0",
 		"@wordpress/scripts": "^19.2.3"
 	}
 }

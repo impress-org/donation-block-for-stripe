@@ -1,17 +1,52 @@
 {
-	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "givewp/donation-form-block",
-	"version": "0.1.0",
-	"title": "Donation Form Block for Stripe",
-	"category": "widgets",
-	"icon": "smiley",
-	"description": "A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.",
-	"supports": {
-		"html": false
+  "$schema": "https://json.schemastore.org/block.json",
+  "apiVersion": 2,
+  "name": "givewp/donation-form-block",
+  "version": "1.0.0",
+  "title": "Donation Form Block for Stripe",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.",
+  "supports": {
+	"html": false
+  },
+  "attributes": {
+	"backgroundId": {
+	  "type": "integer",
+	  "default": 0
 	},
-	"textdomain": "donation-form-block",
-	"editorScript": "file:./build/index.js",
-	"editorStyle": "file:./build/index.css",
-	"style": "file:./build/style-index.css"
+	"backgroundUrl": {
+	  "type": "string",
+	  "default": ""
+	},
+	"introHeading": {
+	  "type": "string",
+	  "default": "How much would you like to donate today?"
+	},
+	"introSubheading": {
+	  "type": "string",
+	  "default": "All donations directly impact our cause. Any support is appreciated."
+	},
+	"fieldsHeading": {
+	  "type": "string",
+	  "default": "Who’s giving today?"
+	},
+	"fieldsSubheading": {
+	  "type": "string",
+	  "default": "This information is never shared with anyone outside of our organization."
+	},
+	"preview": {
+	  "type" : "boolean",
+	  "default": false
+	}
+  },
+  "example": {
+	"attributes": {
+	  "preview": true
+	}
+  },
+  "textdomain": "donation-form-block",
+  "editorScript": "file:./build/index.js",
+  "editorStyle": "file:./build/index.css",
+  "style": "file:./build/style-index.css"
 }

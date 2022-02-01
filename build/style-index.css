@@ -1,1 +1,75 @@
-.wp-block-create-block-gutenpride{background-color:#21759b;color:#fff;padding:2px}
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/style.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.donation-form {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-width: 650px;
+  margin: 1rem auto;
+  padding: 0;
+}
+.donation-form p {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #444;
+}
+.donation-form .donation-form-header {
+  background-position: center;
+  background-size: cover;
+  height: 215px;
+  width: 100%;
+  border-radius: 7px 7px 0 0;
+}
+.donation-form-inner {
+  padding: 2rem;
+}
+
+.donation-form-fieldset-intro h2, .donation-form-fieldset-intro h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 1rem;
+  padding: 0 0 1rem;
+  border-bottom: 1px solid #DDD;
+}
+
+.donation-form-field-amount {
+  width: 100%;
+}
+
+.donation-form-field-row {
+  margin: 0 0 1rem;
+}
+.donation-form-field-row:last-child {
+  margin-bottom: 0;
+}
+
+.donation-form-amount-btns {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  grid-auto-rows: minmax(60px, auto);
+}
+.donation-form-amount-btns > input {
+  border-radius: 6px;
+}
+
+.donation-form-fields-wrap {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[2];
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  grid-auto-rows: minmax(40px, auto);
+}
+
+/*# sourceMappingURL=style-index.css.map*/
