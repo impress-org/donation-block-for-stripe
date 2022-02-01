@@ -9,6 +9,7 @@ import './style.scss';
 import {useEffect, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
+import CurrencyInput from 'react-currency-input-field';
 
 export default function DonationForm(props) {
 
@@ -29,10 +30,12 @@ export default function DonationForm(props) {
 
 					<form>
 						<div className="donation-form-field-row">
-							<input
-								className={'donation-form-field-amount'}
-								type={'text'}
-								placeholder={'$25'}
+							<CurrencyInput
+								id="input-example"
+								name="input-name"
+								defaultValue={1000}
+								decimalsLimit={2}
+								onValueChange={(value, name) => console.log(value, name)}
 							/>
 						</div>
 						<div className="donation-form-field-row donation-form-amount-btns">

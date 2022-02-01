@@ -54,13 +54,15 @@ domReady(function () {
 		return;
 	}
 
-	const blockLauncherElement = document.querySelector('#root-donation-block');
-	const attributes = blockLauncherElement.dataset;
+	const donationForms = document.querySelectorAll('.root-donation-block');
 
-	if (blockLauncherElement) {
+	donationForms.forEach(donationForm => {
+		const attributes = donationForm.dataset;
 		render(
 			<DonationForm attributes={attributes}/>,
-			blockLauncherElement
+			donationForm
 		);
-	}
+	});
+
+
 });

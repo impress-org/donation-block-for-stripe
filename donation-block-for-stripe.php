@@ -14,7 +14,7 @@
  */
 
 
-define("DONATION_BLOCK_SCRIPT_ASSET", require(plugin_dir_path(__FILE__) . 'build/index.asset.php'));
+define('DONATION_BLOCK_SCRIPT_ASSET', require(plugin_dir_path(__FILE__) . 'build/index.asset.php'));
 
 /**
  * @return void
@@ -49,15 +49,13 @@ add_action('init', 'create_donation_form_block_init');
  */
 function blocks_for_github_localize_scripts()
 {
-	$return = wp_localize_script(
+	wp_localize_script(
 			'givewp-donation-form-block-editor-script',
 			'dfbPreview',
 			array(
 					'profile_preview' => plugin_dir_url(__FILE__) . 'src/images/donation-form-preview.jpg',
 			)
 	);
-
-	error_log( print_r( $return . PHP_EOL, true ), 3, './debug_custom.log' );
 }
 
 add_action('admin_enqueue_scripts', 'blocks_for_github_localize_scripts');
@@ -76,7 +74,7 @@ function donation_block_for_stripe_render($attributes)
 
 	ob_start(); ?>
 
-	<div id="root-donation-block"
+	<div class="root-donation-block"
 			<?php
 			// Loop through and set attributes per block.
 			foreach ($attributes as $key => $value) : ?>

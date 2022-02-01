@@ -18,7 +18,8 @@
 		"@wordpress/blocks": "^11.1.5",
 		"@wordpress/dom-ready": "^3.3.0",
 		"@wordpress/i18n": "^4.2.4",
-		"classnames": "^2.3.1"
+		"classnames": "^2.3.1",
+		"react-currency-input-field": "^3.6.4"
 	},
 	"devDependencies": {
 		"@wordpress/components": "^19.3.0",
