@@ -10,11 +10,22 @@ import {useEffect, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
+import {dispatch, useSelect} from '@wordpress/data';
 
 export default function DonationForm(props) {
 
+	const [donationAmount, setDonationAmount] = useState(25);
+
+	const updateDonationAmount = (amount) => {
+		setDonationAmount(amount);
+	};
+
+	let backgroundColor = {
+		background: props.attributes.color
+	};
+
 	return (
-		<div className={'donation-form'}>
+		<div id={'donation-form-block'} className={cx('donation-form')}>
 			<div className="donation-form-header"
 				 style={{
 					 backgroundImage: `url(${props.attributes.backgroundUrl})`
@@ -31,43 +42,58 @@ export default function DonationForm(props) {
 					<form>
 						<div className="donation-form-field-row">
 							<CurrencyInput
-								id="input-example"
-								name="input-name"
-								defaultValue={1000}
-								decimalsLimit={2}
+								className="donation-form-amount-input"
+								name="donation-amount"
+								allowDecimals={false}
+								allowNegativeValue={false}
+								maxLength={6}
+								value={donationAmount}
+								defaultValue={donationAmount}
 								onValueChange={(value, name) => console.log(value, name)}
 							/>
 						</div>
 						<div className="donation-form-field-row donation-form-amount-btns">
 							<input
 								type={'button'}
-								value={'$5'}
+								value={'5'}
+								style={backgroundColor}
 								className={'donation-form-field-button'}
+								onClick={(e) => setDonationAmount(e.target.value)}
 							/>
 							<input
 								type={'button'}
-								value={'$10'}
+								value={'10'}
+								style={backgroundColor}
 								className={'donation-form-field-button'}
+								onClick={(e) => setDonationAmount(e.target.value)}
 							/>
 							<input
 								type={'button'}
-								value={'$25'}
+								value={'25'}
+								style={backgroundColor}
 								className={'donation-form-field-button'}
+								onClick={(e) => setDonationAmount(e.target.value)}
 							/>
 							<input
 								type={'button'}
-								value={'$50'}
+								value={'50'}
+								style={backgroundColor}
 								className={'donation-form-field-button'}
+								onClick={(e) => setDonationAmount(e.target.value)}
 							/>
 							<input
 								type={'button'}
-								value={'$50'}
+								value={'100'}
+								style={backgroundColor}
 								className={'donation-form-field-button'}
+								onClick={(e) => setDonationAmount(e.target.value)}
 							/>
 							<input
 								type={'button'}
-								value={'$50'}
+								value={'250'}
+								style={backgroundColor}
 								className={'donation-form-field-button'}
+								onClick={(e) => setDonationAmount(e.target.value)}
 							/>
 						</div>
 						<div className="donation-form-field-row">

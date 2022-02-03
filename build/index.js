@@ -20,6 +20,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var react_currency_input_field__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-currency-input-field */ "./node_modules/react-currency-input-field/dist/index.esm.js");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
 
 
 /**
@@ -34,9 +36,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 function DonationForm(props) {
+  const [donationAmount, setDonationAmount] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(25);
+
+  const updateDonationAmount = amount => {
+    setDonationAmount(amount);
+  };
+
+  let backgroundColor = {
+    background: props.attributes.color
+  };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: 'donation-form'
+    id: 'donation-form-block',
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('donation-form')
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "donation-form-header",
     style: {
@@ -53,37 +66,52 @@ function DonationForm(props) {
   }, props.attributes.introSubheading), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "donation-form-field-row"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_currency_input_field__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    id: "input-example",
-    name: "input-name",
-    defaultValue: 1000,
-    decimalsLimit: 2,
+    className: "donation-form-amount-input",
+    name: "donation-amount",
+    allowDecimals: false,
+    allowNegativeValue: false,
+    maxLength: 6,
+    value: donationAmount,
+    defaultValue: donationAmount,
     onValueChange: (value, name) => console.log(value, name)
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "donation-form-field-row donation-form-amount-btns"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: 'button',
-    value: '$5',
-    className: 'donation-form-field-button'
+    value: '5',
+    style: backgroundColor,
+    className: 'donation-form-field-button',
+    onClick: e => setDonationAmount(e.target.value)
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: 'button',
-    value: '$10',
-    className: 'donation-form-field-button'
+    value: '10',
+    style: backgroundColor,
+    className: 'donation-form-field-button',
+    onClick: e => setDonationAmount(e.target.value)
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: 'button',
-    value: '$25',
-    className: 'donation-form-field-button'
+    value: '25',
+    style: backgroundColor,
+    className: 'donation-form-field-button',
+    onClick: e => setDonationAmount(e.target.value)
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: 'button',
-    value: '$50',
-    className: 'donation-form-field-button'
+    value: '50',
+    style: backgroundColor,
+    className: 'donation-form-field-button',
+    onClick: e => setDonationAmount(e.target.value)
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: 'button',
-    value: '$50',
-    className: 'donation-form-field-button'
+    value: '100',
+    style: backgroundColor,
+    className: 'donation-form-field-button',
+    onClick: e => setDonationAmount(e.target.value)
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: 'button',
-    value: '$50',
-    className: 'donation-form-field-button'
+    value: '250',
+    style: backgroundColor,
+    className: 'donation-form-field-button',
+    onClick: e => setDonationAmount(e.target.value)
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "donation-form-field-row"
   }, props.attributes.fieldsHeading && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
@@ -177,9 +205,11 @@ function Edit(_ref) {
     attributes,
     setAttributes
   } = _ref;
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useBlockProps)();
   const {
     backgroundId,
     backgroundUrl,
+    color,
     introHeading,
     introSubheading,
     preview
@@ -212,7 +242,18 @@ function Edit(_ref) {
 
   const background = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.useSelect)(select => {
     return select('core').getMedia(backgroundId);
-  }, [onSelectBackground]);
+  }, [onSelectBackground]); // Color picker.
+
+  const colors = [{
+    name: 'red',
+    color: '#f00'
+  }, {
+    name: 'white',
+    color: '#fff'
+  }, {
+    name: 'blue',
+    color: '#00f'
+  }];
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Appearance Settings', 'donation-form-block'),
     initialOpen: true
@@ -262,7 +303,21 @@ function Edit(_ref) {
     variant: "secondary"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove image', 'donation-form-block')))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: 'dfb-help-text'
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upload or select an image for the header background.', 'donation-form-block')))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upload or select an image for the header background.', 'donation-form-block')))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: 'dfb-label'
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Primary Color', 'donation-form-block')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+    colors: colors,
+    value: color,
+    onChange: value => setAttributes({
+      color: value
+    }),
+    clearable: false
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: 'dfb-help-text'
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Choose the primary color for this donation form.', 'donation-form-block'))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Settings', 'donation-form-block'),
+    initialOpen: false
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Main Heading', 'donation-form-block'),
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Customize or delete all text to hide.', 'donation-form-block'),
     value: attributes.introHeading,
@@ -290,7 +345,7 @@ function Edit(_ref) {
     onChange: value => setAttributes({
       fieldsSubheading: value
     })
-  }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useBlockProps)(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_donationForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_donationForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
     attributes: attributes
   }))));
 }

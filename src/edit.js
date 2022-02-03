@@ -10,8 +10,8 @@ import {
 	PanelRow,
 	TextControl,
 	Button,
-	Spinner,
 	ResponsiveWrapper,
+	ColorPalette,
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
@@ -34,9 +34,12 @@ import './editor.scss';
  */
 export default function Edit({attributes, setAttributes}) {
 
+	const blockProps = useBlockProps();
+
 	const {
 		backgroundId,
 		backgroundUrl,
+		color,
 		introHeading,
 		introSubheading,
 		preview,
@@ -70,8 +73,14 @@ export default function Edit({attributes, setAttributes}) {
 		return select('core').getMedia(backgroundId);
 	}, [onSelectBackground]);
 
-	return (
+	// Color picker.
+	const colors = [
+		{name: 'red', color: '#f00'},
+		{name: 'white', color: '#fff'},
+		{name: 'blue', color: '#00f'},
+	];
 
+	return (
 		<Fragment>
 			<Fragment>
 				<InspectorControls>
@@ -130,6 +139,22 @@ export default function Edit({attributes, setAttributes}) {
 							</div>
 						</PanelRow>
 						<PanelRow>
+							<div>
+								<label className={'dfb-label'}>{__('Primary Color', 'donation-form-block')}</label>
+								<div>
+									<ColorPalette
+										colors={colors}
+										value={color}
+										onChange={(value) => setAttributes({color: value})}
+										clearable={false}
+									/>
+								</div>
+								<p className={'dfb-help-text'}>{__('Choose the primary color for this donation form.', 'donation-form-block')}</p>
+							</div>
+						</PanelRow>
+					</PanelBody>
+					<PanelBody title={__('Content Settings', 'donation-form-block')} initialOpen={false}>
+						<PanelRow>
 							<TextControl
 								label={__('Main Heading', 'donation-form-block')}
 								help={__('Customize or delete all text to hide.', 'donation-form-block')}
@@ -165,7 +190,7 @@ export default function Edit({attributes, setAttributes}) {
 				</InspectorControls>
 			</Fragment>
 			<Fragment>
-				<div {...useBlockProps()}>
+				<div {...blockProps}>
 					<DonationForm attributes={attributes}/>
 				</div>
 			</Fragment>

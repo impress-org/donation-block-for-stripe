@@ -7,7 +7,7 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.donation-form {
+#donation-form-block {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -15,23 +15,22 @@
   margin: 1rem auto;
   padding: 0;
 }
-.donation-form p {
+#donation-form-block p {
   font-size: 1rem;
   font-weight: 400;
   color: #444;
 }
-.donation-form .donation-form-header {
+#donation-form-block .donation-form-header {
   background-position: center;
   background-size: cover;
   height: 215px;
   width: 100%;
   border-radius: 7px 7px 0 0;
 }
-.donation-form-inner {
+#donation-form-block .donation-form-inner {
   padding: 2rem;
 }
-
-.donation-form-fieldset-intro h2, .donation-form-fieldset-intro h3 {
+#donation-form-block .donation-form-fieldset-intro h2, #donation-form-block .donation-form-fieldset-intro h3 {
   font-size: 1.2rem;
   font-weight: 500;
   color: #333;
@@ -39,19 +38,16 @@
   padding: 0 0 1rem;
   border-bottom: 1px solid #DDD;
 }
-
-.donation-form-field-amount {
+#donation-form-block .donation-form-field-amount {
   width: 100%;
 }
-
-.donation-form-field-row {
+#donation-form-block .donation-form-field-row {
   margin: 0 0 1rem;
 }
-.donation-form-field-row:last-child {
+#donation-form-block .donation-form-field-row:last-child {
   margin-bottom: 0;
 }
-
-.donation-form-amount-btns {
+#donation-form-block .donation-form-amount-btns {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[3];
@@ -59,11 +55,10 @@
   gap: 10px;
   grid-auto-rows: minmax(60px, auto);
 }
-.donation-form-amount-btns > input {
+#donation-form-block .donation-form-amount-btns > input {
   border-radius: 6px;
 }
-
-.donation-form-fields-wrap {
+#donation-form-block .donation-form-fields-wrap {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[2];

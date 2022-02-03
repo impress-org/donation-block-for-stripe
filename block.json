@@ -19,6 +19,10 @@
 	  "type": "string",
 	  "default": ""
 	},
+	"color": {
+	  "type": "string",
+	  "default": "#1E8CBE"
+	},
 	"introHeading": {
 	  "type": "string",
 	  "default": "How much would you like to donate today?"
