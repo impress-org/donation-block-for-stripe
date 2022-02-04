@@ -37,6 +37,9 @@ const DonationForm = props => {
 			border: `3px solid ${props.attributes.color}`,
 			fontSize: '28px',
 			fontWeight: '500',
+			transition: 'all 0.2s ease',
+			lineHeight: '1.6',
+			cursor: 'pointer',
 		},
 		buttonPrimary: {
 			':hover': {
@@ -47,8 +50,17 @@ const DonationForm = props => {
 		buttonSelected: {
 			color: `${props.attributes.color}`,
 			background: '#FFF',
+		},
+		currencyField: {
+			width: '100%',
+			fontSize: '2.5rem',
+			padding: '1rem 1.5rem',
+			border: '2px solid #424242',
+			borderRadius: '8px',
+			textAlign: 'right',
+			lineHeight: '1',
+			boxSizing: 'border-box',
 		}
-
 	};
 
 	const donationAmounts = [
@@ -73,15 +85,7 @@ const DonationForm = props => {
 						<div className="donation-form-field-row">
 							<CurrencyInput
 								className="donation-form-amount-input"
-								style={{
-									width: '100%',
-									fontSize: '2.5rem',
-									padding: '1rem 1.5rem',
-									border: '2px solid #424242',
-									borderRadius: '8px',
-									textAlign: 'right',
-									lineHeight: '1'
-								}}
+								style={styles.currencyField}
 								name="donation-amount"
 								allowDecimals={false}
 								allowNegativeValue={false}
@@ -94,7 +98,6 @@ const DonationForm = props => {
 						<div className="donation-form-field-row donation-form-amount-btns">
 							{
 								donationAmounts.map((amount, index) => {
-									console.log(donationAmount, amount);
 									return (
 										<button
 											key={index}
@@ -144,6 +147,7 @@ const DonationForm = props => {
 							<input
 								type={'button'}
 								value={'Donate Now'}
+								style={[styles.buttonBase, styles.buttonPrimary]}
 								className={cx('donation-form-submit')}
 							/>
 						</div>

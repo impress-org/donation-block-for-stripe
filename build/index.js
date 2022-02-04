@@ -59,7 +59,10 @@ const DonationForm = props => {
       borderRadius: '6px',
       border: `3px solid ${props.attributes.color}`,
       fontSize: '28px',
-      fontWeight: '500'
+      fontWeight: '500',
+      transition: 'all 0.2s ease',
+      lineHeight: '1.6',
+      cursor: 'pointer'
     },
     buttonPrimary: {
       ':hover': {
@@ -70,6 +73,16 @@ const DonationForm = props => {
     buttonSelected: {
       color: `${props.attributes.color}`,
       background: '#FFF'
+    },
+    currencyField: {
+      width: '100%',
+      fontSize: '2.5rem',
+      padding: '1rem 1.5rem',
+      border: '2px solid #424242',
+      borderRadius: '8px',
+      textAlign: 'right',
+      lineHeight: '1',
+      boxSizing: 'border-box'
     }
   };
   const donationAmounts = ['5', '10', '25', '50', '100', '250'];
@@ -93,15 +106,7 @@ const DonationForm = props => {
     className: "donation-form-field-row"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_currency_input_field__WEBPACK_IMPORTED_MODULE_4__["default"], {
     className: "donation-form-amount-input",
-    style: {
-      width: '100%',
-      fontSize: '2.5rem',
-      padding: '1rem 1.5rem',
-      border: '2px solid #424242',
-      borderRadius: '8px',
-      textAlign: 'right',
-      lineHeight: '1'
-    },
+    style: styles.currencyField,
     name: "donation-amount",
     allowDecimals: false,
     allowNegativeValue: false,
@@ -112,7 +117,6 @@ const DonationForm = props => {
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "donation-form-field-row donation-form-amount-btns"
   }, donationAmounts.map((amount, index) => {
-    console.log(donationAmount, amount);
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
       key: index,
       className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('donation-form-amount-btn', {
@@ -147,6 +151,7 @@ const DonationForm = props => {
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: 'button',
     value: 'Donate Now',
+    style: [styles.buttonBase, styles.buttonPrimary],
     className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('donation-form-submit')
   })), window.location.protocol === 'https:' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('donation-form-field-row')
