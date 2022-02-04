@@ -24,6 +24,7 @@
 		"react-currency-input-field": "^3.6.4"
 	},
 	"devDependencies": {
+		"@svgr/webpack": "^6.2.1",
 		"@wordpress/components": "^19.3.0",
 		"@wordpress/data": "^6.2.0",
 		"@wordpress/element": "^4.1.0",

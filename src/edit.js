@@ -198,9 +198,20 @@ export default function Edit({attributes, setAttributes}) {
 							/>
 						</PanelRow>
 					</PanelBody>
-					<PanelBody title={__('Connect to Stripe', 'donation-form-block')} initialOpen={true}>
+					<PanelBody title={__('Stripe Connect', 'donation-form-block')} initialOpen={true}>
 						<PanelRow>
-							<a href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?give-donation-block-stripe-connected=1`} target="_blank">Connect to Stripe</a>
+							<div id="dfb-stripe-connect-wrap">
+								<div className="dfb-welcome-wrap-inner">
+									<span className="dfb-welcome-wave">👋</span>
+									<h2>{__('Welcome to the Stripe Donation Form Block by GiveWP!', 'donation-form-block')}</h2>
+									<p>{__('To begin, connect to Stripe and start accepting donations in minutes.', 'donation-form-block')}</p>
+									<a
+										href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?give-donation-block-stripe-connected=1`}
+										target="_blank"
+										className={'dfb-stripe-connect'}
+									>{__('Connect to Stripe', 'donation-form-block')}</a>
+								</div>
+							</div>
 						</PanelRow>
 					</PanelBody>
 				</InspectorControls>
