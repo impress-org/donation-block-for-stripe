@@ -198,6 +198,11 @@ export default function Edit({attributes, setAttributes}) {
 							/>
 						</PanelRow>
 					</PanelBody>
+					<PanelBody title={__('Connect to Stripe', 'donation-form-block')} initialOpen={true}>
+						<PanelRow>
+							<a href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?give-donation-block-stripe-connected=1`} target="_blank">Connect to Stripe</a>
+						</PanelRow>
+					</PanelBody>
 				</InspectorControls>
 			</Fragment>
 			<Fragment>
