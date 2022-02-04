@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GiveDonationBlock\DataTransferObjects;
+namespace GiveDonationBlock\Stripe\DataTransferObjects;
 
 class StripeData
 {
