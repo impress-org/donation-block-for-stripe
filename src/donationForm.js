@@ -10,19 +10,50 @@ import {useEffect, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
-import {dispatch, useSelect} from '@wordpress/data';
+import Radium from 'radium';
+import color from 'color';
 
-export default function DonationForm(props) {
+/**
+ * Donation Form.
+ *
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const DonationForm = props => {
 
-	const [donationAmount, setDonationAmount] = useState(25);
+	const [donationAmount, setDonationAmount] = useState('25');
 
 	const updateDonationAmount = (amount) => {
+		amount = amount.replace('$', '');
 		setDonationAmount(amount);
 	};
 
-	let backgroundColor = {
-		background: props.attributes.color
+	const styles = {
+		buttonBase: {
+			color: '#FFF',
+			background: `${props.attributes.color}`,
+			borderRadius: '6px',
+			border: `3px solid ${props.attributes.color}`,
+			fontSize: '28px',
+			fontWeight: '500',
+		},
+		buttonPrimary: {
+			':hover': {
+				background: color(`${props.attributes.color}`).lighten(0.2),
+				border: color(`${props.attributes.color}`).lighten(0.2)
+			},
+		},
+		buttonSelected: {
+			color: `${props.attributes.color}`,
+			background: '#FFF',
+		}
+
 	};
+
+	const donationAmounts = [
+		'5', '10', '25', '50', '100', '250'
+	];
 
 	return (
 		<div id={'donation-form-block'} className={cx('donation-form')}>
@@ -38,11 +69,19 @@ export default function DonationForm(props) {
 					{props.attributes.introSubheading &&
 						<p className={'donation-form-main-subheading'}>{props.attributes.introSubheading}</p>
 					}
-
 					<form>
 						<div className="donation-form-field-row">
 							<CurrencyInput
 								className="donation-form-amount-input"
+								style={{
+									width: '100%',
+									fontSize: '2.5rem',
+									padding: '1rem 1.5rem',
+									border: '2px solid #424242',
+									borderRadius: '8px',
+									textAlign: 'right',
+									lineHeight: '1'
+								}}
 								name="donation-amount"
 								allowDecimals={false}
 								allowNegativeValue={false}
@@ -53,48 +92,29 @@ export default function DonationForm(props) {
 							/>
 						</div>
 						<div className="donation-form-field-row donation-form-amount-btns">
-							<input
-								type={'button'}
-								value={'5'}
-								style={backgroundColor}
-								className={'donation-form-field-button'}
-								onClick={(e) => setDonationAmount(e.target.value)}
-							/>
-							<input
-								type={'button'}
-								value={'10'}
-								style={backgroundColor}
-								className={'donation-form-field-button'}
-								onClick={(e) => setDonationAmount(e.target.value)}
-							/>
-							<input
-								type={'button'}
-								value={'25'}
-								style={backgroundColor}
-								className={'donation-form-field-button'}
-								onClick={(e) => setDonationAmount(e.target.value)}
-							/>
-							<input
-								type={'button'}
-								value={'50'}
-								style={backgroundColor}
-								className={'donation-form-field-button'}
-								onClick={(e) => setDonationAmount(e.target.value)}
-							/>
-							<input
-								type={'button'}
-								value={'100'}
-								style={backgroundColor}
-								className={'donation-form-field-button'}
-								onClick={(e) => setDonationAmount(e.target.value)}
-							/>
-							<input
-								type={'button'}
-								value={'250'}
-								style={backgroundColor}
-								className={'donation-form-field-button'}
-								onClick={(e) => setDonationAmount(e.target.value)}
-							/>
+							{
+								donationAmounts.map((amount, index) => {
+									console.log(donationAmount, amount);
+									return (
+										<button
+											key={index}
+											className={cx('donation-form-amount-btn', {
+												'is-selected': donationAmount === amount
+											})}
+											style={[
+												styles.buttonBase,
+												donationAmount === amount ? styles.buttonSelected : styles.buttonPrimary
+											]}
+											onClick={(e) => {
+												e.preventDefault();
+												updateDonationAmount(amount)
+											}}
+										>
+											{amount}
+										</button>
+									);
+								})
+							}
 						</div>
 						<div className="donation-form-field-row">
 							{props.attributes.fieldsHeading &&
@@ -148,3 +168,5 @@ export default function DonationForm(props) {
 DonationForm.defaultProps = {
 	attributes: [],
 };
+
+export default Radium(DonationForm);

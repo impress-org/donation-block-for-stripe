@@ -75,9 +75,20 @@ export default function Edit({attributes, setAttributes}) {
 
 	// Color picker.
 	const colors = [
-		{name: 'red', color: '#f00'},
-		{name: 'white', color: '#fff'},
-		{name: 'blue', color: '#00f'},
+		{name: 'Gray', color: '#2F363D'},
+		{name: 'Light Gray', color: '#6A737D'},
+		{name: 'Blue', color: '#044289'},
+		{name: 'Light Blue', color: '#0366D6'},
+		{name: 'Green', color: '#176F2C'},
+		{name: 'Light Green', color: '#28A745'},
+		{name: 'Yellow', color: '#DBAB09'},
+		{name: 'Light Yellow', color: '#FFD33D'},
+		{name: 'Orange', color: '#D15704'},
+		{name: 'Light Orange', color: '#F66A0A'},
+		{name: 'Red', color: '#B31D28'},
+		{name: 'Light Red', color: '#D73A49'},
+		{name: 'Pink', color: '#B93A86'},
+		{name: 'Light Pink', color: '#EA4AAA'},
 	];
 
 	return (
@@ -141,7 +152,7 @@ export default function Edit({attributes, setAttributes}) {
 						<PanelRow>
 							<div>
 								<label className={'dfb-label'}>{__('Primary Color', 'donation-form-block')}</label>
-								<div>
+								<div className={'dfb-color-picker'}>
 									<ColorPalette
 										colors={colors}
 										value={color}

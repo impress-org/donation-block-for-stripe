@@ -19,6 +19,8 @@
 		"@wordpress/dom-ready": "^3.3.0",
 		"@wordpress/i18n": "^4.2.4",
 		"classnames": "^2.3.1",
+		"color": "^4.2.0",
+		"radium": "^0.26.1",
 		"react-currency-input-field": "^3.6.4"
 	},
 	"devDependencies": {

@@ -27,3 +27,10 @@
   font-style: normal;
   color: rgb(117, 117, 117);
 }
+
+.dfb-color-picker {
+  margin: 0 0 10px;
+  .components-circular-option-picker .components-circular-option-picker__swatches {
+	gap: 8px;
+  }
+}
