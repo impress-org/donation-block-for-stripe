@@ -10,8 +10,8 @@ import {useEffect, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
-import Radium from 'radium';
 import color from 'color';
+import {StyleSheet, css} from 'aphrodite';
 
 /**
  * Donation Form.
@@ -32,7 +32,15 @@ const DonationForm = props => {
         setDonationAmount(amount);
     };
 
-    const styles = {
+    const styles = StyleSheet.create({
+        container: {
+            boxShadow: 'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
+            borderRadius: '8px',
+            border: '1px solid #ddd',
+            maxWidth: '650px',
+            margin: '1rem auto',
+            padding: '0',
+        },
         buttonBase: {
             color: '#FFF',
             background: `${props.attributes.color}`,
@@ -63,8 +71,11 @@ const DonationForm = props => {
             textAlign: 'right',
             lineHeight: '1',
             boxSizing: 'border-box',
+            ':hover': {
+                backgroundColor: 'red'
+            }
         }
-    };
+    });
 
     const donationAmounts = [
         '5', '10', '25', '50', '100', '250'
@@ -79,7 +90,7 @@ const DonationForm = props => {
     }
 
     return (
-        <div id={'donation-form-block'} className={cx('donation-form')}>
+        <div id={'donation-form-block'} className={cx('donation-form')} style={styles.container}>
             <div className="donation-form-header"
                  style={{
                      backgroundImage: `url(${props.attributes.backgroundUrl})`
@@ -95,9 +106,8 @@ const DonationForm = props => {
                     <form onSubmit={handleSubmit}>
                         <div className="donation-form-field-row">
                             <CurrencyInput
-                                className="donation-form-amount-input"
-                                style={styles.currencyField}
-                                name="donation-amount"
+                                className={css(styles.currencyField)}
+                                name="amount"
                                 allowDecimals={false}
                                 allowNegativeValue={false}
                                 maxLength={6}
@@ -115,10 +125,6 @@ const DonationForm = props => {
                                             className={cx('donation-form-amount-btn', {
                                                 'is-selected': donationAmount === amount
                                             })}
-                                            style={[
-                                                styles.buttonBase,
-                                                donationAmount === amount ? styles.buttonSelected : styles.buttonPrimary
-                                            ]}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 updateDonationAmount(amount)
@@ -167,7 +173,6 @@ const DonationForm = props => {
                             <input
                                 type={'submit'}
                                 value={'Donate Now'}
-                                style={[styles.buttonBase, styles.buttonPrimary]}
                                 className={cx('donation-form-submit')}
                             />
                         </div>
@@ -178,11 +183,8 @@ const DonationForm = props => {
                                 </div>
                             </div>
                         }
-
                     </form>
-
                 </div>
-
             </div>
         </div>
     );
@@ -193,4 +195,4 @@ DonationForm.defaultProps = {
     attributes: [],
 };
 
-export default Radium(DonationForm);
+export default DonationForm;
