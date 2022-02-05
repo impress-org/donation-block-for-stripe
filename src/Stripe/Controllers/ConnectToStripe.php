@@ -8,10 +8,6 @@ class ConnectToStripe
 {
     public function __invoke()
     {
-        if (empty($_GET['give-donation-block-stripe-connected'])) {
-            return;
-        }
-
         [
             'stripe_access_token' => $stripeLiveAccessToken,
             'stripe_access_token_test' => $stripeTestAccessToken,
@@ -20,9 +16,9 @@ class ConnectToStripe
             'stripe_user_id' => $stripeAccountId
         ] = $_GET;
 
-        update_option('give_donation_block_stripe_data', [
-            'stripeLiveAccessToken' => $stripeLiveAccessToken,
-            'stripeTestAccessToken' => $stripeTestAccessToken,
+        update_option('dfb_donation_block_stripe_data', [
+            'stripeLiveSecretKey' => $stripeLiveAccessToken,
+            'stripeTestSecretKey' => $stripeTestAccessToken,
             'stripeLivePublishableKey' => $stripeLivePublishableKey,
             'stripeTestPublishableKey' => $stripeTestPublishableKey,
             'stripeAccountId' => $stripeAccountId

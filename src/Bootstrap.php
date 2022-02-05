@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace GiveDonationBlock;
 
 use GiveDonationBlock\Stripe\Controllers\ConnectToStripe;
+use GiveDonationBlock\Stripe\Controllers\PaymentIntentRequest;
+use GiveDonationBlock\Stripe\Controllers\RouteStripeActions;
 
 class Bootstrap
 {
@@ -19,7 +21,7 @@ class Bootstrap
         add_action('init', [$block, 'registerBlock']);
         add_action('admin_enqueue_scripts', [$block, 'addAdminLocalizations']);
 
-        $stripeConnect = new ConnectToStripe();
-        add_action('template_redirect', [$stripeConnect, '__invoke']);
+        $stripeActionHandler = new RouteStripeActions();
+        add_action('template_redirect', [$stripeActionHandler, '__invoke']);
     }
 }

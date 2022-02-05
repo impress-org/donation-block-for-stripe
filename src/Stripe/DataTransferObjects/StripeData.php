@@ -6,9 +6,9 @@ namespace GiveDonationBlock\Stripe\DataTransferObjects;
 
 class StripeData
 {
-    public $liveAccessToken;
+    public $liveSecretKey;
     public $livePublishableKey;
-    public $testAccessToken;
+    public $testSecretKey;
     public $testPublishableKey;
     public $accountId;
 
@@ -19,9 +19,9 @@ class StripeData
         string $testPublishableKey,
         string $accountId
     ) {
-        $this->liveAccessToken = $liveAccessToken;
+        $this->liveSecretKey = $liveAccessToken;
         $this->livePublishableKey = $livePublishableKey;
-        $this->testAccessToken = $testAccessToken;
+        $this->testSecretKey = $testAccessToken;
         $this->testPublishableKey = $testPublishableKey;
         $this->accountId = $accountId;
     }
@@ -29,11 +29,18 @@ class StripeData
     public static function fromArray(array $data): StripeData
     {
         return new self(
-            $data['liveAccessToken'],
+            $data['liveSecretKey'],
             $data['livePublishableKey'],
-            $data['testAccessToken'],
+            $data['testSecretKey'],
             $data['testPublishableKey'],
             $data['accountId']
         );
+    }
+
+    public static function fromOption(): ?self
+    {
+        $data = get_option('dfb_donation_block_stripe_data');
+
+        return empty($data) ? null : self::fromArray($data);
     }
 }

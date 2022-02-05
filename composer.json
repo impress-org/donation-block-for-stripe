@@ -11,7 +11,9 @@
             "email": "devin@givewp.com"
         }
     ],
-    "require": {},
+    "require": {
+        "stripe/stripe-php": "^7.113"
+    },
     "autoload": {
         "psr-4": {
             "GiveDonationBlock\\": "src/"

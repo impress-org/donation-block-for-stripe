@@ -206,7 +206,7 @@ export default function Edit({attributes, setAttributes}) {
 									<h2>{__('Welcome to the Stripe Donation Form Block by GiveWP!', 'donation-form-block')}</h2>
 									<p>{__('To begin, connect to Stripe and start accepting donations in minutes.', 'donation-form-block')}</p>
 									<a
-										href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?give-donation-block-stripe-connected=1`}
+										href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
 										target="_blank"
 										className={'dfb-stripe-connect'}
 									>{__('Connect to Stripe', 'donation-form-block')}</a>
