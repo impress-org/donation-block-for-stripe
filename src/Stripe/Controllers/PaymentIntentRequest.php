@@ -33,6 +33,7 @@ class PaymentIntentRequest
             $paymentIntent = $stripeClient->paymentIntents->create([
                 'amount' => $data->amount,
                 'currency' => 'USD',
+                'receipt_email' => $data->email,
                 'application_fee_amount' => ceil($data->amount * 0.02),
                 'automatic_payment_methods' => [
                     'enabled' => true,
