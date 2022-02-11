@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Stripe\DataTransferObjects;
+namespace GiveDonationBlock\Stripe\DataTransferObjects;
 
 class PaymentIntentForm
 {
@@ -29,8 +29,8 @@ class PaymentIntentForm
     public static function fromArray(array $data): self
     {
         $object = new self();
-        $object->firstName = $data['first_name'];
-        $object->lastName = $data['last_name'];
+        $object->firstName = $data['firstName'];
+        $object->lastName = $data['lastName'];
         $object->email = $data['email'];
         $object->amount = $data['amount'];
         return $object;

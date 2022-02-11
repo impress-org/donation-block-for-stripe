@@ -41,6 +41,12 @@ class StripeData
     {
         $data = get_option('dfb_donation_block_stripe_data');
 
-        return empty($data) ? null : self::fromArray($data);
+        return empty($data) ? null : self::fromArray([
+            'liveSecretKey' => $data['stripeLiveSecretKey'],
+            'livePublishableKey' => $data['stripeLivePublishableKey'],
+            'testSecretKey' => $data['stripeTestSecretKey'],
+            'testPublishableKey' => $data['stripeTestPublishableKey'],
+            'accountId' => $data['stripeAccountId'],
+        ]);
     }
 }

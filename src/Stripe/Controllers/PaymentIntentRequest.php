@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace GiveDonationBlock\Stripe\Controllers;
 
+use GiveDonationBlock\Stripe\DataTransferObjects\PaymentIntentForm;
 use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
-use Stripe\DataTransferObjects\PaymentIntentForm;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 
@@ -56,7 +56,7 @@ class PaymentIntentRequest
         $requiredFields = [
             'amount' => 'Amount',
             'firstName' => 'First Name',
-            'lastName' => 'Last Name',
+            'email' => 'Email',
         ];
 
         $data = [];
@@ -80,7 +80,7 @@ class PaymentIntentRequest
         }
 
         $data['amount'] = (int) $data['amount'];
-        $data['lastname'] = !empty($_POST['lastName']) ? sanitize_text_field($_POST['lastName']) : null;
+        $data['lastName'] = !empty($_POST['lastName']) ? sanitize_text_field($_POST['lastName']) : null;
 
         return PaymentIntentForm::fromArray($data);
     }
