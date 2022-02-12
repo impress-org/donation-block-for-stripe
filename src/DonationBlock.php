@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace GiveDonationBlock;
 
+use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
+
 class DonationBlock
 {
     public function registerBlock(): void
@@ -19,6 +21,10 @@ class DonationBlock
             DONATION_BLOCK_SCRIPT_ASSET['dependencies'],
             DONATION_BLOCK_SCRIPT_ASSET['version']
         );
+        wp_register_script(
+            'donation-form-block-stripe-js',
+            'https://js.stripe.com/v3/'
+        );
 
         wp_set_script_translations('donation-form-block-script', 'donation-form-block');
 
@@ -31,16 +37,20 @@ class DonationBlock
     {
         if (!is_admin()) {
             wp_enqueue_script('donation-form-block-script');
+            wp_enqueue_script('donation-form-block-stripe-js');
         }
+
+        $stripeData = StripeData::fromOption();
 
         ob_start(); ?>
 
         <div class="root-donation-block"
+             data-stripe-pub-key="<?php echo $stripeData->testPublishableKey; ?>"
             <?php
             // Loop through and set attributes per block.
             foreach ($attributes as $key => $value) : ?>
                 data-<?php
-                // output as hyphen-case  so that it's changed to camelCase in JS.
+                // output as hyphen-case so that it's changed to camelCase in JS.
                 echo preg_replace('/([A-Z])/', '-$1', $key); ?>="<?php
                 echo $value; ?>"
             <?php

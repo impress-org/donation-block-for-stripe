@@ -41,7 +41,7 @@ class PaymentIntentRequest
             ]);
 
             wp_send_json_success([
-                'paymentIntent' => $paymentIntent->id,
+                'clientSecret' => $paymentIntent->client_secret,
             ]);
         } catch (ApiErrorException $e) {
             wp_send_json_error([
@@ -58,17 +58,19 @@ class PaymentIntentRequest
             'firstName' => 'First Name',
             'email' => 'Email',
         ];
-
+        $request_body = file_get_contents('php://input');
+        $postData = json_decode($request_body, true);
         $data = [];
         $missingFields = [];
+
         foreach($requiredFields as $field => $label) {
-            if(empty($_POST[$field])) {
+            if(empty($postData[$field])) {
                 $missingFields[] = [
                     'field' => $field,
                     'message' => "$label is required."
                 ];
             } else {
-                $data[$field] = sanitize_text_field($_POST[$field]);
+                $data[$field] = sanitize_text_field($postData[$field]);
             }
         }
 
@@ -80,7 +82,7 @@ class PaymentIntentRequest
         }
 
         $data['amount'] = (int) $data['amount'];
-        $data['lastName'] = !empty($_POST['lastName']) ? sanitize_text_field($_POST['lastName']) : null;
+        $data['lastName'] = !empty($postData['lastName']) ? sanitize_text_field($postData['lastName']) : null;
 
         return PaymentIntentForm::fromArray($data);
     }

@@ -12,6 +12,7 @@ import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
 import color from 'color';
 import {StyleSheet, css} from 'aphrodite';
+import axios from 'axios';
 
 /**
  * Donation Form.
@@ -84,8 +85,30 @@ const DonationForm = props => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // TODO: Validate form.
-        // TODO: Fetch Stripe Payment Intent.
+        axios.post('/?dfb_donation-block-stripe-action=getStripeIntent', {
+            amount: donationAmount,
+            firstName: firstName,
+            lastName: lastName,
+            email: email
+        }).then(function (response) {
+
+            // TODO: Validate form.
+
+            console.log(response);
+            console.log();
+
+            const stripe = Stripe(props.attributes.stripePubKey);
+            const clientSecret = response.data.data.clientSecret;
+            let elements = stripe.elements({clientSecret});
+
+            const paymentElement = elements.create('payment');
+            paymentElement.mount('.paymentIntentForm');
+
+        }).catch(function (error) {
+
+            console.log(error);
+
+        });
 
     }
 
@@ -108,7 +131,7 @@ const DonationForm = props => {
                             <CurrencyInput
                                 className={css(styles.currencyField)}
                                 name="amount"
-                                allowDecimals={false}
+                                allowDecimals={true}
                                 allowNegativeValue={false}
                                 maxLength={6}
                                 value={donationAmount}
@@ -125,10 +148,12 @@ const DonationForm = props => {
                                             className={cx('donation-form-amount-btn', {
                                                 'is-selected': donationAmount === amount
                                             })}
+                                            style={styles.buttonBase}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 updateDonationAmount(amount)
                                             }}
+
                                         >
                                             {amount}
                                         </button>
@@ -185,6 +210,9 @@ const DonationForm = props => {
                         }
                     </form>
                 </div>
+            </div>
+            <div className="paymentIntentForm">
+
             </div>
         </div>
     );
