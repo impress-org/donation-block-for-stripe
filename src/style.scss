@@ -7,40 +7,16 @@
 
 
 #donation-form-block {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  max-width: 650px;
-  margin: 1rem auto;
-  padding: 0;
 
-  p {
-	font-size: 1rem;
-	font-weight: 400;
-	color: #444;
+    p {
+
   }
 
-  .donation-form-header {
-	background-position: center;
-	background-size: cover;
-	height: 215px;
-	width: 100%;
-	border-radius: 7px 7px 0 0;
-  }
-
-  .donation-form-inner {
-	padding: 2rem;
-  }
 
   .donation-form-fieldset-intro {
 
 	h2, h3 {
-	  font-size: 1.2rem;
-	  font-weight: 500;
-	  color: #333;
-	  margin: 0 0 1rem;
-	  padding: 0 0 1rem;
-	  border-bottom: 1px solid #DDD;
+
 	}
 
   }
@@ -50,30 +26,19 @@
   }
 
   .donation-form-field-row {
-	margin: 0 0 1rem;
 
 	&:last-child {
-	  margin-bottom: 0;
 	}
   }
 
   .donation-form-amount-btns {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 10px;
-	grid-auto-rows: minmax(60px, auto);
-
 	> input {
-	  border-radius: 6px;
 	}
   }
 
 
   .donation-form-fields-wrap {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 1rem;
-	grid-auto-rows: minmax(40px, auto);
+
   }
 
 
