@@ -202,21 +202,38 @@ export default function Edit({attributes, setAttributes}) {
                     </PanelBody>
                     <PanelBody title={__('Stripe Connect', 'donation-form-block')} initialOpen={true}>
                         <PanelRow>
-                            <div id="dfb-stripe-connect-wrap">
-                                <div className="dfb-welcome-wrap-inner">
-                                    <span className="dfb-welcome-wave">👋</span>
-                                    <h2>{__('Welcome to the Stripe Donation Form Block by GiveWP!', 'donation-form-block')}</h2>
-                                    <p>{__('To begin, connect to Stripe and start accepting donations.', 'donation-form-block')}</p>
-                                    <a
-                                        href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
-                                        target="_blank"
-                                        className={'dfb-stripe-connect'}
-                                    >
-                                        <StripeIcon style={{fill: '#FFF', marginRight: '10px', height:'25px', width:'18px', transform: 'scale(.75)'}}/>
-                                        <span>{__('Connect to Stripe', 'donation-form-block')}</span>
-                                    </a>
+                            {!stripeConnected &&
+                                <div id="dfb-stripe-connect-wrap">
+                                    <div className="dfb-welcome-wrap-inner">
+                                        <span className="dfb-welcome-wave">👋</span>
+                                        <h2>{__('Welcome to the Stripe Donation Form Block by GiveWP!', 'donation-form-block')}</h2>
+                                        <p>{__('To begin, connect to Stripe and start accepting donations.', 'donation-form-block')}</p>
+                                        <a
+                                            href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
+                                            target="_blank"
+                                            className={'dfb-stripe-connect'}
+                                        >
+                                            <StripeIcon style={{
+                                                fill: '#FFF',
+                                                marginRight: '10px',
+                                                height: '25px',
+                                                width: '18px',
+                                                transform: 'scale(.75)'
+                                            }}/>
+                                            <span>{__('Connect to Stripe', 'donation-form-block')}</span>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+                            {stripeConnected &&
+                                <div className={'dfb-connected-wrap'}>
+                                    <div className={'dfb-connected-circle-wrap'}>
+                                        <div className="dfb-connected-circle"></div>
+                                    </div>
+                                    <span>You're connected to Stripe!</span>
+                                </div>
+
+                            }
                         </PanelRow>
                     </PanelBody>
                 </InspectorControls>
