@@ -23,5 +23,40 @@ class Bootstrap
 
         $stripeActionHandler = new RouteStripeActions();
         add_action('template_redirect', [$stripeActionHandler, '__invoke']);
+        add_action('rest_api_init', [$this, 'registerSettings']);
+        add_action('admin_init', [$this, 'registerSettings']);
+    }
+
+    public function registerSettings()
+    {
+        register_setting(
+            'dfb_donation_block_stripe_data',
+            'dfb_donation_block_stripe_data',
+            [
+                'show_in_rest' => [
+                    'schema' => [
+                        'name' => 'dfb_stripe_connect',
+                        'type' => 'object',
+                        'properties' => [
+                            'stripeLiveSecretKey' => [
+                                'type' => 'string',
+                            ],
+                            'stripeTestSecretKey' => [
+                                'type' => 'string',
+                            ],
+                            'stripeLivePublishableKey' => [
+                                'type' => 'string',
+                            ],
+                            'stripeTestPublishableKey' => [
+                                'type' => 'string',
+                            ],
+                            'stripeAccountId' => [
+                                'type' => 'string',
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
     }
 }

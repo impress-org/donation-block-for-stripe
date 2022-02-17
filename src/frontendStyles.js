@@ -96,6 +96,12 @@ export default class StyleSheetFactory {
                 color: `${props.attributes.color}`,
                 background: '#FFF',
             },
+            btnDollarSymbol: {
+                fontSize: '18px',
+                margin: '0 5px 0 -10px',
+                position: 'relative',
+                top: '-6px',
+            },
             donateBtn: {
                 fontSize: '22px',
                 height: '55px',

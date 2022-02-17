@@ -16,6 +16,7 @@ import {
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
 import {dispatch, useSelect} from '@wordpress/data';
+import { useEntityProp } from '@wordpress/core-data';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -73,7 +74,7 @@ export default function Edit({attributes, setAttributes}) {
 		return select('core').getMedia(backgroundId);
 	}, [onSelectBackground]);
 
-	// Color picker.
+	// Color picker colors.
 	const colors = [
 		{name: 'Gray', color: '#2F363D'},
 		{name: 'Light Gray', color: '#6A737D'},
@@ -90,6 +91,15 @@ export default function Edit({attributes, setAttributes}) {
 		{name: 'Pink', color: '#B93A86'},
 		{name: 'Light Pink', color: '#EA4AAA'},
 	];
+
+    // Get settings to check for Stripe connection.
+    const stripeConnectData = useEntityProp( 'root', 'site', 'dfb_donation_block_stripe_data' );
+
+    useEffect( () => {
+        if (! stripeConnectData ) {
+
+        }
+    }, [stripeConnectData] );
 
 	return (
 		<Fragment>
