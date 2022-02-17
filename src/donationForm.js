@@ -11,6 +11,7 @@ import {ReactComponent as MailIcon} from './images/mail.svg';
 import {ReactComponent as UserIcon} from './images/user.svg';
 import {ReactComponent as CaretIcon} from './images/caret-right.svg';
 import {ReactComponent as DollarIcon} from './images/dollar.svg';
+import {ReactComponent as ErrorIcon} from './images/stop.svg';
 
 /**
  * Donation Form.
@@ -26,9 +27,11 @@ const DonationForm = props => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState([]);
 
     const updateDonationAmount = (amount) => {
-        amount = amount.replace('$', '');
+        amount = amount.replace('$', '');``
         setDonationAmount(amount);
     };
 
@@ -48,15 +51,23 @@ const DonationForm = props => {
 
             // TODO: Validate form.
 
-            console.log(response);
-            console.log();
+            console.log(response.data.data);
+            console.log(response.data.data.fields);
+            // Check for errors.
+            if (response.data.data.error) {
+                setError(true);
+                setErrorMessage(response.data.data.fields);
+                console.log(errorMessage);
+            } else {
+                // Proceed with Stripe.
+                const stripe = Stripe(props.attributes.stripePubKey);
+                const clientSecret = response.data.data.clientSecret;
+                let elements = stripe.elements({clientSecret});
 
-            const stripe = Stripe(props.attributes.stripePubKey);
-            const clientSecret = response.data.data.clientSecret;
-            let elements = stripe.elements({clientSecret});
+                const paymentElement = elements.create('payment');
+                paymentElement.mount('.paymentIntentForm');
+            }
 
-            const paymentElement = elements.create('payment');
-            paymentElement.mount('.paymentIntentForm');
 
         }).catch(function (error) {
 
@@ -71,7 +82,7 @@ const DonationForm = props => {
             {!props.attributes.stripeConnected &&
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
                     <AlertIcon className={css(styles.noticeIcon)}/>
-                    <p className={css(styles.formParagraph, styles.noticeParagraph)}>{'Stripe needs to be connected in order to begin accepting donations.'}</p>
+                    <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Stripe needs to be connected in order to begin accepting donations.', 'donation-form-block')}</p>
                 </div>
             }
             <div className={`donation-form-block ${css(styles.formContainer)}`}>
@@ -144,7 +155,6 @@ const DonationForm = props => {
                                     placeholder={__('First Name', 'donation-form-block')}
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    required={true}
                                 />
                             </div>
                             <input
@@ -163,7 +173,7 @@ const DonationForm = props => {
                                     placeholder={__('Email', 'donation-form-block')}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    required={true}
+
                                 />
                             </div>
                             <button
@@ -173,7 +183,23 @@ const DonationForm = props => {
                                 <CaretIcon className={css(styles.donateBtnIcon)}/>
                             </button>
                         </div>
-                        {window.location.protocol === 'https:' &&
+                        {
+                            // 🙅‍ Validation error message (if any).
+                            error &&
+                            errorMessage.map((error, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
+                                        <ErrorIcon className={css(styles.noticeIcon)}/>
+                                        <p className={css(styles.formParagraph, styles.noticeParagraph)}>{error.message}</p>
+                                    </div>
+                                );
+                            })
+                        }
+                        {
+                            // 🔒 SSL secure if actually https.
+                            window.location.protocol === 'https:' &&
                             <div className={`donation-form-secure-wrap ${css(styles.secureFooter)}`}>
                                 <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`}/>
                                 {__('100% Secure Donation', 'donation-form-block')}

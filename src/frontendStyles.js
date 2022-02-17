@@ -71,8 +71,16 @@ export default class StyleSheetFactory {
                 padding: '10px 15px',
                 borderRadius: '6px',
             },
+            noticeIcon: {
+                marginRight: '10px',
+            },
             noticeParagraph: {
                 margin: '0',
+            },
+            noticeValidationError: {
+                backgroundColor: '#FFEBE9',
+                border: '1px solid rgba(255, 129, 130, 0.4)',
+                margin: '30px 0 0',
             },
             buttonBase: {
                 color: '#FFF',
@@ -95,6 +103,7 @@ export default class StyleSheetFactory {
             buttonSelected: {
                 color: `${props.attributes.color}`,
                 background: '#FFF',
+                fontWeight: '600',
             },
             btnDollarSymbol: {
                 fontSize: '18px',
@@ -105,9 +114,6 @@ export default class StyleSheetFactory {
             donateBtn: {
                 fontSize: '22px',
                 height: '55px',
-            },
-            noticeIcon: {
-                marginRight: '10px',
             },
             donateBtnIcon: {
                 margin: '0 0 0 10px',
