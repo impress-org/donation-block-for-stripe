@@ -39,6 +39,10 @@
 	  "type": "string",
 	  "default": "This information is never shared with anyone outside of our organization."
 	},
+	"stripeConnected": {
+	  "type" : "boolean",
+	  "default": false
+	},
 	"preview": {
 	  "type" : "boolean",
 	  "default": false

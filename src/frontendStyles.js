@@ -98,7 +98,7 @@ export default class StyleSheetFactory {
             },
             btnDollarSymbol: {
                 fontSize: '18px',
-                margin: '0 5px 0 -10px',
+                margin: '0 3px 0 -10px',
                 position: 'relative',
                 top: '-6px',
             },

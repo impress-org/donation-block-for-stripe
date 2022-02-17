@@ -68,10 +68,12 @@ const DonationForm = props => {
 
     return (
         <div className={'donation-form-block-wrap'}>
-            <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                <AlertIcon className={css(styles.noticeIcon)}/>
-                <p className={css(styles.formParagraph, styles.noticeParagraph)}>{'Stripe needs to be connected in order to begin accepting donations.'}</p>
-            </div>
+            {!props.attributes.stripePubKey &&
+                <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
+                    <AlertIcon className={css(styles.noticeIcon)}/>
+                    <p className={css(styles.formParagraph, styles.noticeParagraph)}>{'Stripe needs to be connected in order to begin accepting donations.'}</p>
+                </div>
+            }
             <div className={`donation-form-block ${css(styles.formContainer)}`}>
                 {props.attributes.backgroundUrl &&
                     <div
