@@ -14,7 +14,7 @@ export default class StyleSheetFactory {
                 padding: '0',
             },
             formContainerInner: {
-                padding: '20px',
+                padding: '30px',
             },
             formHeaderImage: {
                 backgroundPosition: 'center',
@@ -28,7 +28,7 @@ export default class StyleSheetFactory {
                 fontWeight: '500',
                 lineHeight: '1.4',
                 color: '#333',
-                margin: '0 0 20px',
+                margin: '0 0 15px',
                 padding: '0 0 1rem',
                 borderBottom: '1px solid #DDD',
             },
@@ -37,14 +37,14 @@ export default class StyleSheetFactory {
                 fontWeight: '400',
                 color: '#444',
             },
-            noticeParagraph: {
-                margin: '0',
-            },
             formFieldRow: {
                 margin: '0 0 20px',
                 ':last-child': {
                     marginBottom: '0',
                 },
+            },
+            introWrap: {
+                margin: '0 0 30px',
             },
             donationFormFieldsRow: {
                 display: 'grid',
@@ -57,8 +57,11 @@ export default class StyleSheetFactory {
                 gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: '10px',
                 gridAutoRows: 'minmax(60px, auto)',
+                margin: '0 0 30px',
             },
             noticeBase: {
+                display: 'flex',
+                alignItems: 'center',
                 fontSize: '18px',
                 fontWeight: '400',
                 backgroundColor: '#FFF8C5',
@@ -66,6 +69,10 @@ export default class StyleSheetFactory {
                 color: '#333',
                 margin: '0 0 20px',
                 padding: '10px 15px',
+                borderRadius: '6px',
+            },
+            noticeParagraph: {
+                margin: '0',
             },
             buttonBase: {
                 color: '#FFF',
@@ -77,16 +84,63 @@ export default class StyleSheetFactory {
                 transition: 'all 0.2s ease',
                 lineHeight: '1.6',
                 cursor: 'pointer',
+                height: '70px',
             },
             buttonPrimary: {
                 ':hover': {
                     background: `${color(`${props.attributes.color}`).lighten(0.2)}`,
-                    border: `${color(`${props.attributes.color}`).lighten(0.2)}`,
+                    border: `3px solid ${color(`${props.attributes.color}`).lighten(0.2)}`,
                 },
             },
             buttonSelected: {
                 color: `${props.attributes.color}`,
                 background: '#FFF',
+            },
+            donateBtn: {
+                fontSize: '22px',
+                height: '55px',
+            },
+            noticeIcon: {
+                marginRight: '10px',
+            },
+            donateBtnIcon: {
+                margin: '0 0 0 10px',
+            },
+            textField: {
+                background: '#FFF',
+                border: '1.2px solid #666',
+                boxSizing: 'border-box',
+                boxShadow: 'inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15)',
+                borderRadius: '5px',
+                padding: '10px 15px',
+                fontSize: '16px',
+                lineHeight: '20px',
+                height: '55px',
+                width: '100%',
+            },
+            textFieldIcon: {
+                paddingLeft: '45px',
+            },
+            fieldIconWrap: {
+                position: 'relative',
+                boxSizing: 'border-box',
+            },
+            fieldIcon: {
+                position: 'absolute',
+                top: '18px',
+                left: '18px',
+            },
+            emailIcon: {
+                top: '20px',
+            },
+            currencyFieldWrap: {
+                position: 'relative',
+                boxSizing: 'border-box',
+            },
+            currencyIcon: {
+                position: 'absolute',
+                top: '18px',
+                left: '15px',
             },
             currencyField: {
                 width: '100%',
@@ -98,6 +152,17 @@ export default class StyleSheetFactory {
                 lineHeight: '1',
                 boxSizing: 'border-box',
                 ':hover': {}
+            },
+            secureFooter: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '13px',
+                color: '#333',
+                margin: '30px 0 0',
+            },
+            iconLock: {
+                margin: '0 10px 0 0',
             }
         })
     }
