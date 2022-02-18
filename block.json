@@ -39,6 +39,10 @@
 	  "type": "string",
 	  "default": "This information is never shared with anyone outside of our organization."
 	},
+	"donateBtnText": {
+	  "type": "string",
+	  "default": "Donate Now"
+	},
 	"stripeConnected": {
 	  "type" : "boolean",
 	  "default": false

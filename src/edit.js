@@ -32,6 +32,7 @@ export default function Edit({attributes, setAttributes}) {
         color,
         introHeading,
         introSubheading,
+        donateBtnText,
         stripeConnected,
         preview,
     } = attributes;
@@ -197,6 +198,15 @@ export default function Edit({attributes, setAttributes}) {
                                 help={__('Customize or delete all text to hide.', 'donation-form-block')}
                                 value={attributes.fieldsSubheading}
                                 onChange={(value) => setAttributes({fieldsSubheading: value})}
+                            />
+                        </PanelRow>
+                        <PanelRow>
+                            <TextControl
+                                label={__('Donate Button Text', 'donation-form-block')}
+                                help={__('Customize the text for the donate button. The maximum text length is 20 characters.', 'donation-form-block')}
+                                value={attributes.donateBtnText}
+                                maxLength={20}
+                                onChange={(value) => setAttributes({donateBtnText: value})}
                             />
                         </PanelRow>
                     </PanelBody>

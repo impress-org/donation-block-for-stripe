@@ -12,9 +12,27 @@ export default class StyleSheetFactory {
                 maxWidth: '650px',
                 margin: '1rem auto',
                 padding: '0',
+                position: 'relative',
+                transition: 'all .5s ease-in-out',
             },
             formContainerInner: {
                 padding: '30px',
+                transition: 'all .5s ease-in-out',
+            },
+            loadingWrap: {
+                background: 'rgb(255 255 255 / 85%)',
+                zIndex: '9999',
+                borderRadius: '8px',
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                bottom: '0',
+                right: '0',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
             },
             formHeaderImage: {
                 backgroundPosition: 'center',
@@ -77,10 +95,29 @@ export default class StyleSheetFactory {
             noticeParagraph: {
                 margin: '0',
             },
+            noticeInfo: {
+                backgroundColor: '#DDF4FF',
+                border: '1px solid rgba(84, 174, 255, 0.4)',
+                margin: '30px 0',
+                justifyContent: 'center',
+                fontSize: '28px',
+                fontWeight: '600',
+            },
             noticeValidationError: {
                 backgroundColor: '#FFEBE9',
                 border: '1px solid rgba(255, 129, 130, 0.4)',
                 margin: '30px 0 0',
+            },
+            noticeDonation:{
+                background: `${color(`${props.attributes.color}`).lighten(0.8)}`,
+                border: `1px solid ${color(`${props.attributes.color}`).lighten(0.6)}`,
+               margin: '0 0 30px',
+            },
+            noticeDonationParagraph: {
+                fontSize: '22px',
+                fontWeight: '600',
+                margin: '0',
+                color: '#333',
             },
             buttonBase: {
                 color: '#FFF',
@@ -114,6 +151,12 @@ export default class StyleSheetFactory {
             donateBtn: {
                 fontSize: '22px',
                 height: '55px',
+                fontWeight: '600',
+            },
+            payBtn: {
+                margin: '50px auto 0',
+                padding: '0 25px',
+                display: 'block',
             },
             donateBtnIcon: {
                 margin: '0 0 0 10px',

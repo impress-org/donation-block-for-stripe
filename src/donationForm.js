@@ -5,6 +5,7 @@ import CurrencyInput from 'react-currency-input-field';
 import axios from 'axios';
 import StyleSheetFactory from "./frontendStyles";
 import {css} from 'aphrodite';
+import {Spinner} from '@wordpress/components';
 import {ReactComponent as AlertIcon} from './images/alert.svg';
 import {ReactComponent as LockIcon} from './images/lock.svg';
 import {ReactComponent as MailIcon} from './images/mail.svg';
@@ -29,9 +30,11 @@ const DonationForm = props => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [step, setStep] = useState(1);
 
     const updateDonationAmount = (amount) => {
-        amount = amount.replace('$', '');``
+        amount = amount.replace('$', '');
         setDonationAmount(amount);
     };
 
@@ -39,8 +42,12 @@ const DonationForm = props => {
         '5', '10', '25', '50', '100', '250'
     ];
 
-    const handleSubmit = (e) => {
+    let elements;
+
+
+    const handleAmountSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         axios.post('/?dfb_donation-block-stripe-action=getStripeIntent', {
             amount: donationAmount * 100,
@@ -48,32 +55,56 @@ const DonationForm = props => {
             lastName: lastName,
             email: email
         }).then(function (response) {
-
-            // TODO: Validate form.
-
-            console.log(response.data.data);
-            console.log(response.data.data.fields);
-            // Check for errors.
+            // 🧐 Validation.
             if (response.data.data.error) {
                 setError(true);
+                setIsLoading(false);
                 setErrorMessage(response.data.data.fields);
-                console.log(errorMessage);
             } else {
-                // Proceed with Stripe.
+                setStep(2);
+                // 🤗 Proceed with Stripe.
                 const stripe = Stripe(props.attributes.stripePubKey);
                 const clientSecret = response.data.data.clientSecret;
-                let elements = stripe.elements({clientSecret});
-
+                const appearance = {
+                    theme: 'stripe',
+                    variables: {
+                        colorPrimary: props.attributes.color,
+                    },
+                };
+                elements = stripe.elements({appearance, clientSecret});
                 const paymentElement = elements.create('payment');
                 paymentElement.mount('.paymentIntentForm');
+                paymentElement.on('ready', function (event) {
+                    setIsLoading(false);
+                });
             }
-
-
         }).catch(function (error) {
-
             console.log(error);
-
+            setStep(1);
+            setIsLoading(false);
         });
+    }
+
+    const handlePaymentSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const {error} = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: window.location.href,
+            },
+        });
+
+        if (error.type === "card_error" || error.type === "validation_error") {
+            setError(true);
+            setErrorMessage(error.message);
+        } else {
+            setError(true);
+            setErrorMessage("An unexpected error occured.");
+        }
+
+        setIsLoading(false);
 
     }
 
@@ -86,6 +117,11 @@ const DonationForm = props => {
                 </div>
             }
             <div className={`donation-form-block ${css(styles.formContainer)}`}>
+                {isLoading &&
+                    <div className={`donation-form-loading-wrap ${css(styles.loadingWrap)}`}>
+                        <Spinner/>
+                    </div>
+                }
                 {props.attributes.backgroundUrl &&
                     <div
                         className={`donation-form-header ${css(styles.formHeaderImage)}`}
@@ -94,122 +130,139 @@ const DonationForm = props => {
                         }}></div>
                 }
                 <div className={`donation-form-inner ${css(styles.formContainerInner)}`}>
-                    <div className={`donation-form-fieldset-intro ${css(styles.introWrap)}`}>
-                        {props.attributes.introHeading &&
-                            <h2 className={`donation-form-main-heading ${css(styles.formHeading)}`}>{props.attributes.introHeading}</h2>
-                        }
-                        {props.attributes.introSubheading &&
-                            <p className={`donation-form-main-subheading ${css(styles.formParagraph)}`}>{props.attributes.introSubheading}</p>
-                        }
-                    </div>
-                    <form onSubmit={handleSubmit}>
-                        <div
-                            className={`donation-form-field-row ${css(styles.formFieldRow, styles.currencyFieldWrap)}`}>
-                            <DollarIcon className={css(styles.currencyIcon)}/>
-                            <CurrencyInput
-                                className={css(styles.currencyField)}
-                                name="amount"
-                                allowDecimals={true}
-                                allowNegativeValue={false}
-                                maxLength={6}
-                                value={donationAmount}
-                                defaultValue={donationAmount}
-                                onValueChange={(value, name) => updateDonationAmount(value)}
-                            />
-                        </div>
-                        <div
-                            className={`donation-form-field-row donation-form-amount-btns ${css(styles.formFieldRow, styles.formButtonRow)}`}>
-                            {
-                                donationAmounts.map((amount, index) => {
-                                    return (
-                                        <button
-                                            key={index}
-                                            className={`${cx('donation-form-amount-btn', {'is-selected': donationAmount === amount})} ${css(
-                                                donationAmount === amount ? [styles.buttonBase, styles.buttonSelected] : [styles.buttonBase, styles.buttonPrimary],)}`}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                updateDonationAmount(amount)
-                                            }}
-                                        >
-                                            <span className={css(styles.btnDollarSymbol)}>$</span>{amount}
-                                        </button>
-                                    );
-                                })
-                            }
-                        </div>
-                        <div className={`donation-form-field-row ${css(styles.introWrap)}`}>
-                            {props.attributes.fieldsHeading &&
-                                <h3 className={`donation-form-fields-heading ${css(styles.formHeading)}`}>{props.attributes.fieldsHeading}</h3>
-                            }
-                            {props.attributes.fieldsSubheading &&
-                                <p className={`donation-form-fields-subheading ${css(styles.formParagraph)}`}>{props.attributes.fieldsSubheading}</p>
-                            }
-                        </div>
-                        <div
-                            className={`donation-form-field-row donation-form-fields-wrap ${css(styles.donationFormFieldsRow)}`}>
-                            <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                <UserIcon className={`${css(styles.fieldIcon)}`}/>
-                                <input
-                                    className={`donation-form-field donation-form-first-name ${css(styles.textField, styles.textFieldIcon)}`}
-                                    type={'text'}
-                                    placeholder={__('First Name', 'donation-form-block')}
-                                    value={firstName}
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                />
+                    {1 === step &&
+                        <>
+                            <div className={`donation-form-fieldset-intro ${css(styles.introWrap)}`}>
+                                {props.attributes.introHeading &&
+                                    <h2 className={`donation-form-main-heading ${css(styles.formHeading)}`}>{props.attributes.introHeading}</h2>
+                                }
+                                {props.attributes.introSubheading &&
+                                    <p className={`donation-form-main-subheading ${css(styles.formParagraph)}`}>{props.attributes.introSubheading}</p>
+                                }
                             </div>
-                            <input
-                                className={`donation-form-field donation-form-last-name ${css(styles.textField)}`}
-                                type={'text'}
-                                placeholder={__('Last Name', 'donation-form-block')}
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                required={false}
-                            />
-                            <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`}/>
-                                <input
-                                    className={`donation-form-field donation-form-first-email ${css(styles.textField, styles.textFieldIcon)}`}
-                                    type={'email'}
-                                    placeholder={__('Email', 'donation-form-block')}
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-
-                                />
-                            </div>
-                            <button
-                                className={`donation-form-submit ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn)}`}
-                            >
-                                Donate Now
-                                <CaretIcon className={css(styles.donateBtnIcon)}/>
-                            </button>
-                        </div>
-                        {
-                            // 🙅‍ Validation error message (if any).
-                            error &&
-                            errorMessage.map((error, index) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
-                                        <ErrorIcon className={css(styles.noticeIcon)}/>
-                                        <p className={css(styles.formParagraph, styles.noticeParagraph)}>{error.message}</p>
+                            <form onSubmit={handleAmountSubmit}>
+                                <div
+                                    className={`donation-form-field-row ${css(styles.formFieldRow, styles.currencyFieldWrap)}`}>
+                                    <DollarIcon className={css(styles.currencyIcon)}/>
+                                    <CurrencyInput
+                                        className={css(styles.currencyField)}
+                                        name="amount"
+                                        allowDecimals={true}
+                                        allowNegativeValue={false}
+                                        maxLength={6}
+                                        value={donationAmount}
+                                        defaultValue={donationAmount}
+                                        onValueChange={(value, name) => updateDonationAmount(value)}
+                                    />
+                                </div>
+                                <div
+                                    className={`donation-form-field-row donation-form-amount-btns ${css(styles.formFieldRow, styles.formButtonRow)}`}>
+                                    {
+                                        donationAmounts.map((amount, index) => {
+                                            return (
+                                                <button
+                                                    key={index}
+                                                    className={`${cx('donation-form-amount-btn', {'is-selected': donationAmount === amount})} ${css(
+                                                        donationAmount === amount ? [styles.buttonBase, styles.buttonSelected] : [styles.buttonBase, styles.buttonPrimary],)}`}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        updateDonationAmount(amount)
+                                                    }}
+                                                >
+                                                    <span className={css(styles.btnDollarSymbol)}>$</span>{amount}
+                                                </button>
+                                            );
+                                        })
+                                    }
+                                </div>
+                                <div className={`donation-form-field-row ${css(styles.introWrap)}`}>
+                                    {props.attributes.fieldsHeading &&
+                                        <h3 className={`donation-form-fields-heading ${css(styles.formHeading)}`}>{props.attributes.fieldsHeading}</h3>
+                                    }
+                                    {props.attributes.fieldsSubheading &&
+                                        <p className={`donation-form-fields-subheading ${css(styles.formParagraph)}`}>{props.attributes.fieldsSubheading}</p>
+                                    }
+                                </div>
+                                <div
+                                    className={`donation-form-field-row donation-form-fields-wrap ${css(styles.donationFormFieldsRow)}`}>
+                                    <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
+                                        <UserIcon className={`${css(styles.fieldIcon)}`}/>
+                                        <input
+                                            className={`donation-form-field donation-form-first-name ${css(styles.textField, styles.textFieldIcon)}`}
+                                            type={'text'}
+                                            placeholder={__('First Name', 'donation-form-block')}
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            required={true}
+                                        />
                                     </div>
-                                );
-                            })
-                        }
-                        {
-                            // 🔒 SSL secure if actually https.
-                            window.location.protocol === 'https:' &&
-                            <div className={`donation-form-secure-wrap ${css(styles.secureFooter)}`}>
-                                <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`}/>
-                                {__('100% Secure Donation', 'donation-form-block')}
+                                    <input
+                                        className={`donation-form-field donation-form-last-name ${css(styles.textField)}`}
+                                        type={'text'}
+                                        placeholder={__('Last Name', 'donation-form-block')}
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        required={false}
+                                    />
+                                    <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
+                                        <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`}/>
+                                        <input
+                                            className={`donation-form-field donation-form-first-email ${css(styles.textField, styles.textFieldIcon)}`}
+                                            type={'email'}
+                                            placeholder={__('Email', 'donation-form-block')}
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            required={true}
+                                        />
+                                    </div>
+                                    <button
+                                        className={`donation-form-submit ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn)}`}
+                                    >
+                                        {props.attributes.donateBtnText}
+                                        <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                    </button>
+                                </div>
+                                {
+                                    // 🙅‍ Validation error message (if any).
+                                    error &&
+                                    errorMessage.map((error, index) => {
+                                        return (
+                                            <div
+                                                key={index}
+                                                className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
+                                                <ErrorIcon className={css(styles.noticeIcon)}/>
+                                                <p className={css(styles.formParagraph, styles.noticeParagraph)}>{error.message}</p>
+                                            </div>
+                                        );
+                                    })
+                                }
+                            </form>
+                        </>
+                    }
+                    {2 === step &&
+                        <div className={`donation-form-payment-step`}>
+                            <div
+                                className={`donation-form-payment-summary ${css(styles.noticeBase, styles.noticeInfo, styles.noticeDonation)}`}>
+                                <p className={css(styles.noticeDonationParagraph)}>{`Complete your $${donationAmount} one-time donation`}</p>
                             </div>
-                        }
-                    </form>
-
-                    <div className="paymentIntentForm">
-
-                    </div>
+                            <form onSubmit={handlePaymentSubmit}>
+                                <div className={`paymentIntentForm`}></div>
+                                <button
+                                    className={`donation-form-submit ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn, styles.payBtn)}`}>
+                                    Complete Donation
+                                    <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    {
+                        // 🔒 SSL secure if actually https.
+                        window.location.protocol === 'https:' &&
+                        <div className={`donation-form-secure-wrap ${css(styles.secureFooter)}`}>
+                            <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`}/>
+                            {__('100% Secure Donation', 'donation-form-block')}
+                        </div>
+                    }
                 </div>
             </div>
         </div>
