@@ -15,7 +15,7 @@ import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
 
 /**
- * Donation Form.
+ * 💚 Donation Form.
  *
  * @param props
  * @returns {JSX.Element}
@@ -36,6 +36,8 @@ const DonationForm = props => {
         return props.backend ? null : Stripe(props.attributes.stripePubKey);
     }, [props.attributes.stripePubKey, props.backend]);
     const elements = useRef(null);
+
+    checkPaymentStatus();
 
     const updateDonationAmount = (amount) => {
         amount = amount.replace('$', '');
@@ -92,6 +94,7 @@ const DonationForm = props => {
         });
     }
 
+    // 💰 Payment.
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -99,7 +102,13 @@ const DonationForm = props => {
         const {error} = await stripe.confirmPayment({
             elements: elements.current,
             confirmParams: {
-                return_url: window.location.href,
+                payment_method_data: {
+                    billing_details: {
+                        name: `${firstName} ${lastName}`,
+                        email: email,
+                    },
+                },
+                return_url: window.location.href + '#donation-form-receipt',
             },
         });
 
@@ -110,9 +119,37 @@ const DonationForm = props => {
             setError(true);
             setErrorMessage("An unexpected error occurred.");
         }
-
         setIsLoading(false);
+    }
 
+    // 🏃‍ Fetches the payment intent status after payment submission.
+    async function checkPaymentStatus() {
+        const clientSecret = new URLSearchParams(window.location.search).get(
+            'payment_intent_client_secret'
+        );
+
+        if (!clientSecret) {
+            return;
+        }
+
+        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+
+        console.log(paymentIntent);
+
+        switch (paymentIntent.status) {
+            case "succeeded":
+                // showMessage("Payment succeeded!");
+                break;
+            case "processing":
+                // showMessage("Your payment is processing.");
+                break;
+            case "requires_payment_method":
+                // showMessage("Your payment was not successful, please try again.");
+                break;
+            default:
+                // showMessage("Something went wrong.");
+                break;
+        }
     }
 
     return (
@@ -269,7 +306,7 @@ const DonationForm = props => {
                         </div>
                     }
                     {3 === step &&
-                        <div className="donation-form-receipt-step">
+                        <div id={'donation-form-receipt'} className="donation-form-receipt-step">
                             <div
                                 className={`donation-form-payment-summary ${css(styles.noticeBase, styles.noticeInfo, styles.noticeDonation)}`}>
                                 <p className={css(styles.noticeDonationParagraph)}>{`Thank you for your $${donationAmount} donation!`}</p>
