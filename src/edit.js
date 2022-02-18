@@ -6,6 +6,7 @@ import {
     TextControl,
     Button,
     ResponsiveWrapper,
+    ToggleControl,
     ColorPalette,
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
@@ -34,6 +35,7 @@ export default function Edit({attributes, setAttributes}) {
         introSubheading,
         donateBtnText,
         stripeConnected,
+        testMode,
         preview,
     } = attributes;
 
@@ -211,8 +213,8 @@ export default function Edit({attributes, setAttributes}) {
                         </PanelRow>
                     </PanelBody>
                     <PanelBody title={__('Stripe Connect', 'donation-form-block')} initialOpen={true}>
-                        <PanelRow>
-                            {!stripeConnected &&
+                        {!stripeConnected &&
+                            <PanelRow>
                                 <div id="dfb-stripe-connect-wrap">
                                     <div className="dfb-welcome-wrap-inner">
                                         <span className="dfb-welcome-wave">👋</span>
@@ -234,23 +236,37 @@ export default function Edit({attributes, setAttributes}) {
                                         </a>
                                     </div>
                                 </div>
-                            }
-                            {stripeConnected &&
-                                <div className={'dfb-connected-wrap'}>
-                                    <div className={'dfb-connected-circle-wrap'}>
-                                        <div className="dfb-connected-circle"></div>
+                            </PanelRow>
+                        }
+                        {stripeConnected &&
+                            <>
+                                <PanelRow>
+                                    <div className={'dfb-connected-wrap'}>
+                                        <div className={'dfb-connected-circle-wrap'}>
+                                            <div className="dfb-connected-circle"></div>
+                                        </div>
+                                        <span>You're connected to Stripe!</span>
                                     </div>
-                                    <span>You're connected to Stripe!</span>
-                                </div>
-
-                            }
-                        </PanelRow>
+                                </PanelRow>
+                                <PanelRow>
+                                    <ToggleControl
+                                        label={__('Live mode enabled', 'donation-form-block')}
+                                        help={__('Enable to accept live payments. Turn off to test the donation process using test payments.', 'donation-form-block')}
+                                        checked={testMode}
+                                        onChange={(value) => {
+                                            console.log(value);
+                                            setAttributes({testMode: value});
+                                        }}
+                                    />
+                                </PanelRow>
+                            </>
+                        }
                     </PanelBody>
                 </InspectorControls>
             </Fragment>
             <Fragment>
                 <div {...blockProps}>
-                    <DonationForm attributes={attributes}/>
+                    <DonationForm attributes={attributes} backend />
                 </div>
             </Fragment>
         </Fragment>

@@ -1,4 +1,4 @@
-import {useEffect, useState} from '@wordpress/element';
+import {useMemo, useRef, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
@@ -32,6 +32,10 @@ const DonationForm = props => {
     const [errorMessage, setErrorMessage] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [step, setStep] = useState(1);
+    const stripe = useMemo(() => {
+        return props.backend ? null : Stripe(props.attributes.stripePubKey);
+    }, [props.attributes.stripePubKey, props.backend]);
+    const elements = useRef(null);
 
     const updateDonationAmount = (amount) => {
         amount = amount.replace('$', '');
@@ -42,13 +46,17 @@ const DonationForm = props => {
         '5', '10', '25', '50', '100', '250'
     ];
 
-    let elements;
-
-
     const handleAmountSubmit = (e) => {
         e.preventDefault();
+
+        // 🛑 Don't proceed if in wp-admin.
+        if (props.backend) {
+            return;
+        }
+
         setIsLoading(true);
 
+        // 🟢 Good to go.
         axios.post('/?dfb_donation-block-stripe-action=getStripeIntent', {
             amount: donationAmount * 100,
             firstName: firstName,
@@ -63,7 +71,6 @@ const DonationForm = props => {
             } else {
                 setStep(2);
                 // 🤗 Proceed with Stripe.
-                const stripe = Stripe(props.attributes.stripePubKey);
                 const clientSecret = response.data.data.clientSecret;
                 const appearance = {
                     theme: 'stripe',
@@ -71,8 +78,8 @@ const DonationForm = props => {
                         colorPrimary: props.attributes.color,
                     },
                 };
-                elements = stripe.elements({appearance, clientSecret});
-                const paymentElement = elements.create('payment');
+                elements.current = stripe.elements({appearance, clientSecret});
+                const paymentElement = elements.current.create('payment');
                 paymentElement.mount('.paymentIntentForm');
                 paymentElement.on('ready', function (event) {
                     setIsLoading(false);
@@ -90,7 +97,7 @@ const DonationForm = props => {
         setIsLoading(true);
 
         const {error} = await stripe.confirmPayment({
-            elements,
+            elements: elements.current,
             confirmParams: {
                 return_url: window.location.href,
             },
@@ -101,7 +108,7 @@ const DonationForm = props => {
             setErrorMessage(error.message);
         } else {
             setError(true);
-            setErrorMessage("An unexpected error occured.");
+            setErrorMessage("An unexpected error occurred.");
         }
 
         setIsLoading(false);
@@ -114,6 +121,12 @@ const DonationForm = props => {
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
                     <AlertIcon className={css(styles.noticeIcon)}/>
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Stripe needs to be connected in order to begin accepting donations.', 'donation-form-block')}</p>
+                </div>
+            }
+            {!props.attributes.testMode && props.attributes.stripeConnected &&
+                <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
+                    <AlertIcon className={css(styles.noticeIcon)}/>
+                    <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Test mode is enabled. No live payments will be accepted for this donation form.', 'donation-form-block')}</p>
                 </div>
             }
             <div className={`donation-form-block ${css(styles.formContainer)}`}>
@@ -255,7 +268,54 @@ const DonationForm = props => {
                             </form>
                         </div>
                     }
-                    {
+                    {3 === step &&
+                        <div className="donation-form-receipt-step">
+                            <div
+                                className={`donation-form-payment-summary ${css(styles.noticeBase, styles.noticeInfo, styles.noticeDonation)}`}>
+                                <p className={css(styles.noticeDonationParagraph)}>{`Thank you for your $${donationAmount} donation!`}</p>
+                            </div>
+                            <p className={`donation-receipt-email-text ${css(styles.donationReceiptEmailText)}`}>
+                                Your receipt has been sent to <strong>{email}</strong>
+                            </p>
+                            <div className={`donation-receipt-details`}>
+                                <p className={`donation-receipt-heading ${css(styles.donationReceiptDetails)}`}>Donation
+                                    Details</p>
+                                <ul className={`donation-receipt-list ${css(styles.donationReceiptDetailsList)}`}>
+                                    <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
+                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donor
+                                            Name</p>
+                                        <span
+                                            className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>{firstName} {lastName}</span>
+                                    </li>
+                                    <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
+                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donor
+                                            Email</p>
+                                        <span
+                                            className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>{email}</span>
+                                    </li>
+                                    <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
+                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donation
+                                            Amount</p>
+                                        <span
+                                            className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>${donationAmount}</span>
+                                    </li>
+                                    <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
+                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donation
+                                            Frequency</p>
+                                        <span
+                                            className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>One-time</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button
+                                className={`donation-form-give-again ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn, styles.giveAgainBtn)}`}
+                                onClick={() => setStep(1)}>
+                                Give Again
+                                <CaretIcon className={css(styles.donateBtnIcon)}/>
+                            </button>
+                        </div>
+                    }
+                    {3 !== step &&
                         // 🔒 SSL secure if actually https.
                         window.location.protocol === 'https:' &&
                         <div className={`donation-form-secure-wrap ${css(styles.secureFooter)}`}>

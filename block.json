@@ -47,6 +47,10 @@
 	  "type" : "boolean",
 	  "default": false
 	},
+	"testMode": {
+	  "type" : "boolean",
+	  "default": false
+	},
 	"preview": {
 	  "type" : "boolean",
 	  "default": false

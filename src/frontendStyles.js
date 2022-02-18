@@ -108,10 +108,10 @@ export default class StyleSheetFactory {
                 border: '1px solid rgba(255, 129, 130, 0.4)',
                 margin: '30px 0 0',
             },
-            noticeDonation:{
+            noticeDonation: {
                 background: `${color(`${props.attributes.color}`).lighten(0.8)}`,
                 border: `1px solid ${color(`${props.attributes.color}`).lighten(0.6)}`,
-               margin: '0 0 30px',
+                margin: '0 0 30px',
             },
             noticeDonationParagraph: {
                 fontSize: '22px',
@@ -218,7 +218,43 @@ export default class StyleSheetFactory {
             },
             iconLock: {
                 margin: '0 10px 0 0',
-            }
+            },
+            donationReceiptEmailText: {
+                textAlign: 'center',
+                margin: '0 0 30px',
+            },
+            donationReceiptDetails: {
+                fontWeight: '600',
+                fontSize: '22px',
+                padding: '0 10px 15px',
+                margin: '0',
+                borderBottom: '1px solid #DDD',
+            },
+            donationReceiptDetailsList: {
+                listStyle: 'none',
+                padding: '0',
+                margin: '0',
+            },
+            donationReceiptDetailsListItem: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                margin: '0 0 10px',
+                padding: '14px 10px',
+                borderBottom: '1px solid #DDD',
+            },
+            donationReceiptDetailsListItemParagraph: {
+                margin: '0',
+                padding: '0',
+            },
+            donationReceiptDetailsListItemSpan: {
+                fontWeight: '600',
+            },
+            giveAgainBtn: {
+                minWidth: '200px',
+                margin: '40px auto 20px',
+                display: 'block',
+            },
         })
     }
 }
