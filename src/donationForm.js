@@ -31,6 +31,11 @@ const DonationForm = props => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState({
+        status: '',
+        message: '',
+        error: false
+    });
     const [step, setStep] = useState(1);
     const stripe = useMemo(() => {
         return props.backend ? null : Stripe(props.attributes.stripePubKey);
@@ -48,6 +53,7 @@ const DonationForm = props => {
         '5', '10', '25', '50', '100', '250'
     ];
 
+    // 🤠 Handle the first step of the form.
     const handleAmountSubmit = (e) => {
         e.preventDefault();
 
@@ -131,23 +137,45 @@ const DonationForm = props => {
         if (!clientSecret) {
             return;
         }
+        if (3 !== step) {
+            setStep(3);
+        }
 
-        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+        const {paymentIntent} = await stripe.retrievePaymentIntent(clientSecret);
+
+        setDonationAmount(paymentIntent.amount / 100);
+        setEmail(paymentIntent.receipt_email);
 
         console.log(paymentIntent);
 
         switch (paymentIntent.status) {
             case "succeeded":
-                // showMessage("Payment succeeded!");
+                setPaymentStatus({
+                    status: 'Successful',
+                    message: `Thank you for your $${donationAmount} donation!`,
+                    error: false,
+                });
                 break;
             case "processing":
-                // showMessage("Your payment is processing.");
+                setPaymentStatus({
+                    status: 'Processing',
+                    message: "Your payment is processing.",
+                    error: false,
+                });
                 break;
             case "requires_payment_method":
-                // showMessage("Your payment was not successful, please try again.");
+                setPaymentStatus({
+                    status: 'Not successful',
+                    message: "Your payment was not successful, please try again.",
+                    error: true,
+                });
                 break;
             default:
-                // showMessage("Something went wrong.");
+                setPaymentStatus({
+                    status: paymentIntent.status,
+                    message: "Something went wrong, please try again.",
+                    error: true,
+                });
                 break;
         }
     }
@@ -307,47 +335,56 @@ const DonationForm = props => {
                     }
                     {3 === step &&
                         <div id={'donation-form-receipt'} className="donation-form-receipt-step">
-                            <div
-                                className={`donation-form-payment-summary ${css(styles.noticeBase, styles.noticeInfo, styles.noticeDonation)}`}>
-                                <p className={css(styles.noticeDonationParagraph)}>{`Thank you for your $${donationAmount} donation!`}</p>
-                            </div>
-                            <p className={`donation-receipt-email-text ${css(styles.donationReceiptEmailText)}`}>
-                                Your receipt has been sent to <strong>{email}</strong>
-                            </p>
+                            {'' !== paymentStatus.status && true !== paymentStatus.error &&
+                                <>
+                                    <div
+                                        className={`donation-form-payment-summary ${css(styles.noticeBase, styles.noticeInfo, styles.noticeDonation)}`}>
+                                        <p className={css(styles.noticeDonationParagraph)}>{paymentStatus.message}</p>
+                                    </div>
+                                    <p className={`donation-receipt-email-text ${css(styles.donationReceiptEmailText)}`}>
+                                        Your receipt has been sent to <strong>{email}</strong>
+                                    </p>
+                                </>
+                            }
+                            {'' !== paymentStatus.status && true === paymentStatus.error &&
+                                // Error message.
+                                <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
+                                    <AlertIcon className={css(styles.noticeIcon)}/>
+                                    <p className={css(styles.formParagraph, styles.noticeParagraph)}>{paymentStatus.message}</p>
+                                </div>
+
+                            }
                             <div className={`donation-receipt-details`}>
-                                <p className={`donation-receipt-heading ${css(styles.donationReceiptDetails)}`}>Donation
-                                    Details</p>
+                                <p className={`donation-receipt-heading ${css(styles.donationReceiptDetails)}`}>{__('Donation Details', 'donation-form-block')}</p>
                                 <ul className={`donation-receipt-list ${css(styles.donationReceiptDetailsList)}`}>
+                                    {'' !== paymentStatus.status &&
+                                        <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
+                                            <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>{__('Payment Status', 'donation-form-block')}</p>
+                                            <span
+                                                className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>{paymentStatus.status}</span>
+                                        </li>
+                                    }
                                     <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
-                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donor
-                                            Name</p>
-                                        <span
-                                            className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>{firstName} {lastName}</span>
-                                    </li>
-                                    <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
-                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donor
-                                            Email</p>
+                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>{__('Donor Email', 'donation-form-block')}</p>
                                         <span
                                             className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>{email}</span>
                                     </li>
                                     <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
-                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donation
-                                            Amount</p>
+                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>{__('Donation Amount', 'donation-form-block')}</p>
                                         <span
                                             className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>${donationAmount}</span>
                                     </li>
                                     <li className={`donation-receipt-list-item ${css(styles.donationReceiptDetailsListItem)}`}>
-                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>Donation
-                                            Frequency</p>
+                                        <p className={`donation-receipt-list-item-p ${css(styles.formParagraph, styles.donationReceiptDetailsListItemParagraph)}`}>{__('Donation Frequency', 'donation-form-block')}</p>
                                         <span
-                                            className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>One-time</span>
+                                            className={`donation-receipt-list-item-span ${css(styles.donationReceiptDetailsListItemSpan)}`}>{__('One-time', 'donation-form-block')}</span>
                                     </li>
                                 </ul>
                             </div>
                             <button
                                 className={`donation-form-give-again ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn, styles.giveAgainBtn)}`}
                                 onClick={() => setStep(1)}>
-                                Give Again
+                                {__('Give Again', 'donation-form-block')}
                                 <CaretIcon className={css(styles.donateBtnIcon)}/>
                             </button>
                         </div>
