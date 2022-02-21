@@ -82,7 +82,7 @@ const DonationForm = props => {
                 };
                 elements.current = stripe.elements({appearance, clientSecret});
                 const paymentElement = elements.current.create('payment');
-                paymentElement.mount('.paymentIntentForm');
+                paymentElement.mount('.donation-form-payment-intent');
                 paymentElement.on('ready', function (event) {
                     setIsLoading(false);
                 });
@@ -296,7 +296,7 @@ const DonationForm = props => {
                                 <p className={css(styles.noticeDonationParagraph)}>{`Complete your $${donationAmount} one-time donation`}</p>
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
-                                <div className={`paymentIntentForm`}></div>
+                                <div className={`donation-form-payment-intent ${css(styles.stripePaymentWrap)}`}></div>
                                 <button
                                     className={`donation-form-submit ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn, styles.payBtn)}`}>
                                     Complete Donation

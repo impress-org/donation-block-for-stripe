@@ -5,6 +5,7 @@
  */
 import {registerBlockType} from '@wordpress/blocks';
 import {__} from '@wordpress/i18n';
+import GiveIcon from './giveIcon';
 
 /**
  * Internal dependencies
@@ -23,6 +24,7 @@ import {render} from '@wordpress/element';
 registerBlockType('givewp/donation-form-block', {
 
 	title: __('Donation Form Block', 'donation-form-block'),
+    icon: <GiveIcon color="grey" />,
 
 	/**
 	 * @see ./edit.js

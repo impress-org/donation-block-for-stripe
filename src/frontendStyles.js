@@ -219,6 +219,9 @@ export default class StyleSheetFactory {
             iconLock: {
                 margin: '0 10px 0 0',
             },
+            stripePaymentWrap: {
+                minHeight: '300px',
+            },
             donationReceiptEmailText: {
                 textAlign: 'center',
                 margin: '0 0 30px',

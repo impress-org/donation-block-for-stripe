@@ -104,7 +104,7 @@ export default function Edit({attributes, setAttributes}) {
                         <PanelRow>
                             <div className="dfb-background-uploader">
                                 <p className={'dfb-label'}>
-                                    <label>{__('Header background image', 'donation-form-block')}</label>
+                                    <label>{__('Header image', 'donation-form-block')}</label>
                                 </p>
                                 <MediaUploadCheck>
                                     <MediaUpload
