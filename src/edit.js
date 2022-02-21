@@ -14,6 +14,7 @@ import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@
 import {dispatch, useSelect} from '@wordpress/data';
 import {useEntityProp} from '@wordpress/core-data';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
+import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
 
 /**
@@ -245,7 +246,7 @@ export default function Edit({attributes, setAttributes}) {
                                         <div className={'dfb-connected-circle-wrap'}>
                                             <div className="dfb-connected-circle"></div>
                                         </div>
-                                        <span>You're connected to Stripe!</span>
+                                        <span>{__('You\'re connected to Stripe!', 'donation-form-block')}</span>
                                     </div>
                                 </PanelRow>
                                 <PanelRow>
@@ -261,12 +262,18 @@ export default function Edit({attributes, setAttributes}) {
                                 </PanelRow>
                             </>
                         }
+                        <PanelRow>
+                            <div className="dfb-stripe-message">
+                                <a href="https://givewp.com/" target="_blank"><GiveLogo/></a>
+                                <p>{'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.'} <a href="https://go.givewp.com/dfb-learn-more" target="_blank">Learn more &raquo;</a></p>
+                            </div>
+                        </PanelRow>
                     </PanelBody>
                 </InspectorControls>
             </Fragment>
             <Fragment>
                 <div {...blockProps}>
-                    <DonationForm attributes={attributes} backend />
+                    <DonationForm attributes={attributes} backend/>
                 </div>
             </Fragment>
         </Fragment>
