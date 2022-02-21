@@ -26,6 +26,11 @@ class PaymentIntentForm
      */
     public $amount;
 
+    /**
+     * @var bool
+     */
+    public $testMode;
+
     public static function fromArray(array $data): self
     {
         $object = new self();
@@ -33,6 +38,7 @@ class PaymentIntentForm
         $object->lastName = $data['lastName'];
         $object->email = $data['email'];
         $object->amount = $data['amount'];
+        $object->testMode = $data['testMode'];
         return $object;
     }
 }

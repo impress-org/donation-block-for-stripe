@@ -38,8 +38,8 @@ const DonationForm = props => {
     });
     const [step, setStep] = useState(1);
     const stripe = useMemo(() => {
-        return props.backend ? null : Stripe(props.attributes.stripePubKey);
-    }, [props.attributes.stripePubKey, props.backend]);
+        return props.backend ? null : Stripe(props.attributes.testMode ? props.attributes.stripeTestPubKey : props.attributes.stripeLivePubKey);
+    }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
 
     checkPaymentStatus();
@@ -69,7 +69,8 @@ const DonationForm = props => {
             amount: donationAmount * 100,
             firstName: firstName,
             lastName: lastName,
-            email: email
+            email: email,
+            testMode: props.attributes.testMode,
         }).then(function (response) {
             // 🧐 Validation.
             if (response.data.data.error) {
@@ -146,8 +147,6 @@ const DonationForm = props => {
         setDonationAmount(paymentIntent.amount / 100);
         setEmail(paymentIntent.receipt_email);
 
-        console.log(paymentIntent);
-
         switch (paymentIntent.status) {
             case "succeeded":
                 setPaymentStatus({
@@ -188,7 +187,7 @@ const DonationForm = props => {
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Stripe needs to be connected in order to begin accepting donations.', 'donation-form-block')}</p>
                 </div>
             }
-            {!props.attributes.testMode && props.attributes.stripeConnected &&
+            {props.attributes.testMode && props.attributes.stripeConnected &&
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
                     <AlertIcon className={css(styles.noticeIcon)}/>
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Test mode is enabled. No live payments will be accepted for this donation form.', 'donation-form-block')}</p>

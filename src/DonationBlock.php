@@ -45,7 +45,8 @@ class DonationBlock
         ob_start(); ?>
 
         <div class="root-donation-block"
-             data-stripe-pub-key="<?php echo $stripeData->testPublishableKey; ?>"
+             data-stripe-live-pub-key="<?php echo $stripeData->livePublishableKey; ?>"
+             data-stripe-test-pub-key="<?php echo $stripeData->testPublishableKey; ?>"
             <?php
             // Loop through and set attributes per block.
             foreach ($attributes as $key => $value) : ?>

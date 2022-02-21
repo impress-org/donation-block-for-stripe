@@ -242,8 +242,8 @@ export default class StyleSheetFactory {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                margin: '0 0 10px',
-                padding: '14px 10px',
+                margin: '0',
+                padding: '15px 10px',
                 borderBottom: '1px solid #DDD',
             },
             donationReceiptDetailsListItemParagraph: {
