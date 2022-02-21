@@ -29,6 +29,7 @@ const DonationForm = props => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [error, setError] = useState(false);
+    const [handledIntent, setHandledIntent] = useState(null);
     const [errorMessage, setErrorMessage] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState({
@@ -106,8 +107,9 @@ const DonationForm = props => {
         e.preventDefault();
         setIsLoading(true);
 
-        const {error} = await stripe.confirmPayment({
+        const {paymentIntent, error} = await stripe.confirmPayment({
             elements: elements.current,
+            redirect: 'always',
             confirmParams: {
                 payment_method_data: {
                     billing_details: {
@@ -115,7 +117,7 @@ const DonationForm = props => {
                         email: email,
                     },
                 },
-                return_url: window.location.href + '#donation-form-receipt',
+                return_url: window.location.origin + window.location.pathname + `?form_id=${props.attributes.formId}#donation-form-receipt`,
             },
         });
 
@@ -131,6 +133,7 @@ const DonationForm = props => {
 
     // 🏃‍ Fetches the payment intent status after payment submission.
     async function checkPaymentStatus() {
+
         const clientSecret = new URLSearchParams(window.location.search).get(
             'payment_intent_client_secret'
         );
@@ -138,6 +141,19 @@ const DonationForm = props => {
         if (!clientSecret) {
             return;
         }
+
+        if(handledIntent === clientSecret) {
+            return;
+        }
+
+        const formId = new URLSearchParams(window.location.search).get(
+            'form_id'
+        );
+
+        if(formId !== props.attributes.formId) {
+            return;
+        }
+
         if (3 !== step) {
             setStep(3);
         }
@@ -146,6 +162,7 @@ const DonationForm = props => {
 
         setDonationAmount(paymentIntent.amount / 100);
         setEmail(paymentIntent.receipt_email);
+        setHandledIntent(clientSecret);
 
         switch (paymentIntent.status) {
             case "succeeded":

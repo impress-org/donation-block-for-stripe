@@ -69,6 +69,9 @@ export default class StyleSheetFactory {
                 gridTemplateColumns: 'repeat(2, 1fr)',
                 gap: '1rem',
                 gridAutoRows: 'minmax(40px, auto)',
+                '@media (max-width: 480px)': {
+                    gridTemplateColumns: 'repeat(1, 1fr)',
+                }
             },
             formButtonRow: {
                 display: 'grid',
@@ -76,6 +79,9 @@ export default class StyleSheetFactory {
                 gap: '10px',
                 gridAutoRows: 'minmax(60px, auto)',
                 margin: '0 0 30px',
+                '@media (max-width: 400px)': {
+                    gridTemplateColumns: 'repeat(2, 1fr)',
+                }
             },
             noticeBase: {
                 display: 'flex',

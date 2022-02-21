@@ -24,7 +24,7 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit({attributes, setAttributes}) {
+export default function Edit({attributes, setAttributes, instanceId}) {
 
     const blockProps = useBlockProps();
 
@@ -36,6 +36,7 @@ export default function Edit({attributes, setAttributes}) {
         introSubheading,
         donateBtnText,
         stripeConnected,
+        formId,
         testMode,
         preview,
     } = attributes;
@@ -96,6 +97,12 @@ export default function Edit({attributes, setAttributes}) {
             });
         }
     }, [stripeConnectData]);
+
+    useEffect(() => {
+       setAttributes({
+           formId: instanceId,
+       });
+    }, [instanceId]);
 
     return (
         <Fragment>

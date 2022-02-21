@@ -15,6 +15,7 @@ import Edit from './edit';
 import DonationForm from './donationForm';
 import domReady from '@wordpress/dom-ready';
 import {render} from '@wordpress/element';
+import {compose, withInstanceId} from '@wordpress/compose'
 
 /**
  * Register the Block.
@@ -23,39 +24,33 @@ import {render} from '@wordpress/element';
  */
 registerBlockType('givewp/donation-form-block', {
 
-	title: __('Donation Form Block', 'donation-form-block'),
-    icon: <GiveIcon color="grey" />,
+    title: __('Donation Form Block', 'donation-form-block'),
+    icon: <GiveIcon color="grey"/>,
 
-	/**
-	 * @see ./edit.js
-	 */
-	edit: Edit,
+    edit: withInstanceId(Edit),
 
-	/**
-	 * @see ./save.js
-	 */
-	save: () => {
-		return null;
-	}
+    save: () => {
+        return null;
+    }
 
 });
 
 domReady(function () {
 
-	// Don't run when Gutenberg / Block editor is active.
-	if (document.body.classList.contains('block-editor-page')) {
-		return;
-	}
+    // Don't run when Gutenberg / Block editor is active.
+    if (document.body.classList.contains('block-editor-page')) {
+        return;
+    }
 
-	const donationForms = document.querySelectorAll('.root-donation-block');
+    const donationForms = document.querySelectorAll('.root-donation-block');
 
-	donationForms.forEach(donationForm => {
-		const attributes = donationForm.dataset;
-		render(
-			<DonationForm attributes={attributes}/>,
-			donationForm
-		);
-	});
+    donationForms.forEach(donationForm => {
+        const attributes = donationForm.dataset;
+        render(
+            <DonationForm attributes={attributes}/>,
+            donationForm
+        );
+    });
 
 
 });

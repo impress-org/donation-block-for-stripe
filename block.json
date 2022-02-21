@@ -47,6 +47,10 @@
 	  "type" : "boolean",
 	  "default": false
 	},
+	"formId": {
+	  "type" : "integer",
+	  "default": 0
+	},
 	"testMode": {
 	  "type" : "boolean",
 	  "default": false
