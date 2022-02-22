@@ -6,6 +6,8 @@ import axios from 'axios';
 import StyleSheetFactory from "./frontendStyles";
 import {css} from 'aphrodite';
 import {Spinner} from '@wordpress/components';
+import lottie from 'lottie-web';
+import confetti from './lotties/confetti-partyyy.json'
 import {ReactComponent as AlertIcon} from './images/alert.svg';
 import {ReactComponent as LockIcon} from './images/lock.svg';
 import {ReactComponent as MailIcon} from './images/mail.svg';
@@ -142,7 +144,7 @@ const DonationForm = props => {
             return;
         }
 
-        if(handledIntent === clientSecret) {
+        if (handledIntent === clientSecret) {
             return;
         }
 
@@ -150,7 +152,7 @@ const DonationForm = props => {
             'form_id'
         );
 
-        if(formId !== props.attributes.formId) {
+        if (formId !== props.attributes.formId) {
             return;
         }
 
@@ -195,6 +197,18 @@ const DonationForm = props => {
                 break;
         }
     }
+
+    // 🎉 Confetti animation on completion.
+    const anim = lottie.loadAnimation({
+        container: document.getElementById('lottie'),
+        loop: false,
+        autoplay: true,
+        animationData: confetti,
+    });
+
+    anim.addEventListener('complete',() => {
+        anim.destroy();
+    });
 
     return (
         <div className={'donation-form-block-wrap'}>
@@ -353,6 +367,7 @@ const DonationForm = props => {
                         <div id={'donation-form-receipt'} className="donation-form-receipt-step">
                             {'' !== paymentStatus.status && true !== paymentStatus.error &&
                                 <>
+                                    <div id={'lottie'} className={`donation-form-lottie-wrap ${css(styles.lottieWrap)}`}></div>
                                     <div
                                         className={`donation-form-payment-summary ${css(styles.noticeBase, styles.noticeInfo, styles.noticeDonation)}`}>
                                         <p className={css(styles.noticeDonationParagraph)}>{paymentStatus.message}</p>

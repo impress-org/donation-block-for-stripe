@@ -259,6 +259,11 @@ export default class StyleSheetFactory {
             donationReceiptDetailsListItemSpan: {
                 fontWeight: '600',
             },
+            lottieWrap: {
+                position: 'absolute',
+                top: '0',
+                left: '0',
+            },
             giveAgainBtn: {
                 minWidth: '200px',
                 margin: '40px auto 20px',
