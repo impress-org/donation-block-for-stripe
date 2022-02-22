@@ -245,9 +245,11 @@ export default class StyleSheetFactory {
                 margin: '0',
             },
             donationReceiptDetailsListItem: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                '@media (min-width: 599px)': {
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                },
                 margin: '0',
                 padding: '15px 10px',
                 borderBottom: '1px solid #DDD',
