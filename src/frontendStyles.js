@@ -91,9 +91,10 @@ export default class StyleSheetFactory {
                 backgroundColor: '#FFF8C5',
                 border: `1px solid rgba(212, 167, 44, 0.4)`,
                 color: '#333',
-                margin: '0 0 20px',
+                margin: '0 auto 20px',
                 padding: '10px 15px',
                 borderRadius: '6px',
+                maxWidth: '650px',
             },
             noticeIcon: {
                 marginRight: '10px',

@@ -41,7 +41,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         preview,
     } = attributes;
 
-    // Preview image when an admin hovers over the block.
+    // 🖼 Preview image when an admin hovers over the block.
     if (preview) {
         return (
             <Fragment>
@@ -69,7 +69,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         return select('core').getMedia(backgroundId);
     }, [onSelectBackground]);
 
-    // Color picker colors.
+    // 🎨 Color picker colors.
     const colors = [
         {name: 'Gray', color: '#2F363D'},
         {name: 'Light Gray', color: '#6A737D'},
@@ -90,13 +90,18 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     // Get settings to check for Stripe connection.
     const stripeConnectData = useEntityProp('root', 'site', 'dfb_donation_block_stripe_data');
 
+    console.log(stripeConnectData);
+
     useEffect(() => {
-        if (stripeConnectData) {
+        if (stripeConnectData[0] !== undefined && stripeConnectData[0] !== null) {
+            console.log('here');
             setAttributes({
                 stripeConnected: true,
             });
         }
     }, [stripeConnectData]);
+
+
 
     useEffect(() => {
        setAttributes({
