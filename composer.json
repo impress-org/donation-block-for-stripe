@@ -18,5 +18,13 @@
         "psr-4": {
             "GiveDonationBlock\\": "src/"
         }
+    },
+    "require-dev": {
+        "brianhenryie/strauss": "^0.11.0"
+    },
+    "scripts": {
+        "strauss": [
+            "@php strauss.phar"
+        ]
     }
 }
