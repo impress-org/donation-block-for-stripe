@@ -46,6 +46,7 @@ domReady(function () {
 
     donationForms.forEach(donationForm => {
         const attributes = donationForm.dataset;
+        console.log(attributes);
         render(
             <DonationForm attributes={attributes}/>,
             donationForm

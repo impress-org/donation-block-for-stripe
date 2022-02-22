@@ -27,10 +27,10 @@ class PaymentIntentRequest
 
         $data = $this->getValidatedData();
 
-        if($data->testMode) {
-            $secretKey = $stripeData->testSecretKey;
-        } else {
+        if($data->liveMode) {
             $secretKey = $stripeData->liveSecretKey;
+        } else {
+            $secretKey = $stripeData->testSecretKey;
         }
 
         $stripeClient = new StripeClient($secretKey);
@@ -89,7 +89,7 @@ class PaymentIntentRequest
 
         $data['amount'] = (int) $data['amount'];
         $data['lastName'] = !empty($postData['lastName']) ? sanitize_text_field($postData['lastName']) : null;
-        $data['testMode'] = !empty($postData['testMode']) ? $postData['testMode'] : null;
+        $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
 
         return PaymentIntentForm::fromArray($data);
     }

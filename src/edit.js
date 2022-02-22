@@ -37,7 +37,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         donateBtnText,
         stripeConnected,
         formId,
-        testMode,
+        liveMode,
         preview,
     } = attributes;
 
@@ -90,18 +90,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     // Get settings to check for Stripe connection.
     const stripeConnectData = useEntityProp('root', 'site', 'dfb_donation_block_stripe_data');
 
-    console.log(stripeConnectData);
-
     useEffect(() => {
         if (stripeConnectData[0] !== undefined && stripeConnectData[0] !== null) {
-            console.log('here');
             setAttributes({
                 stripeConnected: true,
             });
         }
     }, [stripeConnectData]);
-
-
 
     useEffect(() => {
        setAttributes({
@@ -122,14 +117,14 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                 <MediaUploadCheck>
                                     <MediaUpload
                                         onSelect={onSelectBackground}
-                                        value={attributes.backgroundId}
+                                        value={backgroundId}
                                         allowedTypes={['image']}
                                         render={({open}) => (
                                             <Button
-                                                className={attributes.backgroundId === 0 ? 'editor-post-featured-image__toggle' : 'editor-post-featured-image__preview'}
+                                                className={backgroundId === 0 ? 'editor-post-featured-image__toggle' : 'editor-post-featured-image__preview'}
                                                 onClick={open}
                                             >
-                                                {attributes.backgroundId === 0 && __('Choose an image', 'donation-form-block')}
+                                                {backgroundId === 0 && __('Choose an image', 'donation-form-block')}
                                                 {background !== undefined &&
                                                     <ResponsiveWrapper
                                                         naturalWidth={background.media_details.width}
@@ -143,11 +138,11 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     />
                                 </MediaUploadCheck>
                                 <div className="dfb-background-btns">
-                                    {attributes.backgroundId !== 0 &&
+                                    {backgroundId !== 0 &&
                                         <MediaUploadCheck>
                                             <MediaUpload
                                                 title={__('Replace image', 'donation-form-block')}
-                                                value={attributes.backgroundId}
+                                                value={backgroundId}
                                                 onSelect={onSelectBackground}
                                                 allowedTypes={['image']}
                                                 render={({open}) => (
@@ -157,7 +152,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                             />
                                         </MediaUploadCheck>
                                     }
-                                    {attributes.backgroundId !== 0 &&
+                                    {backgroundId !== 0 &&
                                         <MediaUploadCheck>
                                             <Button onClick={removeBackground} isSmall
                                                     variant="secondary">{__('Remove image', 'donation-form-block')}</Button>
@@ -265,10 +260,11 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     <ToggleControl
                                         label={__('Live mode enabled', 'donation-form-block')}
                                         help={__('Enable to accept live payments. Turn off to test the donation process using test payments.', 'donation-form-block')}
-                                        checked={testMode}
+                                        checked={liveMode}
                                         onChange={(value) => {
                                             console.log(value);
-                                            setAttributes({testMode: value});
+                                            setAttributes({liveMode: value});
+                                            console.log(liveMode);
                                         }}
                                     />
                                 </PanelRow>

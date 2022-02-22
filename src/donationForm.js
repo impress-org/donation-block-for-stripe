@@ -41,7 +41,10 @@ const DonationForm = props => {
     });
     const [step, setStep] = useState(1);
     const stripe = useMemo(() => {
-        return props.backend ? null : Stripe(props.attributes.testMode ? props.attributes.stripeTestPubKey : props.attributes.stripeLivePubKey);
+        if (!props.attributes.stripeTestPubKey || !props.attributes.stripeLivePubKey) {
+            return;
+        }
+        return props.backend ? null : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey );
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
 
@@ -73,7 +76,7 @@ const DonationForm = props => {
             firstName: firstName,
             lastName: lastName,
             email: email,
-            testMode: props.attributes.testMode,
+            liveMode: props.attributes.liveMode,
         }).then(function (response) {
             // 🧐 Validation.
             if (response.data.data.error) {
@@ -211,7 +214,7 @@ const DonationForm = props => {
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Stripe needs to be connected in order to begin accepting donations.', 'donation-form-block')}</p>
                 </div>
             }
-            {props.attributes.testMode && props.attributes.stripeConnected &&
+            {!props.attributes.liveMode && props.attributes.stripeConnected &&
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
                     <AlertIcon className={css(styles.noticeIcon)}/>
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Test mode is enabled. No live payments will be accepted for this donation form.', 'donation-form-block')}</p>
@@ -357,7 +360,7 @@ const DonationForm = props => {
                                 }
                                 <button
                                     className={`donation-form-submit ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn, styles.payBtn)}`}>
-                                    Complete Donation
+                                    {__('Complete Donation', 'donation-form-block')}
                                     <CaretIcon className={css(styles.donateBtnIcon)}/>
                                 </button>
                             </form>

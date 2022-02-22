@@ -45,21 +45,18 @@
         },
         "stripeConnected": {
             "type": "boolean",
-            "source": "attribute",
             "default": false
         },
         "formId": {
             "type": "integer",
             "default": 0
         },
-        "testMode": {
+        "liveMode": {
             "type": "boolean",
-            "source": "attribute",
             "default": false
         },
         "preview": {
             "type": "boolean",
-            "source": "attribute",
             "default": false
         }
     },

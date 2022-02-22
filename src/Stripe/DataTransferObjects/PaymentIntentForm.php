@@ -29,7 +29,7 @@ class PaymentIntentForm
     /**
      * @var bool
      */
-    public $testMode;
+    public $liveMode;
 
     public static function fromArray(array $data): self
     {
