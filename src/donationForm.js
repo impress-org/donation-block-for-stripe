@@ -123,12 +123,12 @@ const DonationForm = props => {
             },
         });
 
-        if (error.type === "card_error" || error.type === "validation_error") {
+        if (error.type === 'card_error' || error.type === 'validation_error') {
             setError(true);
             setErrorMessage(error.message);
         } else {
             setError(true);
-            setErrorMessage("An unexpected error occurred.");
+            setErrorMessage('An unexpected error occurred.');
         }
         setIsLoading(false);
     }
@@ -140,11 +140,7 @@ const DonationForm = props => {
             'payment_intent_client_secret'
         );
 
-        if (!clientSecret) {
-            return;
-        }
-
-        if (handledIntent === clientSecret) {
+        if (!clientSecret || handledIntent === clientSecret) {
             return;
         }
 
@@ -156,12 +152,9 @@ const DonationForm = props => {
             return;
         }
 
-        if (3 !== step) {
-            setStep(3);
-        }
-
         const {paymentIntent} = await stripe.retrievePaymentIntent(clientSecret);
 
+        setStep(3);
         setDonationAmount(paymentIntent.amount / 100);
         setEmail(paymentIntent.receipt_email);
         setHandledIntent(clientSecret);
@@ -206,7 +199,7 @@ const DonationForm = props => {
         animationData: confetti,
     });
 
-    anim.addEventListener('complete',() => {
+    anim.addEventListener('complete', () => {
         anim.destroy();
     });
 
@@ -355,6 +348,13 @@ const DonationForm = props => {
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
                                 <div className={`donation-form-payment-intent ${css(styles.stripePaymentWrap)}`}></div>
+                                {error &&
+                                    <div
+                                        className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
+                                        <ErrorIcon className={css(styles.noticeIcon)}/>
+                                        <p className={css(styles.formParagraph, styles.noticeParagraph)}>{errorMessage}</p>
+                                    </div>
+                                }
                                 <button
                                     className={`donation-form-submit ${css(styles.buttonPrimary, styles.buttonBase, styles.donateBtn, styles.payBtn)}`}>
                                     Complete Donation
@@ -367,7 +367,8 @@ const DonationForm = props => {
                         <div id={'donation-form-receipt'} className="donation-form-receipt-step">
                             {'' !== paymentStatus.status && true !== paymentStatus.error &&
                                 <>
-                                    <div id={'lottie'} className={`donation-form-lottie-wrap ${css(styles.lottieWrap)}`}></div>
+                                    <div id={'lottie'}
+                                         className={`donation-form-lottie-wrap ${css(styles.lottieWrap)}`}></div>
                                     <div
                                         className={`donation-form-payment-summary ${css(styles.noticeBase, styles.noticeInfo, styles.noticeDonation)}`}>
                                         <p className={css(styles.noticeDonationParagraph)}>{paymentStatus.message}</p>

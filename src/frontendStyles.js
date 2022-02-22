@@ -97,9 +97,11 @@ export default class StyleSheetFactory {
             },
             noticeIcon: {
                 marginRight: '10px',
+                flexShrink: '0',
             },
             noticeParagraph: {
                 margin: '0',
+                lineHeight: '22px',
             },
             noticeInfo: {
                 backgroundColor: '#DDF4FF',
@@ -228,7 +230,7 @@ export default class StyleSheetFactory {
                 margin: '0 10px 0 0',
             },
             stripePaymentWrap: {
-                minHeight: '300px',
+                minHeight: '200px',
             },
             donationReceiptEmailText: {
                 textAlign: 'center',
