@@ -135,6 +135,7 @@ export default class StyleSheetFactory {
                 transition: 'all 0.2s ease',
                 lineHeight: '1.6',
                 cursor: 'pointer',
+                padding: '0',
                 height: '70px',
             },
             buttonPrimary: {
@@ -212,6 +213,7 @@ export default class StyleSheetFactory {
                 textAlign: 'right',
                 lineHeight: '1',
                 boxSizing: 'border-box',
+                color: '#333',
                 ':hover': {}
             },
             secureFooter: {
