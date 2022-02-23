@@ -11,11 +11,12 @@ import {
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
-import {dispatch, useSelect} from '@wordpress/data';
-import {useEntityProp} from '@wordpress/core-data';
+import {useSelect} from '@wordpress/data';
+import {usePageVisibility} from 'react-page-visibility';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
+import useCheckStripeConnect from "./useCheckStripeConnect";
 
 /**
  * Edit function.
@@ -35,7 +36,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         introHeading,
         introSubheading,
         donateBtnText,
-        stripeConnected,
         formId,
         liveMode,
         preview,
@@ -87,22 +87,24 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         {name: 'Light Pink', color: '#EA4AAA'},
     ];
 
-    // Get settings to check for Stripe connection.
-    const stripeConnectData = useEntityProp('root', 'site', 'dfb_donation_block_stripe_data');
-
+    // 🔌 Give the form a unique ID for receipts and more.
     useEffect(() => {
-        if (stripeConnectData[0] !== undefined && stripeConnectData[0] !== null) {
-            setAttributes({
-                stripeConnected: true,
-            });
-        }
-    }, [stripeConnectData]);
-
-    useEffect(() => {
-       setAttributes({
-           formId: instanceId,
-       });
+        setAttributes({
+            formId: instanceId,
+        });
     }, [instanceId]);
+
+    // Handle initial Stripe connection return.
+    const isVisible = usePageVisibility()
+    const [stripeConnectionFlow, setStripeConnectionFlow] = useState(false);
+
+    const [stripeConnectedProp, setStripeConnected] = useState(false);
+
+    const stripeConnected = useCheckStripeConnect();
+
+    // if (isVisible && stripeConnectionFlow) {
+    //     setStripeConnectionFlow(false);
+    // }
 
     return (
         <Fragment>
@@ -221,7 +223,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         </PanelRow>
                     </PanelBody>
                     <PanelBody title={__('Stripe Connect', 'donation-form-block')} initialOpen={true}>
-                        {!stripeConnected &&
+                        {stripeConnected === false &&
                             <PanelRow>
                                 <div id="dfb-stripe-connect-wrap">
                                     <div className="dfb-welcome-wrap-inner">
@@ -232,6 +234,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                             href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
                                             target="_blank"
                                             className={'dfb-stripe-connect'}
+                                            onClick={() => setStripeConnectionFlow(true)}
                                         >
                                             <StripeIcon style={{
                                                 fill: '#FFF',
@@ -262,9 +265,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         help={__('Enable to accept live payments. Turn off to test the donation process using test payments.', 'donation-form-block')}
                                         checked={liveMode}
                                         onChange={(value) => {
-                                            console.log(value);
                                             setAttributes({liveMode: value});
-                                            console.log(liveMode);
                                         }}
                                     />
                                 </PanelRow>
@@ -273,7 +274,9 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         <PanelRow>
                             <div className="dfb-stripe-message">
                                 <a href="https://givewp.com/" target="_blank"><GiveLogo/></a>
-                                <p>{'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.'} <a href="https://go.givewp.com/dfb-learn-more" target="_blank">Learn more &raquo;</a></p>
+                                <p>{'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.'}
+                                    <a href="https://go.givewp.com/dfb-learn-more" target="_blank">Learn
+                                        more &raquo;</a></p>
                             </div>
                         </PanelRow>
                     </PanelBody>
@@ -281,7 +284,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             </Fragment>
             <Fragment>
                 <div {...blockProps}>
-                    <DonationForm attributes={attributes} backend/>
+                    <DonationForm attributes={attributes} backend />
                 </div>
             </Fragment>
         </Fragment>

@@ -15,6 +15,7 @@ import {ReactComponent as UserIcon} from './images/user.svg';
 import {ReactComponent as CaretIcon} from './images/caret-right.svg';
 import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
+import useCheckStripeConnect from "./useCheckStripeConnect";
 
 /**
  * 💚 Donation Form.
@@ -44,11 +45,14 @@ const DonationForm = props => {
         if (!props.attributes.stripeTestPubKey || !props.attributes.stripeLivePubKey) {
             return;
         }
-        return props.backend ? null : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey );
+        return props.backend ? null : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey);
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
 
-    checkPaymentStatus();
+    // Checks url for payment success query params.
+    if (props.stripeConnected) {
+        checkPaymentStatus();
+    }
 
     const updateDonationAmount = (amount) => {
         amount = amount.replace('$', '');
@@ -194,7 +198,7 @@ const DonationForm = props => {
         }
     }
 
-    // 🎉 Confetti animation on completion.
+    // 🎊 Confetti animation on completion.
     const anim = lottie.loadAnimation({
         container: document.getElementById('lottie'),
         loop: false,
@@ -206,15 +210,18 @@ const DonationForm = props => {
         anim.destroy();
     });
 
+    const stripeConnected = useCheckStripeConnect();
+
+    // 🎉 Render the donation form.
     return (
-        <div className={'donation-form-block-wrap'}>
-            {!props.attributes.stripeConnected &&
+        <div id={'donation-form-block'} className={'donation-form-block-wrap'}>
+            {stripeConnected === false &&
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
                     <AlertIcon className={css(styles.noticeIcon)}/>
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Stripe needs to be connected in order to begin accepting donations.', 'donation-form-block')}</p>
                 </div>
             }
-            {!props.attributes.liveMode && props.attributes.stripeConnected &&
+            {!props.attributes.liveMode && stripeConnected &&
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
                     <AlertIcon className={css(styles.noticeIcon)}/>
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>{__('Test mode is enabled. No live payments will be accepted for this donation form.', 'donation-form-block')}</p>

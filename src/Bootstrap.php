@@ -25,6 +25,7 @@ class Bootstrap
         add_action('template_redirect', [$stripeActionHandler, '__invoke']);
         add_action('rest_api_init', [$this, 'registerSettings']);
         add_action('admin_init', [$this, 'registerSettings']);
+        add_action('wp_ajax_dfb_stripe_connection', [$this, 'getStripeConnection']);
     }
 
     public function registerSettings()
@@ -58,5 +59,14 @@ class Bootstrap
                 ],
             ]
         );
+    }
+
+    public function getStripeConnection()
+    {
+        $stripeConnection = get_option('dfb_donation_block_stripe_data');
+        if (!$stripeConnection) {
+            wp_send_json(false);
+        }
+        wp_send_json(true);
     }
 }

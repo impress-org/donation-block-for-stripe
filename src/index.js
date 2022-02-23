@@ -15,7 +15,7 @@ import Edit from './edit';
 import DonationForm from './donationForm';
 import domReady from '@wordpress/dom-ready';
 import {render} from '@wordpress/element';
-import {compose, withInstanceId} from '@wordpress/compose'
+import {withInstanceId} from '@wordpress/compose'
 
 /**
  * Register the Block.
@@ -46,9 +46,8 @@ domReady(function () {
 
     donationForms.forEach(donationForm => {
         const attributes = donationForm.dataset;
-        console.log(attributes);
         render(
-            <DonationForm attributes={attributes}/>,
+            <DonationForm attributes={attributes} />,
             donationForm
         );
     });

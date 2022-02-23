@@ -43,10 +43,6 @@
             "type": "string",
             "default": "Donate Now"
         },
-        "stripeConnected": {
-            "type": "boolean",
-            "default": false
-        },
         "formId": {
             "type": "integer",
             "default": 0
