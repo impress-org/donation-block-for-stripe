@@ -276,8 +276,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             <div className="dfb-stripe-message">
                                 <a href="https://givewp.com/" target="_blank"><GiveLogo/></a>
                                 <p>{'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.'}
-                                    <a href="https://go.givewp.com/dfb-learn-more" target="_blank">Learn
-                                        more &raquo;</a></p>
+                                    <a href="https://go.givewp.com/dfb-learn-more"
+                                       target="_blank">{__('Learn more', 'donation-form-block')} &raquo;</a></p>
                             </div>
                         </PanelRow>
                     </PanelBody>

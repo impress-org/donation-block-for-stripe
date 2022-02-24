@@ -6,6 +6,7 @@ export default class StyleSheetFactory {
     static getSheet(props) {
         return StyleSheet.create({
             formContainer: {
+                backgroundColor: '#fff',
                 boxShadow: 'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
                 borderRadius: '8px',
                 border: '1px solid #ddd',
@@ -135,6 +136,7 @@ export default class StyleSheetFactory {
                 border: `3px solid ${props.attributes.color}`,
                 fontSize: '28px',
                 fontWeight: '500',
+                textDecoration: 'none',
                 transition: 'all 0.2s ease',
                 lineHeight: '1.6',
                 cursor: 'pointer',
@@ -170,6 +172,7 @@ export default class StyleSheetFactory {
             },
             donateBtnIcon: {
                 margin: '0 0 0 10px',
+                display: 'inline',
             },
             textField: {
                 background: '#FFF',
@@ -209,11 +212,15 @@ export default class StyleSheetFactory {
             },
             currencyField: {
                 width: '100%',
-                fontSize: '2.5rem',
-                padding: '1rem 1.5rem',
+                height: '80px',
+                fontSize: '36px',
+                padding: '0 20px',
+                letterSpacing: '0',
+                boxShadow: 'none',
                 border: '2px solid #424242',
                 borderRadius: '8px',
                 textAlign: 'right',
+                fontWeight: '500',
                 lineHeight: '1',
                 boxSizing: 'border-box',
                 color: '#333',

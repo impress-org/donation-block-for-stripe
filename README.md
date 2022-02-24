@@ -6,7 +6,7 @@ A beautiful donation form block for Stripe by [GiveWP](https://givewp.com/). Acc
 
 Do you have a WordPress website? Great! You can use this block on your site. Simply log into your WP-Admin and go to Plugins > Add New.
 
-Alternatively, when in the block editor open up the block editor and click the "Add Block" button.
+Alternatively, when in the block editor open up the block editor and click the "Add Block" button. Once there, type "Donation" and you should see the block display in the list of available blocks. Simply click  to add the block to your page.
 
 ### Customization Features
 
