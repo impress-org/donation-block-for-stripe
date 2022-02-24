@@ -142,6 +142,8 @@ export default class StyleSheetFactory {
                 cursor: 'pointer',
                 padding: '0',
                 height: '70px',
+                textTransform: 'none',
+                textAlign: 'center',
             },
             buttonPrimary: {
                 ':hover': {
