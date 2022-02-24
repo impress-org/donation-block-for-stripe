@@ -1,4 +1,4 @@
-import {useMemo, useRef, useState} from '@wordpress/element';
+import {useEffect, useMemo, useRef, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
@@ -7,7 +7,6 @@ import StyleSheetFactory from "./frontendStyles";
 import {css} from 'aphrodite';
 import {Spinner} from '@wordpress/components';
 import lottie from 'lottie-web';
-import confetti from './lotties/confetti-partyyy.json'
 import {ReactComponent as AlertIcon} from './images/alert.svg';
 import {ReactComponent as LockIcon} from './images/lock.svg';
 import {ReactComponent as MailIcon} from './images/mail.svg';
@@ -16,6 +15,7 @@ import {ReactComponent as CaretIcon} from './images/caret-right.svg';
 import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
 import useCheckStripeConnect from "./useCheckStripeConnect";
+import runLottieAnimation from "./runLottieAnimation";
 
 /**
  * 💚 Donation Form.
@@ -50,9 +50,7 @@ const DonationForm = props => {
     const elements = useRef(null);
 
     // Checks url for payment success query params.
-    if (props.stripeConnected) {
-        checkPaymentStatus();
-    }
+    checkPaymentStatus();
 
     const updateDonationAmount = (amount) => {
         amount = amount.replace('$', '');
@@ -126,7 +124,7 @@ const DonationForm = props => {
                         email: email,
                     },
                 },
-                return_url: window.location.origin + window.location.pathname + `?form_id=${props.attributes.formId}#donation-form-receipt`,
+                return_url: window.location.origin + window.location.pathname + `?form_id=${props.attributes.formId}#donation-form-block-${props.attributes.formId}`,
             },
         });
 
@@ -177,44 +175,38 @@ const DonationForm = props => {
             case "processing":
                 setPaymentStatus({
                     status: 'Processing',
-                    message: "Your payment is processing.",
+                    message: __('Your payment is processing.', 'donation-form-block'),
                     error: false,
                 });
                 break;
             case "requires_payment_method":
                 setPaymentStatus({
                     status: 'Not successful',
-                    message: "Your payment was not successful, please try again.",
+                    message: __('Your payment was not successful, please try again.', 'donation-form-block'),
                     error: true,
                 });
                 break;
             default:
                 setPaymentStatus({
                     status: paymentIntent.status,
-                    message: "Something went wrong, please try again.",
+                    message: __('Something went wrong, please try again.', 'donation-form-block'),
                     error: true,
                 });
                 break;
         }
     }
 
-    // 🎊 Confetti animation on completion.
-    const anim = lottie.loadAnimation({
-        container: document.getElementById('lottie'),
-        loop: false,
-        autoplay: true,
-        animationData: confetti,
-    });
+    // 🎊 Confetti animation on successful payment completion.
+    if (step === 3) {
+        runLottieAnimation('confetti-partyyy', document.getElementById('lottie'));
+    }
 
-    anim.addEventListener('complete', () => {
-        anim.destroy();
-    });
-
-    const stripeConnected = useCheckStripeConnect();
+    const checkStripeConnected = useCheckStripeConnect();
+    const stripeConnected = typeof props.stripeConnected !== 'undefined' ? props.stripeConnected : checkStripeConnected;
 
     // 🎉 Render the donation form.
     return (
-        <div id={'donation-form-block'} className={'donation-form-block-wrap'}>
+        <div className={'donation-form-block-wrap'}>
             {stripeConnected === false &&
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
                     <AlertIcon className={css(styles.noticeIcon)}/>

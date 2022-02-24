@@ -42,21 +42,16 @@ class DonationBlock
 
         $stripeData = StripeData::fromOption();
 
-//        var_dump($attributes);
-
         ob_start(); ?>
 
-        <div class="root-donation-block"
+        <div id="donation-form-block-<?php echo $attributes['formId']; ?>" class="root-donation-block"
              data-stripe-live-pub-key="<?php
              echo $stripeData->livePublishableKey; ?>"
              data-stripe-test-pub-key="<?php
              echo $stripeData->testPublishableKey; ?>"
             <?php
             // Loop through and set attributes per block.
-            foreach ($attributes as $key => $value) :
-                if (!$value) {
-                    continue;
-                } ?>
+            foreach ($attributes as $key => $value) : ?>
                 data-<?php
                 // output as hyphen-case so that it's changed to camelCase in JS.
                 echo preg_replace('/([A-Z])/', '-$1', $key); ?>="<?php

@@ -16,7 +16,8 @@ import {usePageVisibility} from 'react-page-visibility';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
-import useCheckStripeConnect from "./useCheckStripeConnect";
+import useCheckStripeConnect from './useCheckStripeConnect';
+import runLottieAnimation from './runLottieAnimation';
 
 /**
  * Edit function.
@@ -45,7 +46,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     if (preview) {
         return (
             <Fragment>
-                <img src={dfbPreview.profile_preview} alt={'Donation form block for Stripe by GiveWP.'}
+                <img src={dfbPreview.profile_preview}
+                     alt={__('Donation form block for Stripe by GiveWP.', 'donation-form-block')}
                      style={{width: '100%', height: 'auto'}}/>
             </Fragment>
         );
@@ -97,14 +99,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     // Handle initial Stripe connection return.
     const isVisible = usePageVisibility()
     const [stripeConnectionFlow, setStripeConnectionFlow] = useState(false);
+    const stripeConnected = useCheckStripeConnect(isVisible && stripeConnectionFlow);
 
-    const [stripeConnectedProp, setStripeConnected] = useState(false);
-
-    const stripeConnected = useCheckStripeConnect();
-
-    // if (isVisible && stripeConnectionFlow) {
-    //     setStripeConnectionFlow(false);
-    // }
+    useEffect(() => {
+        if (stripeConnected && stripeConnectionFlow) {
+            runLottieAnimation('success', document.getElementById('lottie'));
+        }
+    }, [stripeConnected, stripeConnectionFlow]);
 
     return (
         <Fragment>
@@ -283,8 +284,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                 </InspectorControls>
             </Fragment>
             <Fragment>
+                <div id="lottie"></div>
                 <div {...blockProps}>
-                    <DonationForm attributes={attributes} backend />
+
+                    {stripeConnectionFlow &&
+                        <p></p>
+                    }
+                    <DonationForm attributes={attributes} backend stripeConnected={stripeConnected}/>
                 </div>
             </Fragment>
         </Fragment>

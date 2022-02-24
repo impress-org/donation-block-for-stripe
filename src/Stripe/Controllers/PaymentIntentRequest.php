@@ -32,7 +32,6 @@ class PaymentIntentRequest
         } else {
             $secretKey = $stripeData->testSecretKey;
         }
-
         $stripeClient = new StripeClient($secretKey);
 
         try {

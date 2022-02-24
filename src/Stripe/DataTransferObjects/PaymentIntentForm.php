@@ -38,7 +38,7 @@ class PaymentIntentForm
         $object->lastName = $data['lastName'];
         $object->email = $data['email'];
         $object->amount = $data['amount'];
-        $object->testMode = $data['testMode'];
+        $object->liveMode = $data['liveMode'];
         return $object;
     }
 }
