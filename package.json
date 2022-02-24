@@ -19,7 +19,7 @@
 		"@wordpress/dom-ready": "^3.3.0",
 		"@wordpress/i18n": "^4.2.4",
 		"aphrodite": "^2.4.0",
-		"axios": "^0.25.0",
+		"axios": "^0.26.0",
 		"classnames": "^2.3.1",
 		"color": "^4.2.0",
 		"lottie-web": "^5.8.1",

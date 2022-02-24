@@ -103,7 +103,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
 
     useEffect(() => {
         if (stripeConnected && stripeConnectionFlow) {
-            runLottieAnimation('success', document.getElementById('lottie'));
+            runLottieAnimation('fireworks', document.getElementById('dfb-connected-lottie'));
         }
     }, [stripeConnected, stripeConnectionFlow]);
 
@@ -284,11 +284,12 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                 </InspectorControls>
             </Fragment>
             <Fragment>
-                <div id="lottie"></div>
                 <div {...blockProps}>
-
                     {stripeConnectionFlow &&
-                        <p></p>
+                        <div id="dfb-connected-lottie-wrap">
+                            <p className={'dfb-lottie-connected-text'}>{__('You\'re Connected to Stripe', 'donation-form-block')} 🎉</p>
+                            <div id="dfb-connected-lottie"></div>
+                        </div>
                     }
                     <DonationForm attributes={attributes} backend stripeConnected={stripeConnected}/>
                 </div>
