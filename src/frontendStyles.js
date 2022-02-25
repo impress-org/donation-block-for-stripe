@@ -11,7 +11,7 @@ export default class StyleSheetFactory {
                 borderRadius: '8px',
                 border: '1px solid #ddd',
                 maxWidth: '650px',
-                margin: '1rem auto',
+                margin: '1rem auto 1.5rem',
                 padding: '0',
                 position: 'relative',
                 transition: 'all .5s ease-in-out',
@@ -68,7 +68,7 @@ export default class StyleSheetFactory {
             donationFormFieldsRow: {
                 display: 'grid',
                 gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '1rem',
+                gap: '20px',
                 gridAutoRows: 'minmax(40px, auto)',
                 '@media (max-width: 480px)': {
                     gridTemplateColumns: 'repeat(1, 1fr)',
@@ -141,6 +141,7 @@ export default class StyleSheetFactory {
                 lineHeight: '1.6',
                 cursor: 'pointer',
                 padding: '0',
+                margin: '0',
                 height: '70px',
                 textTransform: 'none',
                 textAlign: 'center',
