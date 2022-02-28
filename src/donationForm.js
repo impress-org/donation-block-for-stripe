@@ -57,10 +57,6 @@ const DonationForm = props => {
         setDonationAmount(amount);
     };
 
-    const donationAmounts = [
-        '5', '10', '25', '50', '100', '250'
-    ];
-
     // 🤠 Handle the first step of the form.
     const handleAmountSubmit = (e) => {
         e.preventDefault();
@@ -261,7 +257,7 @@ const DonationForm = props => {
                                 <div
                                     className={`donation-form-field-row donation-form-amount-btns ${css(styles.formFieldRow, styles.formButtonRow)}`}>
                                     {
-                                        donationAmounts.map((amount, index) => {
+                                        props.attributes.donationAmounts.map((amount, index) => {
                                             return (
                                                 <button
                                                     key={index}

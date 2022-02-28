@@ -32,6 +32,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     const blockProps = useBlockProps();
 
     const {
+        donationAmounts,
         backgroundId,
         backgroundUrl,
         color,
@@ -53,6 +54,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             </Fragment>
         );
     }
+
+    const updateDonationAmounts = (newDonationAmounts) => {
+
+        console.log(newDonationAmounts);
+
+        // setAttributes({donationAmounts: newDonationAmounts});
+    };
 
     const removeBackground = () => {
         setAttributes({
@@ -169,9 +177,11 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         <PanelRow>
                             <RepeatableComponent
                                 label={__('Donation Amounts', 'donation-form-block')}
-                                render={(item) => (
+                                initialData={donationAmounts}
+                                onChange={updateDonationAmounts}
+                                render={(item, index) => (
                                     <Fragment>
-                                        <TextControl value={item.value} type="number" onChange={''} label="Amount"/>
+                                        <TextControl value={item} type="number" onChange={updateDonationAmounts} label={__('Amount', 'donation-form-block')}/>
                                     </Fragment>
                                 )}
                             />

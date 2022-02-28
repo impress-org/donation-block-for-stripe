@@ -1,12 +1,12 @@
 import {Component} from '@wordpress/element';
-import {BaseControl, PanelRow, IconButton, Button} from '@wordpress/components';
+import {BaseControl, PanelRow, Button} from '@wordpress/components';
 
 class RepeatableComponent extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            data: props.initialData || [{}],
+            data: props.initialData || [],
         };
 
         this.addRow = this.addRow.bind(this);
@@ -20,7 +20,7 @@ class RepeatableComponent extends Component {
             ...prevState,
             data: [
                 ...prevState.data,
-                props.defaultData || {}
+                props.defaultData || [100]
             ]
         }), this.triggerOnChange);
     }
@@ -63,11 +63,11 @@ class RepeatableComponent extends Component {
             <BaseControl label={label}>
                 {
                     data.map((item, index) => (
-                        <PanelRow>
+                        <PanelRow key={index}>
                             <div>
                                 {render(item, index, this.handleChange.bind(null, index))}
                             </div>
-                            <IconButton onClick={this.removeRow.bind(null, index)} icon="minus" label="Remove" isSecondary />
+                            <Button onClick={this.removeRow.bind(null, index)} icon="minus" label="Remove" isSecondary />
                         </PanelRow>
                     ))
                 }
