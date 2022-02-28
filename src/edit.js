@@ -18,6 +18,7 @@ import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
 import useCheckStripeConnect from './useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
+import RepeatableComponent from "./RepeatableComponent";
 
 /**
  * Edit function.
@@ -166,6 +167,16 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             </div>
                         </PanelRow>
                         <PanelRow>
+                            <RepeatableComponent
+                                label={__('Donation Amounts', 'donation-form-block')}
+                                render={(item) => (
+                                    <Fragment>
+                                        <TextControl value={item.value} type="number" onChange={''} label="Amount"/>
+                                    </Fragment>
+                                )}
+                            />
+                        </PanelRow>
+                        <PanelRow>
                             <div>
                                 <label className={'dfb-label'}>{__('Primary Color', 'donation-form-block')}</label>
                                 <div className={'dfb-color-picker'}>
@@ -223,7 +234,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             />
                         </PanelRow>
                     </PanelBody>
-                    <PanelBody title={__('Stripe Connect', 'donation-form-block')} initialOpen={true}>
+                    <PanelBody title={__('Stripe Connection', 'donation-form-block')} initialOpen={true}>
                         {stripeConnected === false &&
                             <PanelRow>
                                 <div id="dfb-stripe-connect-wrap">

@@ -1,4 +1,4 @@
-=== Donation Blocks for Stripe by GiveWP ===
+=== Donation Block for Stripe by GiveWP ===
 Contributors:      dlocc, jasontheadams, givewp
 Tags:              block
 Tested up to:      5.9.0
