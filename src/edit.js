@@ -18,7 +18,7 @@ import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
 import useCheckStripeConnect from './useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
-import RepeatableComponent from "./RepeatableComponent";
+import RepeatableControl from "./Stripe/RepeatableControl";
 
 /**
  * Edit function.
@@ -56,10 +56,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     }
 
     const updateDonationAmounts = (newDonationAmounts) => {
-
-        console.log(newDonationAmounts);
-
-        // setAttributes({donationAmounts: newDonationAmounts});
+        setAttributes({donationAmounts: newDonationAmounts});
     };
 
     const removeBackground = () => {
@@ -175,15 +172,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             </div>
                         </PanelRow>
                         <PanelRow>
-                            <RepeatableComponent
+                            <RepeatableControl
                                 label={__('Donation Amounts', 'donation-form-block')}
+                                addLabel={__('Add Amount', 'donation-form-block')}
                                 initialData={donationAmounts}
+                                newValue="50"
                                 onChange={updateDonationAmounts}
-                                render={(item, index) => (
-                                    <Fragment>
-                                        <TextControl value={item} type="number" onChange={updateDonationAmounts} label={__('Amount', 'donation-form-block')}/>
-                                    </Fragment>
-                                )}
+                                Control={TextControl}
                             />
                         </PanelRow>
                         <PanelRow>
