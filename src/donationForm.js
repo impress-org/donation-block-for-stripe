@@ -200,6 +200,12 @@ const DonationForm = props => {
     const checkStripeConnected = useCheckStripeConnect();
     const stripeConnected = typeof props.stripeConnected !== 'undefined' ? props.stripeConnected : checkStripeConnected;
 
+    // 👀 Ensure donation amounts comes in as an array.
+    let donationAmounts = props.attributes.donationAmounts;
+    if(typeof props.attributes.donationAmounts === 'string') {
+        donationAmounts = props.attributes.donationAmounts.split(',');
+    }
+
     // 🎉 Render the donation form.
     return (
         <div className={'donation-form-block-wrap'}>
@@ -257,7 +263,7 @@ const DonationForm = props => {
                                 <div
                                     className={`donation-form-field-row donation-form-amount-btns ${css(styles.formFieldRow, styles.formButtonRow)}`}>
                                     {
-                                        props.attributes.donationAmounts.map((amount, index) => {
+                                        donationAmounts.map((amount, index) => {
                                             return (
                                                 <button
                                                     key={index}
