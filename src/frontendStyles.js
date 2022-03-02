@@ -1,6 +1,5 @@
-import {StyleSheet} from "aphrodite";
-import color from "color";
-
+import {StyleSheet} from 'aphrodite';
+import color from 'color';
 
 export default class StyleSheetFactory {
     static getSheet(props) {
@@ -72,7 +71,7 @@ export default class StyleSheetFactory {
                 gridAutoRows: 'minmax(40px, auto)',
                 '@media (max-width: 480px)': {
                     gridTemplateColumns: 'repeat(1, 1fr)',
-                }
+                },
             },
             formButtonRow: {
                 display: 'grid',
@@ -82,7 +81,7 @@ export default class StyleSheetFactory {
                 margin: '0 0 30px',
                 '@media (max-width: 400px)': {
                     gridTemplateColumns: 'repeat(2, 1fr)',
-                }
+                },
             },
             noticeBase: {
                 display: 'flex',
@@ -227,7 +226,7 @@ export default class StyleSheetFactory {
                 lineHeight: '1',
                 boxSizing: 'border-box',
                 color: '#333',
-                ':hover': {}
+                ':hover': {},
             },
             secureFooter: {
                 display: 'flex',
@@ -286,6 +285,6 @@ export default class StyleSheetFactory {
                 margin: '40px auto 20px',
                 display: 'block',
             },
-        })
+        });
     }
 }

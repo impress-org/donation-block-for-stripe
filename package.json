@@ -31,6 +31,7 @@
 		"@wordpress/components": "^19.3.0",
 		"@wordpress/data": "^6.2.0",
 		"@wordpress/element": "^4.1.0",
-		"@wordpress/scripts": "^19.2.3"
+		"@wordpress/scripts": "^19.2.3",
+		"prettier": "2.5.1"
 	}
 }
