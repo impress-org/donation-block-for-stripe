@@ -18,15 +18,18 @@ Alternatively, you can use the full GiveWP donation plugin, which includes robus
 
 = ✨ Block Features =
 
-This block provides Stripe-powered donation forms, built for WordPress' block editor.  through Stripe Connect. 
+This block provides Stripe-powered donation forms, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.  
 
 The Donation Form Block for Stripe includes extensive customization options. You can easily change the donation amounts, colors, main image, headings, description text, and button text.
 
-* Fully functional and responsive Stripe donation form
+* Fully functional and responsive Stripe donation form that looks good on any device
 * Native block controls for content, color, images, donation options
 * Single Stripe account, so once it's configured it's connected for any and all blocks you add to your site
 * Fully responsive donation form block
-* Intuitive and simple settings
+* Ultra light-weight; guaranteed to not slow down your site
+* Zero database load on your site; adds no tables to your database
+* Conditional script loading only adds the script to the page when the block is actually used
+* Intuitive and simple settings allow for WYSIWYG editing
 
 = ⚙ Setting Options =
 **Appearance**
@@ -47,7 +50,7 @@ The Donation Form Block for Stripe includes extensive customization options. You
 _In order to maintain and support this plugin, GiveWP collects a 2% fee on all transactions. You can upgrade to the full GiveWP plugin with the Stripe add-on to avoid this transaction fee._ 
 
 = 👩‍💻 Development Notes =
-Know some code? Great! We love open source contribution. Please visit this plugin's GitHub repository if you'd like to learn more about how to contribute to the development of this block.
+Know some code? Great! We love open source contribution. Please visit this plugin's [GitHub repository](https://github.com/impress-org/donation-block-for-stripe) if you'd like to learn more about how to contribute to the development of this block.
 
 = 💚 About the GiveWP Team =
 [GiveWP](https://givewp.com) is part of StellarWP, a Liquid Web Family Brand. Our donation plugin is backed by a growing team of WordPress developers, support engineers, customer success managers, and marketing professionals who’ve worked with WordPress and nonprofits since 2009. This means GiveWP is made with best practices in mind; extremely extensible and customizable, stable, and reliable. We’ll be here in years to come for you and your nonprofit organization.
@@ -70,18 +73,17 @@ Alternatively, when in the block editor open up the block editor and click the "
 = How is the WordPress Donation Form Block for Stripe different from a GiveWP Donation Form block? =
  
 This block contains a single form with a connection to Stripe. It does not have the additional access to PayPal and other payment gateway options, reporting, donor database, or campaign features that the free download of GiveWP provides. If you would like more information about GiveWP, please visit our website.
-[Learn More]
+[Learn More](https://givewp.com)
 
 = Is there a “Pro” version of this block with more features? = 
 
 Yes! GiveWP, the free version, provides a lot more to set up your fundraising website. When you use GiveWP, you also gain the ability to connect our add-ons, which provide features like Recurring Donations, Fee Recovery, Tributes, Gift Aid, and more. Our add-ons also include a more robust Stripe connection that includes options for Google Pay, Apple Pay, and disables the 2% transaction fee that the free Stripe donation form block requires. 
-[Learn About GiveWP] or [View Stipe Add-on]
+[Learn About GiveWP](https://givewp.com) or [View Stipe Add-on](https://givewp.com/addons/stripe/)
 
 = Does this donation form block support Stripe recurring donations? =
  
 Not currently. For access to Stripe donation forms with support for recurring donations, please use GiveWP with our Stripe and Recurring Donations Add-ons. Both are included in a Plus plan and above. 
 [View Pricing](https://givewp.com/pricing/)
-
 
 == Screenshots ==
 
