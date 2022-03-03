@@ -310,9 +310,9 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     </PanelRow>
                                     <PanelRow>
                                         <ToggleControl
-                                            label={__('Live mode enabled', 'donation-form-block')}
+                                            label={__('Toggle on for Live Mode', 'donation-form-block')}
                                             help={__(
-                                                'Enable to accept live payments. Turn off to test the donation process using test payments.',
+                                                'Enable to accept live payments. Turn off to test the donation process using test payments. Payment methods can be modified via your Stripe account\'s <a href="https://dashboard.stripe.com/settings/payment_methods" target="_blank">payment method settings</a>.',
                                                 'donation-form-block'
                                             )}
                                             checked={liveMode}

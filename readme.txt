@@ -18,7 +18,24 @@ Alternatively, you can use the full GiveWP donation plugin, which includes robus
 
 = ✨ Block Features =
 
-This block provides Stripe-powered donation forms, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.  
+This block provides Stripe-powered donation forms, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.
+
+Payments are facilitated using Stripe's new Payment Element, which is a simple, secure, and modern payment form. You can easily adjust the payment methods within your Stripe account's payment method settings. 
+
+** 💳 18+ supported payment methods:**
+
+* Accept credit and debit card donations
+* Supports payment wallets including Google Pay, and Apple Pay
+* Bank redirects, like iDEAL, EPS, Giropay and more. This helps improve conversion rates and reduce fraud with non-US consumers.
+* Donate now, Pay Later - Reach customers who want to pay in installments with Klarna and Afterpay.
+
+** Additional payment method features:**
+
+* Automatically adjusts input fields to collect information based on the payment method and country.
+* Dynamically sorts payment methods based on a customer’s locale and location to optimize for conversion.
+* Reduces friction for card payments with input validation, masking, styling and error handling.
+
+** Additional Features:**
 
 The Donation Form Block for Stripe includes extensive customization options. You can easily change the donation amounts, colors, main image, headings, description text, and button text.
 
@@ -30,22 +47,23 @@ The Donation Form Block for Stripe includes extensive customization options. You
 * Zero database load on your site; adds no tables to your database
 * Conditional script loading only adds the script to the page when the block is actually used
 * Intuitive and simple settings allow for WYSIWYG editing
+* Donation receipts are email using Stripe's email receipt feature
 
 = ⚙ Setting Options =
 **Appearance**
-* Header Image
-* Primary Color
-* Donation Amounts
+* Header Image - Upload a custom header image to be displayed above the donation form
+* Primary Color - The main color of the donation form
+* Donation Amounts - The donation amounts to be displayed on the form
 
 **Content** 
-* Main Heading
+* Main Heading - The main heading of the donation form
 * Main Sub-heading
 * Fields Heading
 * Donation Button Text
 
 **Stripe Connect**
-* Connect to Stripe
-* Live/Test Mode toggle
+* Connect to Stripe easily without any API key setup.
+* Live/Test Mode toggle for easy testing before accepting live payments.
 
 _In order to maintain and support this plugin, GiveWP collects a 2% fee on all transactions. You can upgrade to the full GiveWP plugin with the Stripe add-on to avoid this transaction fee._ 
 
