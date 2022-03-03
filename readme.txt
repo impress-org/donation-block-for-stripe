@@ -1,6 +1,6 @@
 === WordPress Donation Form Block for Stripe by GiveWP ===
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
-Tags:              donation, donation block, donate, give, givewp
+Tags:              donation, donate, stripe, fundraise, give
 Tested up to:      5.9.0
 Stable tag:        1.0.0
 License:           GPL-2.0-or-later
