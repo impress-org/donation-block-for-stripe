@@ -31,6 +31,11 @@ class PaymentIntentForm
      */
     public $liveMode;
 
+    /**
+     * @var string
+     */
+    public $nonce;
+
     public static function fromArray(array $data): self
     {
         $object = new self();
@@ -39,6 +44,7 @@ class PaymentIntentForm
         $object->email = $data['email'];
         $object->amount = $data['amount'];
         $object->liveMode = $data['liveMode'];
+        $object->nonce = $data['nonce'];
         return $object;
     }
 }

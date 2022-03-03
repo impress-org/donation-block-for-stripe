@@ -77,6 +77,7 @@ const DonationForm = (props) => {
                 lastName: lastName,
                 email: email,
                 liveMode: props.attributes.liveMode,
+                nonce: window.donationFormBlock.nonce,
             })
             .then(function (response) {
                 // 🧐 Validation.
