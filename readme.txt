@@ -105,7 +105,7 @@ Not currently. For access to Stripe donation forms with support for recurring do
 == Screenshots ==
 
 1. Customize your suggested donation amounts live in the block editor.
-2. Powered by Stripe, your form supporpts multiple payment types, is highly secure, and leverage all the power of Stripe Payment Elements.
+2. Powered by Stripe, your form supports multiple payment types, is highly secure, and leverage all the power of Stripe Payment Elements.
 3. Sparks of JOY! Enthrall your donors with a confetti POP upon successful donation.
 
 == Changelog ==
