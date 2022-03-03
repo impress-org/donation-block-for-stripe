@@ -1,4 +1,4 @@
-import {__} from '@wordpress/i18n';
+import {sprintf, __} from '@wordpress/i18n';
 import DonationForm from './donationForm';
 import {
     PanelBody,
@@ -11,7 +11,7 @@ import {
     Dashicon,
     Modal,
 } from '@wordpress/components';
-import {Fragment, useState, useEffect} from '@wordpress/element';
+import {Fragment, useState, useEffect, RawHTML} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
 import {useSelect} from '@wordpress/data';
 import {usePageVisibility} from 'react-page-visibility';
@@ -203,7 +203,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         colors={colors}
                                         value={color}
                                         onChange={(value) => {
-                                            if (value) setAttributes({color: value})
+                                            if (value) setAttributes({color: value});
                                         }}
                                         clearable={false}
                                     />
@@ -313,10 +313,14 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     <PanelRow>
                                         <ToggleControl
                                             label={__('Toggle on for Live Mode', 'donation-form-block')}
-                                            help={__(
-                                                'Enable to accept live payments. Turn off to test the donation process using test payments. Payment methods can be modified via your Stripe account\'s <a href="https://dashboard.stripe.com/settings/payment_methods" target="_blank">payment method settings</a>.',
-                                                'donation-form-block'
-                                            )}
+                                            help={
+                                                <RawHTML>
+                                                    {sprintf(__(
+                                                        'Enable to accept live payments. Turn off to test the donation process using test payments. Payment methods can be modified via your Stripe account\'s %spayment method settings%s.',
+                                                        'donation-form-block'
+                                                    ), '<a href="https://dashboard.stripe.com/settings/payment_methods" target="_blank">', '</a>')}
+                                                </RawHTML>
+                                            }
                                             checked={liveMode}
                                             onChange={(value) => {
                                                 setAttributes({liveMode: value});
@@ -331,8 +335,10 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                             </Button>
                                         </span>
                                         <p>
-                                            Warning: disconnecting from Stripe will prevent all donation forms from
-                                            accepting payments.
+                                            {__(
+                                                'Warning: disconnecting from Stripe will prevent all donation forms from accepting payments.',
+                                                'donation-form-block'
+                                            )}
                                         </p>
                                         {disconnectModalOpen && (
                                             <StripeDisconnectModal
