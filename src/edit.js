@@ -91,6 +91,10 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         [onSelectBackground]
     );
 
+    const userIsAdmin = useSelect((select) => {
+        return select('core').canUser('create', 'users');
+    }, []);
+
     // 🔌 Give the form a unique ID for receipts and more.
     useEffect(() => {
         setAttributes({
@@ -254,105 +258,107 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             />
                         </PanelRow>
                     </PanelBody>
-                    <PanelBody title={__('Stripe Connection', 'donation-form-block')} initialOpen={true}>
-                        {stripeConnected === false && (
-                            <PanelRow>
-                                <div id="dfb-stripe-connect-wrap">
-                                    <div className="dfb-welcome-wrap-inner">
-                                        <span className="dfb-welcome-wave">👋</span>
-                                        <h2>
-                                            {__(
-                                                'Welcome to the Stripe Donation Form Block by GiveWP!',
-                                                'donation-form-block'
-                                            )}
-                                        </h2>
-                                        <p>
-                                            {__(
-                                                'To begin, connect to Stripe and start accepting donations.',
-                                                'donation-form-block'
-                                            )}
-                                        </p>
-                                        <a
-                                            href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
-                                            target="_blank"
-                                            className={'dfb-stripe-connect'}
-                                            onClick={() => setStripeConnectionFlow(true)}
-                                        >
-                                            <StripeIcon
-                                                style={{
-                                                    fill: '#FFF',
-                                                    marginRight: '10px',
-                                                    height: '25px',
-                                                    width: '18px',
-                                                    transform: 'scale(.75)',
-                                                }}
-                                            />
-                                            <span>{__('Connect to Stripe', 'donation-form-block')}</span>
-                                        </a>
+                    {userIsAdmin && (
+                        <PanelBody title={__('Stripe Connection', 'donation-form-block')} initialOpen={true}>
+                            {stripeConnected === false && (
+                                <PanelRow>
+                                    <div id="dfb-stripe-connect-wrap">
+                                        <div className="dfb-welcome-wrap-inner">
+                                            <span className="dfb-welcome-wave">👋</span>
+                                            <h2>
+                                                {__(
+                                                    'Welcome to the Stripe Donation Form Block by GiveWP!',
+                                                    'donation-form-block'
+                                                )}
+                                            </h2>
+                                            <p>
+                                                {__(
+                                                    'To begin, connect to Stripe and start accepting donations.',
+                                                    'donation-form-block'
+                                                )}
+                                            </p>
+                                            <a
+                                                href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
+                                                target="_blank"
+                                                className={'dfb-stripe-connect'}
+                                                onClick={() => setStripeConnectionFlow(true)}
+                                            >
+                                                <StripeIcon
+                                                    style={{
+                                                        fill: '#FFF',
+                                                        marginRight: '10px',
+                                                        height: '25px',
+                                                        width: '18px',
+                                                        transform: 'scale(.75)',
+                                                    }}
+                                                />
+                                                <span>{__('Connect to Stripe', 'donation-form-block')}</span>
+                                            </a>
+                                        </div>
                                     </div>
+                                </PanelRow>
+                            )}
+                            {stripeConnected && (
+                                <>
+                                    <PanelRow>
+                                        <div className={'dfb-connected-wrap'}>
+                                            <div className={'dfb-connected-circle-wrap'}>
+                                                <div className="dfb-connected-circle"></div>
+                                            </div>
+                                            <span>{__("You're connected to Stripe!", 'donation-form-block')}</span>
+                                        </div>
+                                    </PanelRow>
+                                    <PanelRow>
+                                        <ToggleControl
+                                            label={__('Live mode enabled', 'donation-form-block')}
+                                            help={__(
+                                                'Enable to accept live payments. Turn off to test the donation process using test payments.',
+                                                'donation-form-block'
+                                            )}
+                                            checked={liveMode}
+                                            onChange={(value) => {
+                                                setAttributes({liveMode: value});
+                                            }}
+                                        />
+                                    </PanelRow>
+                                    <PanelRow className="dfb-stripe-disconnect">
+                                        <span className="dfb-stripe-disconnect__link">
+                                            <Dashicon icon={'editor-unlink'} />
+                                            <Button isLink onClick={() => setDisconnectModalOpen(true)}>
+                                                Disconnect from Stripe
+                                            </Button>
+                                        </span>
+                                        <p>
+                                            Warning: disconnecting from Stripe will prevent all donation forms from
+                                            accepting payments.
+                                        </p>
+                                        {disconnectModalOpen && (
+                                            <StripeDisconnectModal
+                                                onRequestClose={() => setDisconnectModalOpen(false)}
+                                                onDisconnect={() => setStripeConnected(false)}
+                                            />
+                                        )}
+                                    </PanelRow>
+                                </>
+                            )}
+                            <PanelRow>
+                                <div className="dfb-stripe-message">
+                                    <a href="https://givewp.com/" target="_blank">
+                                        <GiveLogo />
+                                    </a>
+                                    <p>
+                                        {__(
+                                            'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.',
+                                            'donation-form-block'
+                                        )}{' '}
+                                        <a href="https://go.givewp.com/dfb-learn-more" target="_blank">
+                                            {__('Learn more', 'donation-form-block')} &raquo;
+                                        </a>
+                                    </p>
                                 </div>
                             </PanelRow>
-                        )}
-                        {stripeConnected && (
-                            <>
-                                <PanelRow>
-                                    <div className={'dfb-connected-wrap'}>
-                                        <div className={'dfb-connected-circle-wrap'}>
-                                            <div className="dfb-connected-circle"></div>
-                                        </div>
-                                        <span>{__("You're connected to Stripe!", 'donation-form-block')}</span>
-                                    </div>
-                                </PanelRow>
-                                <PanelRow>
-                                    <ToggleControl
-                                        label={__('Live mode enabled', 'donation-form-block')}
-                                        help={__(
-                                            'Enable to accept live payments. Turn off to test the donation process using test payments.',
-                                            'donation-form-block'
-                                        )}
-                                        checked={liveMode}
-                                        onChange={(value) => {
-                                            setAttributes({liveMode: value});
-                                        }}
-                                    />
-                                </PanelRow>
-                                <PanelRow className="dfb-stripe-disconnect">
-                                    <span className="dfb-stripe-disconnect__link">
-                                        <Dashicon icon={'editor-unlink'} />
-                                        <Button isLink onClick={() => setDisconnectModalOpen(true)}>
-                                            Disconnect from Stripe
-                                        </Button>
-                                    </span>
-                                    <p>
-                                        Warning: disconnecting from Stripe will prevent all donation forms from
-                                        accepting payments.
-                                    </p>
-                                    {disconnectModalOpen && (
-                                        <StripeDisconnectModal
-                                            onRequestClose={() => setDisconnectModalOpen(false)}
-                                            onDisconnect={() => setStripeConnected(false)}
-                                        />
-                                    )}
-                                </PanelRow>
-                            </>
-                        )}
-                        <PanelRow>
-                            <div className="dfb-stripe-message">
-                                <a href="https://givewp.com/" target="_blank">
-                                    <GiveLogo />
-                                </a>
-                                <p>
-                                    {__(
-                                        'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.',
-                                        'donation-form-block'
-                                    )}{' '}
-                                    <a href="https://go.givewp.com/dfb-learn-more" target="_blank">
-                                        {__('Learn more', 'donation-form-block')} &raquo;
-                                    </a>
-                                </p>
-                            </div>
-                        </PanelRow>
-                    </PanelBody>
+                        </PanelBody>
+                    )}
                 </InspectorControls>
             </Fragment>
             <Fragment>
