@@ -17,14 +17,55 @@
     "autoload": {
         "psr-4": {
             "GiveDonationBlock\\": "src/"
-        }
+        },
+        "classmap": [
+            "strauss"
+        ]
     },
     "require-dev": {
         "brianhenryie/strauss": "^0.11.0"
     },
     "scripts": {
         "strauss": [
-            "@php strauss.phar"
+            "vendor/bin/strauss"
+        ],
+        "post-install-cmd": [
+            "@strauss"
+        ],
+        "post-update-cmd": [
+            "@strauss"
         ]
+    },
+    "extra": {
+        "strauss": {
+            "target_directory": "strauss",
+            "namespace_prefix": "GiveDonationBlock\\Strauss\\",
+            "classmap_prefix": "GiveDonationBlock_Strauss_",
+            "constant_prefix": "DONATION_BLOCK_",
+            "packages": [
+            ],
+            "override_autoload": {
+            },
+            "exclude_from_copy": {
+                "packages": [
+                ],
+                "namespaces": [
+                ],
+                "file_patterns": [
+                ]
+            },
+            "exclude_from_prefix": {
+                "packages": [
+                ],
+                "namespaces": [
+                ],
+                "file_patterns": [
+                    "/^psr.*$/"
+                ]
+            },
+            "namespace_replacement_patterns" : {
+            },
+            "delete_vendor_files": false
+        }
     }
 }

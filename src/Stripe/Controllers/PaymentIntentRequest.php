@@ -6,8 +6,8 @@ namespace GiveDonationBlock\Stripe\Controllers;
 
 use GiveDonationBlock\Stripe\DataTransferObjects\PaymentIntentForm;
 use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
-use Stripe\Exception\ApiErrorException;
-use Stripe\StripeClient;
+use GiveDonationBlock\Strauss\Stripe\Exception\ApiErrorException;
+use GiveDonationBlock\Strauss\Stripe\StripeClient;
 
 use function sanitize_text_field;
 use function wp_send_json_error;
