@@ -18,5 +18,5 @@ export default function useCheckStripeConnect(recheck) {
         }
     }, [recheck, hasChecked]);
 
-    return stripeConnected;
+    return {stripeConnected, setStripeConnected};
 }

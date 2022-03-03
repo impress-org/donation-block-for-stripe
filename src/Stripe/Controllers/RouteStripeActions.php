@@ -21,8 +21,13 @@ class RouteStripeActions
             $handler();
         }
 
-        if ( $action === 'connectToStripe' ) {
+        if ($action === 'connectToStripe') {
             $handler = new ConnectToStripe();
+            $handler();
+        }
+
+        if ($action === 'disconnectFromStripe') {
+            $handler = new DisconnectFromStripe();
             $handler();
         }
     }

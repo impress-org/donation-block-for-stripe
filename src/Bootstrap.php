@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace GiveDonationBlock;
 
-use GiveDonationBlock\Stripe\Controllers\ConnectToStripe;
-use GiveDonationBlock\Stripe\Controllers\PaymentIntentRequest;
 use GiveDonationBlock\Stripe\Controllers\RouteStripeActions;
 
 class Bootstrap
