@@ -1,72 +1,79 @@
 {
-  "$schema": "https://json.schemastore.org/block.json",
-  "apiVersion": 2,
-  "name": "givewp/donation-form-block",
-  "version": "1.0.0",
-  "title": "Donation Form Block for Stripe",
-  "category": "widgets",
-  "icon": "smiley",
-  "description": "A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.",
-  "supports": {
-	"html": false
-  },
-  "attributes": {
-	"backgroundId": {
-	  "type": "integer",
-	  "default": 0
-	},
-	"backgroundUrl": {
-	  "type": "string",
-	  "default": ""
-	},
-	"color": {
-	  "type": "string",
-	  "default": "#1E8CBE"
-	},
-	"introHeading": {
-	  "type": "string",
-	  "default": "How much would you like to donate today?"
-	},
-	"introSubheading": {
-	  "type": "string",
-	  "default": "All donations directly impact our cause. Any support is appreciated."
-	},
-	"fieldsHeading": {
-	  "type": "string",
-	  "default": "Who’s giving today?"
-	},
-	"fieldsSubheading": {
-	  "type": "string",
-	  "default": "This information is never shared with anyone outside of our organization."
-	},
-	"donateBtnText": {
-	  "type": "string",
-	  "default": "Donate Now"
-	},
-	"stripeConnected": {
-	  "type" : "boolean",
-	  "default": false
-	},
-	"formId": {
-	  "type" : "integer",
-	  "default": 0
-	},
-	"testMode": {
-	  "type" : "boolean",
-	  "default": false
-	},
-	"preview": {
-	  "type" : "boolean",
-	  "default": false
-	}
-  },
-  "example": {
-	"attributes": {
-	  "preview": true
-	}
-  },
-  "textdomain": "donation-form-block",
-  "editorScript": "file:./build/index.js",
-  "editorStyle": "file:./build/index.css",
-  "style": ""
+    "$schema": "https://json.schemastore.org/block.json",
+    "apiVersion": 2,
+    "name": "givewp/donation-form-block",
+    "version": "1.0.0",
+    "title": "Donation Form Block for Stripe",
+    "category": "widgets",
+    "icon": "smiley",
+    "description": "A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.",
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "donationAmounts": {
+            "type": "array",
+            "default": [
+                "5",
+                "10",
+                "25",
+                "50",
+                "100",
+                "250"
+            ]
+        },
+        "backgroundId": {
+            "type": "integer",
+            "default": 0
+        },
+        "backgroundUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "color": {
+            "type": "string",
+            "default": "#1E8CBE"
+        },
+        "introHeading": {
+            "type": "string",
+            "default": "How much would you like to donate today?"
+        },
+        "introSubheading": {
+            "type": "string",
+            "default": "All donations directly impact our cause. Any support is appreciated."
+        },
+        "fieldsHeading": {
+            "type": "string",
+            "default": "Who’s giving today?"
+        },
+        "fieldsSubheading": {
+            "type": "string",
+            "default": "This information is never shared with anyone outside of our organization."
+        },
+        "donateBtnText": {
+            "type": "string",
+            "default": "Donate Now"
+        },
+        "formId": {
+            "type": "integer",
+            "default": 0
+        },
+        "liveMode": {
+            "type": "boolean",
+            "default": false
+        },
+        "preview": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "example": {
+        "attributes": {
+            "preview": true
+        }
+    },
+    "textdomain": "donation-form-block",
+    "editorScript": "file:./build/index.js",
+    "editorStyle": "file:./build/index.css",
+    "style": ""
 }

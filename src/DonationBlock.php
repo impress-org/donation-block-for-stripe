@@ -17,7 +17,7 @@ class DonationBlock
 
         wp_register_script(
             'donation-form-block-script',
-            plugins_url('build/index.js', DONATION_BLOCK_FILE ),
+            plugins_url('build/index.js', DONATION_BLOCK_FILE),
             DONATION_BLOCK_SCRIPT_ASSET['dependencies'],
             DONATION_BLOCK_SCRIPT_ASSET['version']
         );
@@ -44,12 +44,17 @@ class DonationBlock
 
         ob_start(); ?>
 
-        <div class="root-donation-block"
-             data-stripe-live-pub-key="<?php echo $stripeData->livePublishableKey; ?>"
-             data-stripe-test-pub-key="<?php echo $stripeData->testPublishableKey; ?>"
+        <div id="donation-form-block-<?php
+        echo $attributes['formId']; ?>" class="root-donation-block"
+             data-stripe-live-pub-key="<?= $stripeData->livePublishableKey ?? '' ?>"
+             data-stripe-test-pub-key="<?= $stripeData->testPublishableKey ?? '' ?>"
             <?php
-            // Loop through and set attributes per block.
-            foreach ($attributes as $key => $value) : ?>
+            // 🔁 Loop through and set attributes per block.
+            foreach ($attributes as $key => $value) :
+                // Arrays need to be stringified.
+                if (is_array($value)) {
+                    $value = implode(', ', $value);
+                } ?>
                 data-<?php
                 // output as hyphen-case so that it's changed to camelCase in JS.
                 echo preg_replace('/([A-Z])/', '-$1', $key); ?>="<?php

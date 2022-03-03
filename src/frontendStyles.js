@@ -1,16 +1,16 @@
-import {StyleSheet} from "aphrodite";
-import color from "color";
-
+import {StyleSheet} from 'aphrodite';
+import color from 'color';
 
 export default class StyleSheetFactory {
     static getSheet(props) {
         return StyleSheet.create({
             formContainer: {
+                backgroundColor: '#fff',
                 boxShadow: 'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
                 borderRadius: '8px',
                 border: '1px solid #ddd',
                 maxWidth: '650px',
-                margin: '1rem auto',
+                margin: '1rem auto 1.5rem',
                 padding: '0',
                 position: 'relative',
                 transition: 'all .5s ease-in-out',
@@ -67,11 +67,11 @@ export default class StyleSheetFactory {
             donationFormFieldsRow: {
                 display: 'grid',
                 gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '1rem',
+                gap: '20px',
                 gridAutoRows: 'minmax(40px, auto)',
                 '@media (max-width: 480px)': {
                     gridTemplateColumns: 'repeat(1, 1fr)',
-                }
+                },
             },
             formButtonRow: {
                 display: 'grid',
@@ -81,7 +81,7 @@ export default class StyleSheetFactory {
                 margin: '0 0 30px',
                 '@media (max-width: 400px)': {
                     gridTemplateColumns: 'repeat(2, 1fr)',
-                }
+                },
             },
             noticeBase: {
                 display: 'flex',
@@ -91,15 +91,18 @@ export default class StyleSheetFactory {
                 backgroundColor: '#FFF8C5',
                 border: `1px solid rgba(212, 167, 44, 0.4)`,
                 color: '#333',
-                margin: '0 0 20px',
+                margin: '0 auto 20px',
                 padding: '10px 15px',
                 borderRadius: '6px',
+                maxWidth: '650px',
             },
             noticeIcon: {
                 marginRight: '10px',
+                flexShrink: '0',
             },
             noticeParagraph: {
                 margin: '0',
+                lineHeight: '22px',
             },
             noticeInfo: {
                 backgroundColor: '#DDF4FF',
@@ -132,11 +135,15 @@ export default class StyleSheetFactory {
                 border: `3px solid ${props.attributes.color}`,
                 fontSize: '28px',
                 fontWeight: '500',
+                textDecoration: 'none',
                 transition: 'all 0.2s ease',
                 lineHeight: '1.6',
                 cursor: 'pointer',
                 padding: '0',
+                margin: '0',
                 height: '70px',
+                textTransform: 'none',
+                textAlign: 'center',
             },
             buttonPrimary: {
                 ':hover': {
@@ -167,6 +174,7 @@ export default class StyleSheetFactory {
             },
             donateBtnIcon: {
                 margin: '0 0 0 10px',
+                display: 'inline',
             },
             textField: {
                 background: '#FFF',
@@ -206,15 +214,19 @@ export default class StyleSheetFactory {
             },
             currencyField: {
                 width: '100%',
-                fontSize: '2.5rem',
-                padding: '1rem 1.5rem',
+                height: '80px',
+                fontSize: '36px',
+                padding: '0 20px',
+                letterSpacing: '0',
+                boxShadow: 'none',
                 border: '2px solid #424242',
                 borderRadius: '8px',
                 textAlign: 'right',
+                fontWeight: '500',
                 lineHeight: '1',
                 boxSizing: 'border-box',
                 color: '#333',
-                ':hover': {}
+                ':hover': {},
             },
             secureFooter: {
                 display: 'flex',
@@ -228,7 +240,7 @@ export default class StyleSheetFactory {
                 margin: '0 10px 0 0',
             },
             stripePaymentWrap: {
-                minHeight: '300px',
+                minHeight: '200px',
             },
             donationReceiptEmailText: {
                 textAlign: 'center',
@@ -273,6 +285,6 @@ export default class StyleSheetFactory {
                 margin: '40px auto 20px',
                 display: 'block',
             },
-        })
+        });
     }
 }

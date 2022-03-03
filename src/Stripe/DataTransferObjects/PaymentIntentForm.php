@@ -29,7 +29,7 @@ class PaymentIntentForm
     /**
      * @var bool
      */
-    public $testMode;
+    public $liveMode;
 
     public static function fromArray(array $data): self
     {
@@ -38,7 +38,7 @@ class PaymentIntentForm
         $object->lastName = $data['lastName'];
         $object->email = $data['email'];
         $object->amount = $data['amount'];
-        $object->testMode = $data['testMode'];
+        $object->liveMode = $data['liveMode'];
         return $object;
     }
 }

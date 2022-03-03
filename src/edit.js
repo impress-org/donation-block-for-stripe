@@ -8,14 +8,38 @@ import {
     ResponsiveWrapper,
     ToggleControl,
     ColorPalette,
+    Dashicon,
+    Modal,
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
-import {dispatch, useSelect} from '@wordpress/data';
-import {useEntityProp} from '@wordpress/core-data';
+import {useSelect} from '@wordpress/data';
+import {usePageVisibility} from 'react-page-visibility';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
+import useCheckStripeConnect from './useCheckStripeConnect';
+import runLottieAnimation from './runLottieAnimation';
+import RepeatableControl from './components/RepeatableControl';
+import StripeDisconnectModal from './components/StripeDisconnectModal';
+
+// 🎨 Color picker colors.
+const colors = [
+    {name: 'Gray', color: '#2F363D'},
+    {name: 'Light Gray', color: '#6A737D'},
+    {name: 'Blue', color: '#044289'},
+    {name: 'Light Blue', color: '#0366D6'},
+    {name: 'Green', color: '#176F2C'},
+    {name: 'Light Green', color: '#28A745'},
+    {name: 'Yellow', color: '#DBAB09'},
+    {name: 'Light Yellow', color: '#FFD33D'},
+    {name: 'Orange', color: '#D15704'},
+    {name: 'Light Orange', color: '#F66A0A'},
+    {name: 'Red', color: '#B31D28'},
+    {name: 'Light Red', color: '#D73A49'},
+    {name: 'Pink', color: '#B93A86'},
+    {name: 'Light Pink', color: '#EA4AAA'},
+];
 
 /**
  * Edit function.
@@ -25,84 +49,70 @@ import './editor.scss';
  * @return {WPElement} Element to render.
  */
 export default function Edit({attributes, setAttributes, instanceId}) {
-
     const blockProps = useBlockProps();
 
-    const {
-        backgroundId,
-        backgroundUrl,
-        color,
-        introHeading,
-        introSubheading,
-        donateBtnText,
-        stripeConnected,
-        formId,
-        testMode,
-        preview,
-    } = attributes;
+    const {donationAmounts, backgroundId, color, liveMode, preview} = attributes;
 
-    // Preview image when an admin hovers over the block.
+    // 🖼 Preview image when an admin hovers over the block.
     if (preview) {
         return (
             <Fragment>
-                <img src={dfbPreview.profile_preview} alt={'Donation form block for Stripe by GiveWP.'}
-                     style={{width: '100%', height: 'auto'}}/>
+                <img
+                    src={dfbPreview.profile_preview}
+                    alt={__('Donation form block for Stripe by GiveWP.', 'donation-form-block')}
+                    style={{width: '100%', height: 'auto'}}
+                />
             </Fragment>
         );
     }
 
+    const updateDonationAmounts = (newDonationAmounts) => {
+        setAttributes({donationAmounts: newDonationAmounts});
+    };
+
     const removeBackground = () => {
         setAttributes({
             backgroundId: 0,
-            backgroundUrl: ''
+            backgroundUrl: '',
         });
     };
 
     const onSelectBackground = (background) => {
         setAttributes({
             backgroundId: background.id,
-            backgroundUrl: background.url
+            backgroundUrl: background.url,
         });
     };
 
-    const background = useSelect((select) => {
-        return select('core').getMedia(backgroundId);
-    }, [onSelectBackground]);
+    const background = useSelect(
+        (select) => {
+            return select('core').getMedia(backgroundId);
+        },
+        [onSelectBackground]
+    );
 
-    // Color picker colors.
-    const colors = [
-        {name: 'Gray', color: '#2F363D'},
-        {name: 'Light Gray', color: '#6A737D'},
-        {name: 'Blue', color: '#044289'},
-        {name: 'Light Blue', color: '#0366D6'},
-        {name: 'Green', color: '#176F2C'},
-        {name: 'Light Green', color: '#28A745'},
-        {name: 'Yellow', color: '#DBAB09'},
-        {name: 'Light Yellow', color: '#FFD33D'},
-        {name: 'Orange', color: '#D15704'},
-        {name: 'Light Orange', color: '#F66A0A'},
-        {name: 'Red', color: '#B31D28'},
-        {name: 'Light Red', color: '#D73A49'},
-        {name: 'Pink', color: '#B93A86'},
-        {name: 'Light Pink', color: '#EA4AAA'},
-    ];
+    const userIsAdmin = useSelect((select) => {
+        return select('core').canUser('create', 'users');
+    }, []);
 
-    // Get settings to check for Stripe connection.
-    const stripeConnectData = useEntityProp('root', 'site', 'dfb_donation_block_stripe_data');
-
+    // 🔌 Give the form a unique ID for receipts and more.
     useEffect(() => {
-        if (stripeConnectData) {
-            setAttributes({
-                stripeConnected: true,
-            });
-        }
-    }, [stripeConnectData]);
-
-    useEffect(() => {
-       setAttributes({
-           formId: instanceId,
-       });
+        setAttributes({
+            formId: instanceId,
+        });
     }, [instanceId]);
+
+    // Handle initial Stripe connection return.
+    const isVisible = usePageVisibility();
+    const [stripeConnectionFlow, setStripeConnectionFlow] = useState(false);
+    const [disconnectModalOpen, setDisconnectModalOpen] = useState(false);
+    const {stripeConnected, setStripeConnected} = useCheckStripeConnect(isVisible && stripeConnectionFlow);
+
+    useEffect(() => {
+        if (stripeConnected && stripeConnectionFlow) {
+            runLottieAnimation('fireworks', document.getElementById('dfb-connected-lottie'));
+        }
+    }, [stripeConnected, stripeConnectionFlow]);
 
     return (
         <Fragment>
@@ -117,50 +127,73 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                 <MediaUploadCheck>
                                     <MediaUpload
                                         onSelect={onSelectBackground}
-                                        value={attributes.backgroundId}
+                                        value={backgroundId}
                                         allowedTypes={['image']}
                                         render={({open}) => (
                                             <Button
-                                                className={attributes.backgroundId === 0 ? 'editor-post-featured-image__toggle' : 'editor-post-featured-image__preview'}
+                                                className={
+                                                    backgroundId === 0
+                                                        ? 'editor-post-featured-image__toggle'
+                                                        : 'editor-post-featured-image__preview'
+                                                }
                                                 onClick={open}
                                             >
-                                                {attributes.backgroundId === 0 && __('Choose an image', 'donation-form-block')}
-                                                {background !== undefined &&
+                                                {backgroundId === 0 && __('Choose an image', 'donation-form-block')}
+                                                {background !== undefined && (
                                                     <ResponsiveWrapper
                                                         naturalWidth={background.media_details.width}
                                                         naturalHeight={background.media_details.height}
                                                     >
-                                                        <img src={background.source_url}/>
+                                                        <img src={background.source_url} />
                                                     </ResponsiveWrapper>
-                                                }
+                                                )}
                                             </Button>
                                         )}
                                     />
                                 </MediaUploadCheck>
                                 <div className="dfb-background-btns">
-                                    {attributes.backgroundId !== 0 &&
+                                    {backgroundId !== 0 && (
                                         <MediaUploadCheck>
                                             <MediaUpload
                                                 title={__('Replace image', 'donation-form-block')}
-                                                value={attributes.backgroundId}
+                                                value={backgroundId}
                                                 onSelect={onSelectBackground}
                                                 allowedTypes={['image']}
                                                 render={({open}) => (
-                                                    <Button onClick={open} isSmall variant="secondary"
-                                                            className={'dfb-replace-image-btn'}>{__('Replace image', 'donation-form-block')}</Button>
+                                                    <Button
+                                                        onClick={open}
+                                                        isSmall
+                                                        variant="secondary"
+                                                        className={'dfb-replace-image-btn'}
+                                                    >
+                                                        {__('Replace image', 'donation-form-block')}
+                                                    </Button>
                                                 )}
                                             />
                                         </MediaUploadCheck>
-                                    }
-                                    {attributes.backgroundId !== 0 &&
+                                    )}
+                                    {backgroundId !== 0 && (
                                         <MediaUploadCheck>
-                                            <Button onClick={removeBackground} isSmall
-                                                    variant="secondary">{__('Remove image', 'donation-form-block')}</Button>
+                                            <Button onClick={removeBackground} isSmall variant="secondary">
+                                                {__('Remove image', 'donation-form-block')}
+                                            </Button>
                                         </MediaUploadCheck>
-                                    }
+                                    )}
                                 </div>
-                                <p className={'dfb-help-text'}>{__('Upload or select an image for the header background.', 'donation-form-block')}</p>
+                                <p className={'dfb-help-text'}>
+                                    {__('Upload or select an image for the header background.', 'donation-form-block')}
+                                </p>
                             </div>
+                        </PanelRow>
+                        <PanelRow>
+                            <RepeatableControl
+                                label={__('Donation Amounts', 'donation-form-block')}
+                                addLabel={__('Add Amount', 'donation-form-block')}
+                                initialData={donationAmounts}
+                                newValue="50"
+                                onChange={updateDonationAmounts}
+                                Control={TextControl}
+                            />
                         </PanelRow>
                         <PanelRow>
                             <div>
@@ -173,7 +206,9 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         clearable={false}
                                     />
                                 </div>
-                                <p className={'dfb-help-text'}>{__('Choose the primary color for this donation form.', 'donation-form-block')}</p>
+                                <p className={'dfb-help-text'}>
+                                    {__('Choose the primary color for this donation form.', 'donation-form-block')}
+                                </p>
                             </div>
                         </PanelRow>
                     </PanelBody>
@@ -213,77 +248,132 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         <PanelRow>
                             <TextControl
                                 label={__('Donate Button Text', 'donation-form-block')}
-                                help={__('Customize the text for the donate button. The maximum text length is 20 characters.', 'donation-form-block')}
+                                help={__(
+                                    'Customize the text for the donate button. The maximum text length is 20 characters.',
+                                    'donation-form-block'
+                                )}
                                 value={attributes.donateBtnText}
                                 maxLength={20}
                                 onChange={(value) => setAttributes({donateBtnText: value})}
                             />
                         </PanelRow>
                     </PanelBody>
-                    <PanelBody title={__('Stripe Connect', 'donation-form-block')} initialOpen={true}>
-                        {!stripeConnected &&
-                            <PanelRow>
-                                <div id="dfb-stripe-connect-wrap">
-                                    <div className="dfb-welcome-wrap-inner">
-                                        <span className="dfb-welcome-wave">👋</span>
-                                        <h2>{__('Welcome to the Stripe Donation Form Block by GiveWP!', 'donation-form-block')}</h2>
-                                        <p>{__('To begin, connect to Stripe and start accepting donations.', 'donation-form-block')}</p>
-                                        <a
-                                            href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
-                                            target="_blank"
-                                            className={'dfb-stripe-connect'}
-                                        >
-                                            <StripeIcon style={{
-                                                fill: '#FFF',
-                                                marginRight: '10px',
-                                                height: '25px',
-                                                width: '18px',
-                                                transform: 'scale(.75)'
-                                            }}/>
-                                            <span>{__('Connect to Stripe', 'donation-form-block')}</span>
-                                        </a>
+                    {userIsAdmin && (
+                        <PanelBody title={__('Stripe Connection', 'donation-form-block')} initialOpen={true}>
+                            {stripeConnected === false && (
+                                <PanelRow>
+                                    <div id="dfb-stripe-connect-wrap">
+                                        <div className="dfb-welcome-wrap-inner">
+                                            <span className="dfb-welcome-wave">👋</span>
+                                            <h2>
+                                                {__(
+                                                    'Welcome to the Stripe Donation Form Block by GiveWP!',
+                                                    'donation-form-block'
+                                                )}
+                                            </h2>
+                                            <p>
+                                                {__(
+                                                    'To begin, connect to Stripe and start accepting donations.',
+                                                    'donation-form-block'
+                                                )}
+                                            </p>
+                                            <a
+                                                href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
+                                                target="_blank"
+                                                className={'dfb-stripe-connect'}
+                                                onClick={() => setStripeConnectionFlow(true)}
+                                            >
+                                                <StripeIcon
+                                                    style={{
+                                                        fill: '#FFF',
+                                                        marginRight: '10px',
+                                                        height: '25px',
+                                                        width: '18px',
+                                                        transform: 'scale(.75)',
+                                                    }}
+                                                />
+                                                <span>{__('Connect to Stripe', 'donation-form-block')}</span>
+                                            </a>
+                                        </div>
                                     </div>
+                                </PanelRow>
+                            )}
+                            {stripeConnected && (
+                                <>
+                                    <PanelRow>
+                                        <div className={'dfb-connected-wrap'}>
+                                            <div className={'dfb-connected-circle-wrap'}>
+                                                <div className="dfb-connected-circle"></div>
+                                            </div>
+                                            <span>{__("You're connected to Stripe!", 'donation-form-block')}</span>
+                                        </div>
+                                    </PanelRow>
+                                    <PanelRow>
+                                        <ToggleControl
+                                            label={__('Live mode enabled', 'donation-form-block')}
+                                            help={__(
+                                                'Enable to accept live payments. Turn off to test the donation process using test payments.',
+                                                'donation-form-block'
+                                            )}
+                                            checked={liveMode}
+                                            onChange={(value) => {
+                                                setAttributes({liveMode: value});
+                                            }}
+                                        />
+                                    </PanelRow>
+                                    <PanelRow className="dfb-stripe-disconnect">
+                                        <span className="dfb-stripe-disconnect__link">
+                                            <Dashicon icon={'editor-unlink'} />
+                                            <Button isLink onClick={() => setDisconnectModalOpen(true)}>
+                                                Disconnect from Stripe
+                                            </Button>
+                                        </span>
+                                        <p>
+                                            Warning: disconnecting from Stripe will prevent all donation forms from
+                                            accepting payments.
+                                        </p>
+                                        {disconnectModalOpen && (
+                                            <StripeDisconnectModal
+                                                onRequestClose={() => setDisconnectModalOpen(false)}
+                                                onDisconnect={() => setStripeConnected(false)}
+                                            />
+                                        )}
+                                    </PanelRow>
+                                </>
+                            )}
+                            <PanelRow>
+                                <div className="dfb-stripe-message">
+                                    <a href="https://givewp.com/" target="_blank">
+                                        <GiveLogo />
+                                    </a>
+                                    <p>
+                                        {__(
+                                            'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.',
+                                            'donation-form-block'
+                                        )}{' '}
+                                        <a href="https://go.givewp.com/dfb-learn-more" target="_blank">
+                                            {__('Learn more', 'donation-form-block')} &raquo;
+                                        </a>
+                                    </p>
                                 </div>
                             </PanelRow>
-                        }
-                        {stripeConnected &&
-                            <>
-                                <PanelRow>
-                                    <div className={'dfb-connected-wrap'}>
-                                        <div className={'dfb-connected-circle-wrap'}>
-                                            <div className="dfb-connected-circle"></div>
-                                        </div>
-                                        <span>{__('You\'re connected to Stripe!', 'donation-form-block')}</span>
-                                    </div>
-                                </PanelRow>
-                                <PanelRow>
-                                    <ToggleControl
-                                        label={__('Live mode enabled', 'donation-form-block')}
-                                        help={__('Enable to accept live payments. Turn off to test the donation process using test payments.', 'donation-form-block')}
-                                        checked={testMode}
-                                        onChange={(value) => {
-                                            console.log(value);
-                                            setAttributes({testMode: value});
-                                        }}
-                                    />
-                                </PanelRow>
-                            </>
-                        }
-                        <PanelRow>
-                            <div className="dfb-stripe-message">
-                                <a href="https://givewp.com/" target="_blank"><GiveLogo/></a>
-                                <p>{'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.'} <a href="https://go.givewp.com/dfb-learn-more" target="_blank">Learn more &raquo;</a></p>
-                            </div>
-                        </PanelRow>
-                    </PanelBody>
+                        </PanelBody>
+                    )}
                 </InspectorControls>
             </Fragment>
             <Fragment>
                 <div {...blockProps}>
-                    <DonationForm attributes={attributes} backend/>
+                    {stripeConnectionFlow && (
+                        <div id="dfb-connected-lottie-wrap">
+                            <p className={'dfb-lottie-connected-text'}>
+                                {__("You're Connected to Stripe", 'donation-form-block')} 🎉
+                            </p>
+                            <div id="dfb-connected-lottie"></div>
+                        </div>
+                    )}
+                    <DonationForm attributes={attributes} backend stripeConnected={stripeConnected} />
                 </div>
             </Fragment>
         </Fragment>
-
     );
 }

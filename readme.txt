@@ -1,4 +1,4 @@
-=== Donation Blocks for Stripe by GiveWP ===
+=== WordPress Donation Form Block for Stripe by GiveWP ===
 Contributors:      dlocc, jasontheadams, givewp
 Tags:              block
 Tested up to:      5.9.0
@@ -6,27 +6,84 @@ Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.
+A beautiful WordPress donation form block for Stripe by GiveWP. Accept Stripe donations in minutes with a simple online donation form.
 
 == Description ==
 
-Coming soon!
+Add a Stripe Donation Form to your website in a few seconds with the WordPress Donation Form Block for Stripe by GiveWP. 
+
+This “lite” version of GiveWP provides you with the style and functionality of a GiveWP form without all the setup. That way, you can start accepting Stripe donations immediately. 
+
+Alternatively, you can use the full GiveWP donation plugin, which includes robust fundraising reports, a donor database, and unlimited donation forms. [Download GiveWP for free from our website](GO LINK). 
+
+= ✨ Block Features =
+
+This block provides Stripe-powered donation forms, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.  
+
+The Donation Form Block for Stripe includes extensive customization options. You can easily change the donation amounts, colors, main image, headings, description text, and button text.
+
+* Fully functional and responsive Stripe donation form that looks good on any device
+* Native block controls for content, color, images, donation options
+* Single Stripe account, so once it's configured it's connected for any and all blocks you add to your site
+* Fully responsive donation form block
+* Ultra light-weight; guaranteed to not slow down your site
+* Zero database load on your site; adds no tables to your database
+* Conditional script loading only adds the script to the page when the block is actually used
+* Intuitive and simple settings allow for WYSIWYG editing
+
+= ⚙ Setting Options =
+**Appearance**
+* Header Image
+* Primary Color
+* Donation Amounts
+
+**Content** 
+* Main Heading
+* Main Sub-heading
+* Fields Heading
+* Donation Button Text
+
+**Stripe Connect**
+* Connect to Stripe
+* Live/Test Mode toggle
+
+_In order to maintain and support this plugin, GiveWP collects a 2% fee on all transactions. You can upgrade to the full GiveWP plugin with the Stripe add-on to avoid this transaction fee._ 
+
+= 👩‍💻 Development Notes =
+Know some code? Great! We love open source contribution. Please visit this plugin's [GitHub repository](https://github.com/impress-org/donation-block-for-stripe) if you'd like to learn more about how to contribute to the development of this block.
+
+= 💚 About the GiveWP Team =
+[GiveWP](https://givewp.com) is part of StellarWP, a Liquid Web Family Brand. Our donation plugin is backed by a growing team of WordPress developers, support engineers, customer success managers, and marketing professionals who’ve worked with WordPress and nonprofits since 2009. This means GiveWP is made with best practices in mind; extremely extensible and customizable, stable, and reliable. We’ll be here in years to come for you and your nonprofit organization.
+
+Stay in touch with us for important plugin news and updates:
+
+* [GiveWP Website](https://givewp.com)
+* [Download GiveWP Free](https://givewp.com/downloads/give/free/)
+* [GiveWP Newsletter](https://givewp.com/newsletter/)
+* [GiveWP Facebook](https://facebook.com/givewp/)
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/donation-blocks-for-stripe` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
+Do you have a WordPress website? Great! You can use this block on your site. Simply log into your WP-Admin and go to Plugins > Add New. Once there search "Donation Block for Stripe by GiveWP". Once you find the plugin, click "Install Now".
 
+Alternatively, when in the block editor open up the block editor and click the "Add Block" button. Once there, type "Donation" and you should see the block display in the list of available blocks. Simply click to install and add the block to your page.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= How is the WordPress Donation Form Block for Stripe different from a GiveWP Donation Form block? =
+ 
+This block contains a single form with a connection to Stripe. It does not have the additional access to PayPal and other payment gateway options, reporting, donor database, or campaign features that the free download of GiveWP provides. If you would like more information about GiveWP, please visit our website.
+[Learn More](https://givewp.com)
 
-An answer to that question.
+= Is there a “Pro” version of this block with more features? = 
 
-= What about foo bar? =
+Yes! GiveWP, the free version, provides a lot more to set up your fundraising website. When you use GiveWP, you also gain the ability to connect our add-ons, which provide features like Recurring Donations, Fee Recovery, Tributes, Gift Aid, and more. Our add-ons also include a more robust Stripe connection that includes options for Google Pay, Apple Pay, and disables the 2% transaction fee that the free Stripe donation form block requires. 
+[Learn About GiveWP](https://givewp.com) or [View Stipe Add-on](https://givewp.com/addons/stripe/)
 
-Answer to foo bar dilemma.
+= Does this donation form block support Stripe recurring donations? =
+ 
+Not currently. For access to Stripe donation forms with support for recurring donations, please use GiveWP with our Stripe and Recurring Donations Add-ons. Both are included in a Plus plan and above. 
+[View Pricing](https://givewp.com/pricing/)
 
 == Screenshots ==
 

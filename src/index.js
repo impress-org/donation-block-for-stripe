@@ -15,7 +15,7 @@ import Edit from './edit';
 import DonationForm from './donationForm';
 import domReady from '@wordpress/dom-ready';
 import {render} from '@wordpress/element';
-import {compose, withInstanceId} from '@wordpress/compose'
+import {withInstanceId} from '@wordpress/compose';
 
 /**
  * Register the Block.
@@ -23,20 +23,17 @@ import {compose, withInstanceId} from '@wordpress/compose'
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType('givewp/donation-form-block', {
-
     title: __('Donation Form Block', 'donation-form-block'),
-    icon: <GiveIcon color="grey"/>,
+    icon: <GiveIcon color="grey" />,
 
     edit: withInstanceId(Edit),
 
     save: () => {
         return null;
-    }
-
+    },
 });
 
 domReady(function () {
-
     // Don't run when Gutenberg / Block editor is active.
     if (document.body.classList.contains('block-editor-page')) {
         return;
@@ -44,13 +41,8 @@ domReady(function () {
 
     const donationForms = document.querySelectorAll('.root-donation-block');
 
-    donationForms.forEach(donationForm => {
+    donationForms.forEach((donationForm) => {
         const attributes = donationForm.dataset;
-        render(
-            <DonationForm attributes={attributes}/>,
-            donationForm
-        );
+        render(<DonationForm attributes={attributes} />, donationForm);
     });
-
-
 });
