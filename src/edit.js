@@ -8,6 +8,8 @@ import {
     ResponsiveWrapper,
     ToggleControl,
     ColorPalette,
+    Dashicon,
+    Modal,
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
@@ -18,7 +20,26 @@ import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
 import useCheckStripeConnect from './useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
-import RepeatableControl from './Stripe/RepeatableControl';
+import RepeatableControl from './components/RepeatableControl';
+import StripeDisconnectModal from './components/StripeDisconnectModal';
+
+// 🎨 Color picker colors.
+const colors = [
+    {name: 'Gray', color: '#2F363D'},
+    {name: 'Light Gray', color: '#6A737D'},
+    {name: 'Blue', color: '#044289'},
+    {name: 'Light Blue', color: '#0366D6'},
+    {name: 'Green', color: '#176F2C'},
+    {name: 'Light Green', color: '#28A745'},
+    {name: 'Yellow', color: '#DBAB09'},
+    {name: 'Light Yellow', color: '#FFD33D'},
+    {name: 'Orange', color: '#D15704'},
+    {name: 'Light Orange', color: '#F66A0A'},
+    {name: 'Red', color: '#B31D28'},
+    {name: 'Light Red', color: '#D73A49'},
+    {name: 'Pink', color: '#B93A86'},
+    {name: 'Light Pink', color: '#EA4AAA'},
+];
 
 /**
  * Edit function.
@@ -70,24 +91,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         [onSelectBackground]
     );
 
-    // 🎨 Color picker colors.
-    const colors = [
-        {name: 'Gray', color: '#2F363D'},
-        {name: 'Light Gray', color: '#6A737D'},
-        {name: 'Blue', color: '#044289'},
-        {name: 'Light Blue', color: '#0366D6'},
-        {name: 'Green', color: '#176F2C'},
-        {name: 'Light Green', color: '#28A745'},
-        {name: 'Yellow', color: '#DBAB09'},
-        {name: 'Light Yellow', color: '#FFD33D'},
-        {name: 'Orange', color: '#D15704'},
-        {name: 'Light Orange', color: '#F66A0A'},
-        {name: 'Red', color: '#B31D28'},
-        {name: 'Light Red', color: '#D73A49'},
-        {name: 'Pink', color: '#B93A86'},
-        {name: 'Light Pink', color: '#EA4AAA'},
-    ];
-
     // 🔌 Give the form a unique ID for receipts and more.
     useEffect(() => {
         setAttributes({
@@ -98,7 +101,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     // Handle initial Stripe connection return.
     const isVisible = usePageVisibility();
     const [stripeConnectionFlow, setStripeConnectionFlow] = useState(false);
-    const stripeConnected = useCheckStripeConnect(isVisible && stripeConnectionFlow);
+    const [disconnectModalOpen, setDisconnectModalOpen] = useState(false);
+    const {stripeConnected, setStripeConnected} = useCheckStripeConnect(isVisible && stripeConnectionFlow);
 
     useEffect(() => {
         if (stripeConnected && stripeConnectionFlow) {
@@ -311,6 +315,24 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                             setAttributes({liveMode: value});
                                         }}
                                     />
+                                </PanelRow>
+                                <PanelRow className="dfb-stripe-disconnect">
+                                    <span className="dfb-stripe-disconnect__link">
+                                        <Dashicon icon={'editor-unlink'} />
+                                        <Button isLink onClick={() => setDisconnectModalOpen(true)}>
+                                            Disconnect from Stripe
+                                        </Button>
+                                    </span>
+                                    <p>
+                                        Warning: disconnecting from Stripe will prevent all donation forms from
+                                        accepting payments.
+                                    </p>
+                                    {disconnectModalOpen && (
+                                        <StripeDisconnectModal
+                                            onRequestClose={() => setDisconnectModalOpen(false)}
+                                            onDisconnect={() => setStripeConnected(false)}
+                                        />
+                                    )}
                                 </PanelRow>
                             </>
                         )}
