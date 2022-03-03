@@ -144,7 +144,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                                         naturalWidth={background.media_details.width}
                                                         naturalHeight={background.media_details.height}
                                                     >
-                                                        <img src={background.source_url} />
+                                                        <img src={background.source_url}/>
                                                     </ResponsiveWrapper>
                                                 )}
                                             </Button>
@@ -202,7 +202,9 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     <ColorPalette
                                         colors={colors}
                                         value={color}
-                                        onChange={(value) => setAttributes({color: value})}
+                                        onChange={(value) => {
+                                            if (value) setAttributes({color: value})
+                                        }}
                                         clearable={false}
                                     />
                                 </div>
@@ -323,7 +325,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     </PanelRow>
                                     <PanelRow className="dfb-stripe-disconnect">
                                         <span className="dfb-stripe-disconnect__link">
-                                            <Dashicon icon={'editor-unlink'} />
+                                            <Dashicon icon={'editor-unlink'}/>
                                             <Button isLink onClick={() => setDisconnectModalOpen(true)}>
                                                 Disconnect from Stripe
                                             </Button>
@@ -344,7 +346,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             <PanelRow>
                                 <div className="dfb-stripe-message">
                                     <a href="https://givewp.com/" target="_blank">
-                                        <GiveLogo />
+                                        <GiveLogo/>
                                     </a>
                                     <p>
                                         {__(
@@ -371,7 +373,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             <div id="dfb-connected-lottie"></div>
                         </div>
                     )}
-                    <DonationForm attributes={attributes} backend stripeConnected={stripeConnected} />
+                    <DonationForm attributes={attributes} backend stripeConnected={stripeConnected}/>
                 </div>
             </Fragment>
         </Fragment>
