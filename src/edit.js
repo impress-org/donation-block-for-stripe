@@ -9,9 +9,10 @@ import {
     ToggleControl,
     ColorPalette,
     Dashicon,
+    ExternalLink,
     Modal,
 } from '@wordpress/components';
-import {Fragment, useState, useEffect, RawHTML} from '@wordpress/element';
+import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
 import {useSelect} from '@wordpress/data';
 import {usePageVisibility} from 'react-page-visibility';
@@ -144,7 +145,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                                         naturalWidth={background.media_details.width}
                                                         naturalHeight={background.media_details.height}
                                                     >
-                                                        <img src={background.source_url}/>
+                                                        <img src={background.source_url} />
                                                     </ResponsiveWrapper>
                                                 )}
                                             </Button>
@@ -314,13 +315,19 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         <ToggleControl
                                             label={__('Toggle on for Live Mode', 'donation-form-block')}
                                             help={
-                                                <RawHTML>
-                                                    {sprintf(__(
-                                                        'Enable to accept live payments. Turn off to test the donation process using test payments. Payment methods can be modified via your Stripe account\'s %spayment method settings%s.',
+                                                <>
+                                                    {__(
+                                                        "Enable to accept live payments. Turn off to test the donation process using test payments. Payment methods can be modified via your Stripe account's payment method settings.",
                                                         'donation-form-block'
-                                                    ), '<a href="https://dashboard.stripe.com/settings/payment_methods" target="_blank">', '</a>')}
-                                                </RawHTML>
+                                                    )}
+                                                    <ExternalLink
+                                                        href={'https://dashboard.stripe.com/settings/payment_methods'}
+                                                    >
+                                                        {__('Adjust payment methods')}
+                                                    </ExternalLink>
+                                                </>
                                             }
+                                            className={'dfb-stripe-live-mode-toggle'}
                                             checked={liveMode}
                                             onChange={(value) => {
                                                 setAttributes({liveMode: value});
@@ -329,7 +336,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     </PanelRow>
                                     <PanelRow className="dfb-stripe-disconnect">
                                         <span className="dfb-stripe-disconnect__link">
-                                            <Dashicon icon={'editor-unlink'}/>
+                                            <Dashicon icon={'editor-unlink'} />
                                             <Button isLink onClick={() => setDisconnectModalOpen(true)}>
                                                 Disconnect from Stripe
                                             </Button>
@@ -352,7 +359,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             <PanelRow>
                                 <div className="dfb-stripe-message">
                                     <a href="https://givewp.com/" target="_blank">
-                                        <GiveLogo/>
+                                        <GiveLogo />
                                     </a>
                                     <p>
                                         {__(
@@ -379,7 +386,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             <div id="dfb-connected-lottie"></div>
                         </div>
                     )}
-                    <DonationForm attributes={attributes} backend stripeConnected={stripeConnected}/>
+                    <DonationForm attributes={attributes} backend stripeConnected={stripeConnected} />
                 </div>
             </Fragment>
         </Fragment>
