@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from '@wordpress/element';
+import {useMemo, useRef, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
@@ -30,9 +30,9 @@ const DonationForm = (props) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [error, setError] = useState(false);
     const [handledIntent, setHandledIntent] = useState(null);
-    const [errorMessage, setErrorMessage] = useState([]);
+    const [errorFields, setErrorFields] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState({
         status: '',
@@ -80,15 +80,19 @@ const DonationForm = (props) => {
                 nonce: window.donationFormBlock.nonce,
             })
             .then(function (response) {
+                const data = response.data.data;
                 // 🧐 Validation.
-                if (response.data.data.error) {
-                    setError(true);
+                if (data.error) {
                     setIsLoading(false);
-                    setErrorMessage(response.data.data.fields);
+                    if (data.message) {
+                        setErrorMessage(data.message);
+                    } else {
+                        setErrorFields(data.fields);
+                    }
                 } else {
                     setStep(2);
                     // 🤗 Proceed with Stripe.
-                    const clientSecret = response.data.data.clientSecret;
+                    const clientSecret = data.clientSecret;
                     const appearance = {
                         theme: 'stripe',
                         variables: {
@@ -133,11 +137,9 @@ const DonationForm = (props) => {
         });
 
         if (error.type === 'card_error' || error.type === 'validation_error') {
-            setError(true);
-            setErrorMessage(error.message);
+            setErrorFields(error.message);
         } else {
-            setError(true);
-            setErrorMessage('An unexpected error occurred.');
+            setErrorFields('An unexpected error occurred.');
         }
         setIsLoading(false);
     };
@@ -378,24 +380,14 @@ const DonationForm = (props) => {
                                 </div>
                                 {
                                     // 🙅‍ Validation error message (if any).
-                                    error &&
-                                        errorMessage.map((error, index) => {
-                                            return (
-                                                <div
-                                                    key={index}
-                                                    className={`donation-form-notice ${css(
-                                                        styles.noticeBase,
-                                                        styles.noticeValidationError
-                                                    )}`}
-                                                >
-                                                    <ErrorIcon className={css(styles.noticeIcon)} />
-                                                    <p className={css(styles.formParagraph, styles.noticeParagraph)}>
-                                                        {error.message}
-                                                    </p>
-                                                </div>
-                                            );
-                                        })
+                                    errorFields.length > 0 &&
+                                        errorFields.map((error, index) => (
+                                            <ErrorMessage key={index} styles={styles}>
+                                                {error.message}
+                                            </ErrorMessage>
+                                        ))
                                 }
+                                {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
                             </form>
                         </>
                     )}
@@ -414,19 +406,6 @@ const DonationForm = (props) => {
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
                                 <div className={`donation-form-payment-intent ${css(styles.stripePaymentWrap)}`}></div>
-                                {error && (
-                                    <div
-                                        className={`donation-form-notice ${css(
-                                            styles.noticeBase,
-                                            styles.noticeValidationError
-                                        )}`}
-                                    >
-                                        <ErrorIcon className={css(styles.noticeIcon)} />
-                                        <p className={css(styles.formParagraph, styles.noticeParagraph)}>
-                                            {errorMessage}
-                                        </p>
-                                    </div>
-                                )}
                                 <button
                                     className={`donation-form-submit ${css(
                                         styles.buttonPrimary,
@@ -600,5 +579,14 @@ const DonationForm = (props) => {
 DonationForm.defaultProps = {
     attributes: [],
 };
+
+function ErrorMessage({children, styles}) {
+    return (
+        <div className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
+            <ErrorIcon className={css(styles.noticeIcon)} />
+            <p className={css(styles.formParagraph, styles.noticeParagraph)}>{children}</p>
+        </div>
+    );
+}
 
 export default DonationForm;
