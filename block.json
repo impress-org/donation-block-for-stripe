@@ -48,7 +48,7 @@
         },
         "fieldsSubheading": {
             "type": "string",
-            "default": "This information is never shared with anyone outside of our organization."
+            "default": "This information is only used to securely process your donation."
         },
         "donateBtnText": {
             "type": "string",
