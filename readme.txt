@@ -1,5 +1,5 @@
 === WordPress Donation Form Block for Stripe by GiveWP ===
-Contributors:      dlocc, jasontheadams, givewp
+Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
 Tags:              block
 Tested up to:      5.9.0
 Stable tag:        1.0.0
