@@ -58,6 +58,12 @@ const DonationForm = (props) => {
         setDonationAmount(amount);
     };
 
+    const resetForm = () => {
+        setErrorMessage(null);
+        setErrorFields([]);
+        setStep(1);
+    };
+
     // 🤠 Handle the first step of the form.
     const handleAmountSubmit = (e) => {
         e.preventDefault();
@@ -137,9 +143,9 @@ const DonationForm = (props) => {
         });
 
         if (error.type === 'card_error' || error.type === 'validation_error') {
-            setErrorFields(error.message);
+            setErrorMessage(error.message);
         } else {
-            setErrorFields('An unexpected error occurred.');
+            setErrorMessage('An unexpected error occurred.');
         }
         setIsLoading(false);
     };
@@ -406,6 +412,7 @@ const DonationForm = (props) => {
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
                                 <div className={`donation-form-payment-intent ${css(styles.stripePaymentWrap)}`}></div>
+                                {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
                                 <button
                                     className={`donation-form-submit ${css(
                                         styles.buttonPrimary,
@@ -447,13 +454,7 @@ const DonationForm = (props) => {
                                 </>
                             )}
                             {'' !== paymentStatus.status && true === paymentStatus.error && (
-                                // Error message.
-                                <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                                    <AlertIcon className={css(styles.noticeIcon)} />
-                                    <p className={css(styles.formParagraph, styles.noticeParagraph)}>
-                                        {paymentStatus.message}
-                                    </p>
-                                </div>
+                                <ErrorMessage styles={styles}>{paymentStatus.message}</ErrorMessage>
                             )}
                             <div className={`donation-receipt-details`}>
                                 <p className={`donation-receipt-heading ${css(styles.donationReceiptDetails)}`}>
@@ -555,7 +556,7 @@ const DonationForm = (props) => {
                                     styles.donateBtn,
                                     styles.giveAgainBtn
                                 )}`}
-                                onClick={() => setStep(1)}
+                                onClick={resetForm}
                             >
                                 {__('Give Again', 'donation-form-block')}
                                 <CaretIcon className={css(styles.donateBtnIcon)} />
