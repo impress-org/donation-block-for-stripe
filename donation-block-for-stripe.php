@@ -20,6 +20,7 @@ define('DONATION_BLOCK_PATH', plugin_dir_path(__FILE__));
 define('DONATION_BLOCK_SCRIPT_ASSET', require(DONATION_BLOCK_PATH . 'build/index.asset.php'));
 
 require_once 'vendor/autoload.php';
+require_once 'src/Strauss/autoload.php';
 
 $bootstrapPlugin = new Bootstrap();
 $bootstrapPlugin->init();
