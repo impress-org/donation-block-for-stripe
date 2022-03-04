@@ -16,6 +16,15 @@ class PaymentIntentRequest
 {
     public function __invoke()
     {
+        $data = $this->getValidatedData();
+
+        if (!wp_verify_nonce($data->nonce ?? '', 'donation-form-block')) {
+            wp_send_json_error([
+                'error' => 'invalid_nonce',
+                'message' => __('Invalid nonce. Refresh browser.', 'give-donation-block'),
+            ]);
+        }
+
         $stripeData = StripeData::fromOption();
 
         if ($stripeData === null) {
@@ -25,9 +34,7 @@ class PaymentIntentRequest
             ]);
         }
 
-        $data = $this->getValidatedData();
-
-        if($data->liveMode) {
+        if ($data->liveMode) {
             $secretKey = $stripeData->liveSecretKey;
         } else {
             $secretKey = $stripeData->testSecretKey;
@@ -68,8 +75,8 @@ class PaymentIntentRequest
         $data = [];
         $missingFields = [];
 
-        foreach($requiredFields as $field => $label) {
-            if(empty($postData[$field])) {
+        foreach ($requiredFields as $field => $label) {
+            if (empty($postData[$field])) {
                 $missingFields[] = [
                     'field' => $field,
                     'message' => "$label is required."
@@ -79,14 +86,15 @@ class PaymentIntentRequest
             }
         }
 
-        if ( !empty($missingFields)) {
+        if (!empty($missingFields)) {
             wp_send_json_error([
                 'error' => 'validation',
                 'fields' => $missingFields
             ]);
         }
 
-        $data['amount'] = (int) $data['amount'];
+        $data['amount'] = (int)$data['amount'];
+        $data['nonce'] = $postData['nonce'] ?? '';
         $data['lastName'] = !empty($postData['lastName']) ? sanitize_text_field($postData['lastName']) : null;
         $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
 

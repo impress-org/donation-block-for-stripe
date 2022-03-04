@@ -38,6 +38,9 @@ class DonationBlock
         if (!is_admin()) {
             wp_enqueue_script('donation-form-block-script');
             wp_enqueue_script('donation-form-block-stripe-js');
+            wp_localize_script('donation-form-block-stripe-js', 'donationFormBlock', [
+                'nonce' => wp_create_nonce('donation-form-block'),
+            ]);
         }
 
         $stripeData = StripeData::fromOption();
