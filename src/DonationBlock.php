@@ -48,7 +48,7 @@ class DonationBlock
         ob_start(); ?>
 
         <div id="donation-form-block-<?php
-        echo $attributes['formId']; ?>" class="root-donation-block"
+        echo esc_html($attributes['formId']); ?>" class="root-donation-block"
              data-stripe-live-pub-key="<?php
              echo esc_html($stripeData->livePublishableKey) ?? ''; ?>"
              data-stripe-test-pub-key="<?php
