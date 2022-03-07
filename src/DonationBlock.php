@@ -49,8 +49,10 @@ class DonationBlock
 
         <div id="donation-form-block-<?php
         echo $attributes['formId']; ?>" class="root-donation-block"
-             data-stripe-live-pub-key="<?= $stripeData->livePublishableKey ?? '' ?>"
-             data-stripe-test-pub-key="<?= $stripeData->testPublishableKey ?? '' ?>"
+             data-stripe-live-pub-key="<?php
+             echo esc_html($stripeData->livePublishableKey) ?? ''; ?>"
+             data-stripe-test-pub-key="<?php
+             echo esc_html($stripeData->testPublishableKey) ?? ''; ?>"
             <?php
             // 🔁 Loop through and set attributes per block.
             foreach ($attributes as $key => $value) :
@@ -61,7 +63,7 @@ class DonationBlock
                 data-<?php
                 // output as hyphen-case so that it's changed to camelCase in JS.
                 echo preg_replace('/([A-Z])/', '-$1', $key); ?>="<?php
-                echo $value; ?>"
+                echo esc_html($value); ?>"
             <?php
             endforeach; ?>
         ></div>
