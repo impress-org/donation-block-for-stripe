@@ -6,11 +6,11 @@ namespace GiveDonationBlock\Stripe\DataTransferObjects;
 
 class StripeData
 {
-    public $liveSecretKey;
-    public $livePublishableKey;
-    public $testSecretKey;
-    public $testPublishableKey;
-    public $accountId;
+    public string $liveSecretKey;
+    public string $livePublishableKey;
+    public string $testSecretKey;
+    public string $testPublishableKey;
+    public string $accountId;
 
     public function __construct(
         string $liveAccessToken,

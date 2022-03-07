@@ -14,7 +14,7 @@ class RouteStripeActions
         if (empty($_GET['dfb_donation-block-stripe-action'])) {
             return;
         }
-        $action = $_GET['dfb_donation-block-stripe-action'];
+        $action = sanitize_text_field($_GET['dfb_donation-block-stripe-action']);
 
         if ($action === 'getStripeIntent') {
             $handler = new PaymentIntentRequest();

@@ -9,32 +9,32 @@ class PaymentIntentForm
     /**
      * @var string
      */
-    public $firstName;
+    public string $firstName;
 
     /**
      * @var string|null
      */
-    public $lastName;
+    public ?string $lastName;
 
     /**
      * @var string
      */
-    public $email;
+    public string $email;
 
     /**
      * @var int
      */
-    public $amount;
+    public int $amount;
 
     /**
      * @var bool
      */
-    public $liveMode;
+    public bool $liveMode;
 
     /**
      * @var string
      */
-    public $nonce;
+    public string $nonce;
 
     public static function fromArray(array $data): self
     {
