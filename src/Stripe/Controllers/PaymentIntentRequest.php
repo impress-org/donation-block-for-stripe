@@ -81,6 +81,8 @@ class PaymentIntentRequest
                     'field' => $field,
                     'message' => "$label is required."
                 ];
+            } elseif($field === 'email') {
+                $data[$field] = sanitize_email($postData[$field]);
             } else {
                 $data[$field] = sanitize_text_field($postData[$field]);
             }
