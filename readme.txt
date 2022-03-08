@@ -10,32 +10,32 @@ A beautiful WordPress donation form block for Stripe by GiveWP. Accept Stripe do
 
 == Description ==
 
-Add a Stripe Donation Form to your website in a few seconds with the WordPress Donation Form Block for Stripe by GiveWP. 
+Add a Stripe-powered donation form to your website in a few seconds with the WordPress Donation Form Block for Stripe by GiveWP. 
 
-This "lite" version of GiveWP provides you with the style and functionality of a GiveWP form without all the setup. That way, you can start accepting Stripe donations immediately. 
+This "lite" version of GiveWP provides you with the style and functionality of a GiveWP form without all the setup. Start accepting Stripe donations immediately. 
 
-Alternatively, you can use the full GiveWP donation plugin, which includes robust fundraising reports, a donor database, and unlimited donation forms. [Download GiveWP for free from our website](https://go.givewp.com/dfb-r-free). 
+Want more? Use the full GiveWP donation plugin which includes full-featured fundraising reports, a donor database, and unlimited donation forms. [Download GiveWP for free from our website](https://go.givewp.com/dfb-r-free). 
 
-= ✨ Block Features =
+**✨ Block Features**
 
-This block provides Stripe-powered donation forms, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.
+This block provides Stripe-powered donation forms that work great on any device, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.
 
 Payments are facilitated using Stripe's new Payment Element – a simple, secure, and modern payment form. You can easily adjust the payment methods within your Stripe account's payment method settings. 
 
-** 💳 18+ supported payment methods:**
+**💳 18+ supported payment methods:**
 
 * Accept credit and debit card donations
 * Supports payment wallets including Google Pay, and Apple Pay
 * Bank redirects, like iDEAL, EPS, Giropay and more. This helps improve conversion rates and reduce fraud with non-US consumers.
 * Donate now, Pay Later - Reach customers who want to pay in installments with Klarna and Afterpay.
 
-** Additional payment method features:**
+**Additional payment method features:**
 
 * Automatically adjusts input fields to collect information based on the payment method and country.
 * Dynamically sorts payment methods based on a customer’s locale and location to optimize for conversion.
 * Reduces friction for card payments with input validation, masking, styling and error handling.
 
-** Additional Features:**
+**Additional Features:**
 
 The Donation Form Block for Stripe includes extensive customization options. You can easily change the donation amounts, colors, main image, headings, description text, and button text.
 
@@ -49,18 +49,21 @@ The Donation Form Block for Stripe includes extensive customization options. You
 * Donation receipts are emailed to the donor using Stripe's email receipt feature
 
 = ⚙ Settings and Options =
+
 **Appearance**
 * Header Image - Upload a custom header image to be displayed above the donation form
 * Primary Color - The main color of the donation form
 * Donation Amounts - The donation amounts to be displayed on the form
 
 **Content** 
+
 * Main Heading - The main heading of the donation form
 * Main Sub-heading
 * Fields Heading
 * Donation Button Text
 
 **Stripe Connect**
+
 * Connect to Stripe easily without any API key setup.
 * Live/Test Mode toggle for easy testing before accepting live payments.
 

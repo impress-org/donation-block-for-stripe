@@ -1,6 +1,6 @@
 {
     "name": "givewp/donation-block-for-stripe",
-    "type": "project",
+    "type": "wordpress-plugin",
     "authors": [
         {
             "name": "Jason Adams",
