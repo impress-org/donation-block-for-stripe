@@ -213,8 +213,9 @@ const DonationForm = (props) => {
 
     // 👀 Ensure donation amounts comes in as an array.
     let donationAmounts = props.attributes.donationAmounts;
+
     if (typeof props.attributes.donationAmounts === 'string') {
-        donationAmounts = props.attributes.donationAmounts.split(',');
+        donationAmounts = props.attributes.donationAmounts.split(', ');
     }
 
     // 🎉 Render the donation form.
