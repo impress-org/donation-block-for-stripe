@@ -4,7 +4,7 @@
  * Description:       A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.
  * Requires at least: 5.2
  * Requires PHP:      7.2
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            GiveWP
  * Author URI:        https://givewp.com
  * License:           GPL-2.0-or-later

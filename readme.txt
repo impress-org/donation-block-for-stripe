@@ -1,8 +1,8 @@
 === Donation Form Block for Stripe ===
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
-Tags:              donation, donate, stripe, fundraise, give
+Tags:              donation, donate, stripe, fundraise, block
 Tested up to:      5.9.0
-Stable tag:        1.0.0
+Stable tag:        1.0.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,10 @@ Not currently. For access to Stripe donation forms with support for recurring do
 3. Sparks of JOY! Enthrall your donors with a confetti POP upon successful donation.
 
 == Changelog ==
+
+= 1.0.1 =
+* We removed the Stripe PHP SDK and now the plugin to reduce the overall plugin size and PHP footprint.
+* Resolved an issue where an extra space was added before the currency symbol and amount.
 
 = 1.0.0 =
 * Initial Release. Yippee!
