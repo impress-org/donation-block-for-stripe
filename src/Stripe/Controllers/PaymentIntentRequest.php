@@ -39,22 +39,31 @@ class PaymentIntentRequest
         } else {
             $secretKey = $stripeData->testSecretKey;
         }
-        $stripeClient = new StripeClient($secretKey);
 
         try {
-            $paymentIntent = $stripeClient->paymentIntents->create([
-                'amount' => $data->amount,
-                'currency' => 'USD',
-                'receipt_email' => $data->email,
-                'application_fee_amount' => ceil($data->amount * 0.02),
-                'automatic_payment_methods' => [
-                    'enabled' => true,
-                ],
-            ]);
+
+            $paymentIntent = wp_remote_post(
+                'https://api.stripe.com/v1/payment_intents',
+                [
+                    'headers' => ['Authorization' => 'Bearer ' . $secretKey],
+                    'body' => [
+                        'amount' => $data->amount,
+                        'currency' => 'USD',
+                        'receipt_email' => $data->email,
+                        'application_fee_amount' => ceil($data->amount * 0.02),
+                        'automatic_payment_methods' => [
+                            'enabled' => 'true',
+                        ],
+                    ]
+                ]
+            );
+
+            $apiBody     = json_decode( wp_remote_retrieve_body( $paymentIntent ) );
 
             wp_send_json_success([
-                'clientSecret' => $paymentIntent->client_secret,
+                'clientSecret' => $apiBody->client_secret,
             ]);
+
         } catch (ApiErrorException $e) {
             wp_send_json_error([
                 'error' => 'stripe_error',
@@ -81,7 +90,7 @@ class PaymentIntentRequest
                     'field' => $field,
                     'message' => "$label is required."
                 ];
-            } elseif($field === 'email') {
+            } elseif ($field === 'email') {
                 $data[$field] = sanitize_email($postData[$field]);
             } else {
                 $data[$field] = sanitize_text_field($postData[$field]);
