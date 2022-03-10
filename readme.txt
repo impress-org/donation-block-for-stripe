@@ -119,6 +119,7 @@ Not currently. For access to Stripe donation forms with support for recurring do
 = 1.0.1 =
 * We removed the Stripe PHP SDK and now the plugin to reduce the overall plugin size and PHP footprint.
 * Resolved an issue where an extra space was added before the currency symbol and amount.
+* Fixed PHP 7.4+ syntax that wouldn't allow the block to run on earlier PHP versions.
 
 = 1.0.0 =
 * Initial Release. Yippee!
