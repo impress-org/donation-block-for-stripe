@@ -39,27 +39,43 @@ class PaymentIntentRequest
         } else {
             $secretKey = $stripeData->testSecretKey;
         }
-        $stripeClient = new StripeClient($secretKey);
 
-        try {
-            $paymentIntent = $stripeClient->paymentIntents->create([
-                'amount' => $data->amount,
-                'currency' => 'USD',
-                'receipt_email' => $data->email,
-                'application_fee_amount' => ceil($data->amount * 0.02),
-                'automatic_payment_methods' => [
-                    'enabled' => true,
-                ],
-            ]);
+        $paymentIntent = wp_remote_post(
+            'https://api.stripe.com/v1/payment_intents',
+            [
+                'headers' => ['Authorization' => 'Bearer ' . $secretKey],
+                'body' => [
+                    'amount' => $data->amount,
+                    'currency' => 'USD',
+                    'receipt_email' => $data->email,
+                    'application_fee_amount' => ceil($data->amount * 0.02),
+                    'automatic_payment_methods' => [
+                        'enabled' => 'true',
+                    ],
+                ]
+            ]
+        );
 
-            wp_send_json_success([
-                'clientSecret' => $paymentIntent->client_secret,
-            ]);
-        } catch (ApiErrorException $e) {
+        if (is_wp_error($paymentIntent)) {
             wp_send_json_error([
-                'error' => 'stripe_error',
+                'error' => 'wordpress_error',
                 'message' => 'There was an error setting up your donation. Please contact the site owner.',
             ]);
+        } else {
+            $apiBody = json_decode(wp_remote_retrieve_body($paymentIntent));
+
+            // Check for Stripe errors
+            if (isset($apiBody->error)) {
+                error_log( print_r( $apiBody->error, true ), 3, './debug_custom.log' );
+                wp_send_json_error([
+                    'error' => 'stripe_error',
+                    'message' => 'There was an error setting up your donation. Please contact the site owner.',
+                ]);
+            } else {
+                wp_send_json_success([
+                    'clientSecret' => $apiBody->client_secret,
+                ]);
+            }
         }
     }
 
@@ -81,7 +97,7 @@ class PaymentIntentRequest
                     'field' => $field,
                     'message' => "$label is required."
                 ];
-            } elseif($field === 'email') {
+            } elseif ($field === 'email') {
                 $data[$field] = sanitize_email($postData[$field]);
             } else {
                 $data[$field] = sanitize_text_field($postData[$field]);
