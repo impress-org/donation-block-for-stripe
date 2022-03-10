@@ -16,6 +16,7 @@
 
 use GiveDonationBlock\Bootstrap;
 
+define('DONATION_BLOCK_VERSION', '1.0.1');
 define('DONATION_BLOCK_FILE', __FILE__);
 define('DONATION_BLOCK_PATH', plugin_dir_path(__FILE__));
 define('DONATION_BLOCK_SCRIPT_ASSET', require(DONATION_BLOCK_PATH . 'build/index.asset.php'));

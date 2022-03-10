@@ -44,6 +44,7 @@ class PaymentIntentRequest
             'https://api.stripe.com/v1/payment_intents',
             [
                 'headers' => ['Authorization' => 'Bearer ' . $secretKey],
+                'user-agent' => 'WordPress GiveDonationBlock ' . DONATION_BLOCK_VERSION . ' (https://givewp.com)',
                 'body' => [
                     'amount' => $data->amount,
                     'currency' => 'USD',
