@@ -1,4 +1,4 @@
-import {useMemo, useRef, useState} from '@wordpress/element';
+import {useMemo, useRef, useState, useEffect} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
@@ -49,6 +49,17 @@ const DonationForm = (props) => {
             : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey);
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
+
+    if (!props.backend) {
+        useEffect(() => {
+            stripe.registerAppInfo({
+                name: 'GiveDonationBlock',
+                partner_id: 'pp_partner_DKj75W1QYBxBLK',
+                version: window.donationFormBlock.plugin_version,
+                url: 'https://givewp.com',
+            });
+        }, [stripe]);
+    }
 
     // Checks url for payment success query params.
     checkPaymentStatus();

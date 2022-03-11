@@ -40,6 +40,7 @@ class DonationBlock
             wp_enqueue_script('donation-form-block-stripe-js');
             wp_localize_script('donation-form-block-stripe-js', 'donationFormBlock', [
                 'nonce' => wp_create_nonce('donation-form-block'),
+                'plugin_version' => DONATION_BLOCK_VERSION,
             ]);
         }
 
@@ -77,9 +78,9 @@ class DonationBlock
         wp_localize_script(
             'givewp-donation-form-block-editor-script',
             'dfbPreview',
-            array(
+            [
                 'profile_preview' => plugin_dir_url(DONATION_BLOCK_FILE) . 'src/images/donation-form-preview.jpg',
-            )
+            ]
         );
     }
 }
