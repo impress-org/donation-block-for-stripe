@@ -6,8 +6,8 @@ namespace GiveDonationBlock\Stripe\Controllers;
 
 use GiveDonationBlock\Stripe\DataTransferObjects\PaymentIntentForm;
 use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
-use GiveDonationBlock\Strauss\Stripe\Exception\ApiErrorException;
-use GiveDonationBlock\Strauss\Stripe\StripeClient;
+
+use Give_License;
 
 use function sanitize_text_field;
 use function wp_send_json_error;
@@ -49,7 +49,7 @@ class PaymentIntentRequest
                     'amount' => $data->amount,
                     'currency' => 'USD',
                     'receipt_email' => $data->email,
-                    'application_fee_amount' => ceil($data->amount * 0.02),
+                    'application_fee_amount' => $this->canAddFee() ? ceil($data->amount * 0.02) : 0,
                     'automatic_payment_methods' => [
                         'enabled' => 'true',
                     ],
@@ -67,7 +67,6 @@ class PaymentIntentRequest
 
             // Check for Stripe errors
             if (isset($apiBody->error)) {
-                error_log( print_r( $apiBody->error, true ), 3, './debug_custom.log' );
                 wp_send_json_error([
                     'error' => 'stripe_error',
                     'message' => 'There was an error setting up your donation. Please contact the site owner.',
@@ -119,4 +118,34 @@ class PaymentIntentRequest
 
         return PaymentIntentForm::fromArray($data);
     }
+
+    private function canAddFee(): bool
+    {
+        // Is the Stripe Pro add-on active?
+        if (defined('GIVE_STRIPE_VERSION')) {
+            return false;
+        }
+
+        // Is the add-on installed but not active (lazy people...sheesh!)?
+        $stripeInstalled = (bool)array_filter(
+            get_plugins(),
+            function ($plugin) {
+                return 'Give - Stripe Gateway' === $plugin['Name'];
+            }
+        );
+
+        // If so, give them the benefit of the doubt.
+        if ($stripeInstalled) {
+            return false;
+        }
+
+        // Is there an active license for Stripe?
+        if (class_exists(Give_License::class) && Give_License::get_license_by_plugin_dirname('give-stripe')) {
+            return false;
+        }
+
+        // No license, no Stripe add-on (active or installed). Add the fee.
+        return true;
+    }
+
 }
