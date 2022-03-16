@@ -119,7 +119,7 @@ class PaymentIntentRequest
         return PaymentIntentForm::fromArray($data);
     }
 
-    private function canAddFee(): bool
+    public static function canAddFee(): bool
     {
         // Is the Stripe Pro add-on active?
         if (defined('GIVE_STRIPE_VERSION')) {
