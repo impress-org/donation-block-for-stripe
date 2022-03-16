@@ -2,7 +2,7 @@
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
 Tags:              donation, donate, stripe, fundraise, block
 Tested up to:      5.9
-Stable tag:        1.0.1
+Stable tag:        1.0.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,12 @@ Not currently. For access to Stripe donation forms with support for recurring do
 3. Sparks of JOY! Enthrall your donors with a confetti POP upon successful donation.
 
 == Changelog ==
+
+= 1.0.3 =
+* TBD
+
+= 1.0.2 =
+* Fixed zip issue preventing the rendering of the block. 
 
 = 1.0.1 =
 * We removed the Stripe PHP SDK and now the plugin to reduce the overall plugin size and PHP footprint.
