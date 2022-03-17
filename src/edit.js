@@ -59,7 +59,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         return (
             <Fragment>
                 <img
-                    src={dfbPreview.profile_preview}
+                    src={dfbAdminLocalVars.profile_preview}
                     alt={__('Donation form block for Stripe by GiveWP.', 'donation-form-block')}
                     style={{width: '100%', height: 'auto'}}
                 />
@@ -114,6 +114,9 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             runLottieAnimation('fireworks', document.getElementById('dfb-connected-lottie'));
         }
     }, [stripeConnected, stripeConnectionFlow]);
+
+    console.log(dfbAdminLocalVars);
+    console.log(dfbAdminLocalVars.can_add_fee);
 
     return (
         <Fragment>
@@ -361,15 +364,26 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     <a href="https://givewp.com/" target="_blank">
                                         <GiveLogo />
                                     </a>
-                                    <p>
-                                        {__(
-                                            'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.',
-                                            'donation-form-block'
-                                        )}{' '}
-                                        <a href="https://go.givewp.com/dfb-learn-more" target="_blank">
-                                            {__('Learn more', 'donation-form-block')} &raquo;
-                                        </a>
-                                    </p>
+                                    {dfbAdminLocalVars.can_add_fee && (
+                                        <p>
+                                            {__(
+                                                'An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee.',
+                                                'donation-form-block'
+                                            )}{' '}
+                                            <a href="https://go.givewp.com/dfb-learn-more" target="_blank">
+                                                {__('Learn more', 'donation-form-block')} &raquo;
+                                            </a>
+                                        </p>
+                                    )}
+                                    {!dfbAdminLocalVars.can_add_fee && (
+                                        <p>
+                                            🥳{' '}
+                                            {__(
+                                                'You are a GiveWP customer! ZERO Stripe fees are being added to this donation form.',
+                                                'donation-form-block'
+                                            )}
+                                        </p>
+                                    )}
                                 </div>
                             </PanelRow>
                         </PanelBody>

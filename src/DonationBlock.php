@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GiveDonationBlock;
 
 use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
+use GiveDonationBlock\Stripe\Controllers\PaymentIntentRequest as PaymentIntentRequest;
 
 class DonationBlock
 {
@@ -77,9 +78,10 @@ class DonationBlock
     {
         wp_localize_script(
             'givewp-donation-form-block-editor-script',
-            'dfbPreview',
+            'dfbAdminLocalVars',
             [
                 'profile_preview' => plugin_dir_url(DONATION_BLOCK_FILE) . 'src/images/donation-form-preview.jpg',
+                'can_add_fee' => PaymentIntentRequest::canAddFee(),
             ]
         );
     }
