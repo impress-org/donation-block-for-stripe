@@ -11,8 +11,6 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       donation-form-block
  * Domain Path:       /languages
- *
- * @package           create-block
  */
 
 use GiveDonationBlock\Bootstrap;
