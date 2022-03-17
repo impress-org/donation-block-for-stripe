@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-03-17T03:31:52+00:00\n"
+"POT-Creation-Date: 2022-03-17T15:37:14+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: donation-form-block\n"
@@ -31,202 +31,168 @@ msgid "https://givewp.com"
 msgstr ""
 
 #: build/index.js:5439
-#: src/components/StripeDisconnectModal/index.js:46
 #: build/index.js:4892
 msgid "Confirm Stripe Disconnect"
 msgstr ""
 
 #: build/index.js:5449
-#: src/components/StripeDisconnectModal/index.js:53
 #: build/index.js:4899
 msgid "Removing the connection between Stripe and your website will cause all donation forms to not accept any form of payment. If you’re OK with this, please type DISCONNECT below to confirm."
 msgstr ""
 
 #: build/index.js:5458
-#: src/components/StripeDisconnectModal/index.js:62
 #: build/index.js:4908
 msgid "Disconnect"
 msgstr ""
 
 #: build/index.js:5696
-#: src/donationForm.js:196
 #: build/index.js:5115
 msgid "Your payment is processing."
 msgstr ""
 
 #: build/index.js:5704
-#: src/donationForm.js:203
 #: build/index.js:5122
 msgid "Your payment was not successful, please try again."
 msgstr ""
 
 #: build/index.js:5712
-#: src/donationForm.js:210
 #: build/index.js:5129
 msgid "Something went wrong, please try again."
 msgstr ""
 
 #: build/index.js:5742
-#: src/donationForm.js:239
 #: build/index.js:5158
 msgid "Stripe needs to be connected in order to begin accepting donations."
 msgstr ""
 
 #: build/index.js:5748
-#: src/donationForm.js:250
 #: build/index.js:5169
 msgid "Test mode is enabled. No live payments will be accepted for this donation form."
 msgstr ""
 
 #: build/index.js:5810
-#: src/donationForm.js:358
 #: build/index.js:5277
 msgid "First Name"
 msgstr ""
 
 #: build/index.js:5817
-#: src/donationForm.js:369
 #: build/index.js:5288
 msgid "Last Name"
 msgstr ""
 
 #: build/index.js:5828
-#: src/donationForm.js:382
 #: build/index.js:5301
 msgid "Email"
 msgstr ""
 
 #: build/index.js:5856
-#: src/donationForm.js:436
 #: build/index.js:5355
 msgid "Complete Donation"
 msgstr ""
 
 #: build/index.js:5876
-#: src/donationForm.js:473
 #: build/index.js:5392
 msgid "Donation Details"
 msgstr ""
 
 #: build/index.js:5882
-#: src/donationForm.js:488
 #: build/index.js:5407
 msgid "Payment Status"
 msgstr ""
 
 #: build/index.js:5888
-#: src/donationForm.js:510
 #: build/index.js:5429
 msgid "Donor Email"
 msgstr ""
 
 #: build/index.js:5894
-#: src/donationForm.js:531
 #: build/index.js:5450
 msgid "Donation Amount"
 msgstr ""
 
 #: build/index.js:5900
-#: src/donationForm.js:552
 #: build/index.js:5471
 msgid "Donation Frequency"
 msgstr ""
 
 #: build/index.js:5902
-#: src/donationForm.js:559
 #: build/index.js:5478
 msgid "One-time"
 msgstr ""
 
 #: build/index.js:5905
-#: src/donationForm.js:573
 #: build/index.js:5492
 msgid "Give Again"
 msgstr ""
 
 #: build/index.js:5912
-#: src/donationForm.js:583
 #: build/index.js:5502
 msgid "100% Secure Donation"
 msgstr ""
 
 #: build/index.js:6052
-#: src/edit.js:63
 #: build/index.js:5588
 msgid "Donation form block for Stripe by GiveWP."
 msgstr ""
 
 #: build/index.js:6108
-#: src/edit.js:125
 #: build/index.js:5650
 msgid "Appearance Settings"
 msgstr ""
 
 #: build/index.js:6114
-#: src/edit.js:129
 #: build/index.js:5654
 msgid "Header image"
 msgstr ""
 
 #: build/index.js:6125
-#: src/edit.js:145
 #: build/index.js:5670
 msgid "Choose an image"
 msgstr ""
 
 #: build/index.js:6135
 #: build/index.js:6148
-#: src/edit.js:162
-#: src/edit.js:173
 #: build/index.js:5687
 #: build/index.js:5698
 msgid "Replace image"
 msgstr ""
 
 #: build/index.js:6154
-#: src/edit.js:182
 #: build/index.js:5707
 msgid "Remove image"
 msgstr ""
 
 #: build/index.js:6156
-#: src/edit.js:188
 #: build/index.js:5713
 msgid "Upload or select an image for the header background."
 msgstr ""
 
 #: build/index.js:6157
-#: src/edit.js:194
 #: build/index.js:5719
 msgid "Donation Amounts"
 msgstr ""
 
 #: build/index.js:6158
-#: src/edit.js:195
 #: build/index.js:5720
 msgid "Add Amount"
 msgstr ""
 
 #: build/index.js:6165
-#: src/edit.js:204
 #: build/index.js:5729
 msgid "Primary Color"
 msgstr ""
 
 #: build/index.js:6178
-#: src/edit.js:216
 #: build/index.js:5741
 msgid "Choose the primary color for this donation form."
 msgstr ""
 
 #: build/index.js:6179
-#: src/edit.js:221
 #: build/index.js:5746
 msgid "Content Settings"
 msgstr ""
 
 #: build/index.js:6182
-#: src/edit.js:224
 #: build/index.js:5749
 msgid "Main Heading"
 msgstr ""
@@ -235,10 +201,6 @@ msgstr ""
 #: build/index.js:6190
 #: build/index.js:6197
 #: build/index.js:6204
-#: src/edit.js:225
-#: src/edit.js:233
-#: src/edit.js:241
-#: src/edit.js:249
 #: build/index.js:5750
 #: build/index.js:5758
 #: build/index.js:5766
@@ -247,109 +209,91 @@ msgid "Customize or delete all text to hide."
 msgstr ""
 
 #: build/index.js:6189
-#: src/edit.js:232
 #: build/index.js:5757
 msgid "Main Sub-Heading"
 msgstr ""
 
 #: build/index.js:6196
-#: src/edit.js:240
 #: build/index.js:5765
 msgid "Fields Heading"
 msgstr ""
 
 #: build/index.js:6203
-#: src/edit.js:248
 #: build/index.js:5773
 msgid "Fields Sub-Heading"
 msgstr ""
 
 #: build/index.js:6210
-#: src/edit.js:256
 #: build/index.js:5781
 msgid "Donate Button Text"
 msgstr ""
 
 #: build/index.js:6211
-#: src/edit.js:257
 #: build/index.js:5782
 msgid "Customize the text for the donate button. The maximum text length is 20 characters."
 msgstr ""
 
 #: build/index.js:6218
-#: src/edit.js:268
 #: build/index.js:5793
 msgid "Stripe Connection"
 msgstr ""
 
 #: build/index.js:6226
-#: src/edit.js:275
 #: build/index.js:5800
 msgid "Welcome to the Stripe Donation Form Block by GiveWP!"
 msgstr ""
 
 #: build/index.js:6226
-#: src/edit.js:281
 #: build/index.js:5806
 msgid "To begin, connect to Stripe and start accepting donations."
 msgstr ""
 
 #: build/index.js:6239
-#: src/edit.js:301
 #: build/index.js:5826
 msgid "Connect to Stripe"
 msgstr ""
 
 #: build/index.js:6245
-#: src/edit.js:314
 #: build/index.js:5839
 msgid "You're connected to Stripe!"
 msgstr ""
 
 #: build/index.js:6246
-#: src/edit.js:319
 #: build/index.js:5844
 msgid "Toggle on for Live Mode"
 msgstr ""
 
 #: build/index.js:6247
-#: src/edit.js:322
 #: build/index.js:5847
 msgid "Enable to accept live payments. Turn off to test the donation process using test payments. Payment methods can be modified via your Stripe account's payment method settings."
 msgstr ""
 
 #: build/index.js:6266
-#: src/edit.js:348
 #: build/index.js:5873
 msgid "Warning: disconnecting from Stripe will prevent all donation forms from accepting payments."
 msgstr ""
 
 #: build/index.js:6274
-#: src/edit.js:369
 #: build/index.js:5894
 msgid "An additional 2% fee will be added to donations made through this block. Become a GiveWP customer to remove this fee."
 msgstr ""
 
 #: build/index.js:6277
-#: src/edit.js:374
 #: build/index.js:5899
 msgid "Learn more"
 msgstr ""
 
 #: build/index.js:6277
-#: src/edit.js:381
 #: build/index.js:5906
 msgid "You are a GiveWP customer! ZERO Stripe fees are being added to this donation form."
 msgstr ""
 
 #: build/index.js:6281
-#: src/edit.js:398
 #: build/index.js:5923
 msgid "You're Connected to Stripe"
 msgstr ""
 
 #: build/index.js:27976
-#: src/index.js:26
 #: build/index.js:27111
 msgid "Donation Form Block"
 msgstr ""
