@@ -121,9 +121,15 @@ class PaymentIntentRequest
 
     public static function canAddFee(): bool
     {
+
         // Is the Stripe Pro add-on active?
         if (defined('GIVE_STRIPE_VERSION')) {
             return false;
+        }
+
+        // Need to include plugin.php because of use on frontend.
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
 
         // Is the add-on installed but not active (lazy people...sheesh!)?
