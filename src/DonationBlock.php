@@ -27,8 +27,6 @@ class DonationBlock
             'https://js.stripe.com/v3/'
         );
 
-        wp_set_script_translations('donation-form-block-script', 'donation-form-block');
-
         register_block_type(DONATION_BLOCK_PATH,
             ['render_callback' => [$this, 'renderBlock']]
         );
@@ -39,6 +37,7 @@ class DonationBlock
         if (!is_admin()) {
             wp_enqueue_script('donation-form-block-script');
             wp_enqueue_script('donation-form-block-stripe-js');
+            wp_set_script_translations('donation-form-block-script', 'donation-form-block', DONATION_BLOCK_PATH . 'languages');
             wp_localize_script('donation-form-block-stripe-js', 'donationFormBlock', [
                 'nonce' => wp_create_nonce('donation-form-block'),
                 'plugin_version' => DONATION_BLOCK_VERSION,
