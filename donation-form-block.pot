@@ -1,0 +1,35 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Donation Block for Stripe by GiveWP\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-03-17 04:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.1; wp-5.9.2\n"
+"X-Domain: donation-form-block"
+
+#. Description of the plugin
+msgid ""
+"A beautiful donation form block for Stripe by GiveWP. Accept donations in "
+"minutes."
+msgstr ""
+
+#. Name of the plugin
+msgid "Donation Block for Stripe by GiveWP"
+msgstr ""
+
+#. Author of the plugin
+msgid "GiveWP"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://givewp.com"
+msgstr ""
