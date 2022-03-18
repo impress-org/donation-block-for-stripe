@@ -458,7 +458,8 @@ const DonationForm = (props) => {
                         </div>
                     )}
                     {3 === step && (
-                        <div id={'donation-form-receipt'} className="donation-form-receipt-step">
+                        <div id={'donation-form-receipt'} className={`donation-form-receipt-step ${css(
+                            styles.donationReceipt )}`} >
                             {'' !== paymentStatus.status && true !== paymentStatus.error && (
                                 <>
                                     <div
