@@ -14,8 +14,22 @@ import {ReactComponent as UserIcon} from './images/user.svg';
 import {ReactComponent as CaretIcon} from './images/caret-right.svg';
 import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
-import useCheckStripeConnect from './useCheckStripeConnect';
+import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
+
+function getDefaultStep(donationFormId) {
+    const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
+    if (!clientSecret) {
+        return 1;
+    }
+
+    const formId = new URLSearchParams(window.location.search).get('form_id');
+    if (formId !== donationFormId) {
+        return 1;
+    }
+
+    return 3;
+}
 
 /**
  * 💚 Donation Form.
@@ -33,13 +47,13 @@ const DonationForm = (props) => {
     const [handledIntent, setHandledIntent] = useState(null);
     const [errorFields, setErrorFields] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState({
         status: '',
         message: '',
         error: false,
     });
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(getDefaultStep(props.attributes.formId));
     const stripe = useMemo(() => {
         if (!props.attributes.stripeTestPubKey || !props.attributes.stripeLivePubKey) {
             return;
@@ -60,9 +74,6 @@ const DonationForm = (props) => {
             });
         }, [stripe]);
     }
-
-    // Checks url for payment success query params.
-    checkPaymentStatus();
 
     const updateDonationAmount = (amount) => {
         amount = amount.replace('$', '');
@@ -163,66 +174,64 @@ const DonationForm = (props) => {
     };
 
     // 🏃‍ Fetches the payment intent status after payment submission.
-    async function checkPaymentStatus() {
+    useEffect(() => {
 
         const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
-
         if (!clientSecret || handledIntent === clientSecret) {
             return;
         }
 
         const formId = new URLSearchParams(window.location.search).get('form_id');
-
         if (formId !== props.attributes.formId) {
             return;
         }
 
-        useEffect(() => {
-            stripe.retrievePaymentIntent(clientSecret).then((response) =>{
-                const paymentIntent = response.paymentIntent;
-                setStep(3);
-                setIsLoading(false);
-                setDonationAmount(paymentIntent.amount / 100);
-                setEmail(paymentIntent.receipt_email);
-                switch (paymentIntent.status) {
-                    case 'succeeded':
-                        setPaymentStatus({
-                            status: 'Successful',
-                            message: `Thank you for your $${donationAmount} donation!`,
-                            error: false,
-                        });
-                        break;
-                    case 'processing':
-                        setPaymentStatus({
-                            status: 'Processing',
-                            message: __('Your payment is processing.', 'donation-form-block'),
-                            error: false,
-                        });
-                        break;
-                    case 'requires_payment_method':
-                        setPaymentStatus({
-                            status: 'Not successful',
-                            message: __('Your payment was not successful, please try again.', 'donation-form-block'),
-                            error: true,
-                        });
-                        break;
-                    default:
-                        setPaymentStatus({
-                            status: paymentIntent.status,
-                            message: __('Something went wrong, please try again.', 'donation-form-block'),
-                            error: true,
-                        });
-                        break;
-                }
-            });
-        }, [stripe]);
+        setIsLoading(true);
 
-        // const {paymentIntent} = await
+        stripe.retrievePaymentIntent(clientSecret).then((response) => {
 
+            const paymentIntent = response.paymentIntent;
+            const newDonationAmount = (paymentIntent.amount / 100).toString();
 
+            setDonationAmount(newDonationAmount);
+            setHandledIntent(clientSecret);
+            setIsLoading(false);
+            setEmail(paymentIntent.receipt_email);
+            setStep(3);
 
-
-    }
+            // Set the payment status accordingly.
+            switch (paymentIntent.status) {
+                case 'succeeded':
+                    setPaymentStatus({
+                        status: 'Successful',
+                        message: `Thank you for your $${newDonationAmount} donation!`,
+                        error: false,
+                    });
+                    break;
+                case 'processing':
+                    setPaymentStatus({
+                        status: 'Processing',
+                        message: __('Your payment is processing.', 'donation-form-block'),
+                        error: false,
+                    });
+                    break;
+                case 'requires_payment_method':
+                    setPaymentStatus({
+                        status: 'Not successful',
+                        message: __('Your payment was not successful, please try again.', 'donation-form-block'),
+                        error: true,
+                    });
+                    break;
+                default:
+                    setPaymentStatus({
+                        status: paymentIntent.status,
+                        message: __('Something went wrong, please try again.', 'donation-form-block'),
+                        error: true,
+                    });
+                    break;
+            }
+        });
+    }, [stripe]);
 
     // 🎊 Confetti animation on successful payment completion.
     if (step === 3) {
@@ -232,11 +241,10 @@ const DonationForm = (props) => {
     const checkStripeConnected = useCheckStripeConnect();
     const stripeConnected = typeof props.stripeConnected !== 'undefined' ? props.stripeConnected : checkStripeConnected;
 
-    // 👀 Ensure donation amounts comes in as an array.
+    // 🧹 Ensure donation amounts comes in as an array.
     let donationAmounts = props.attributes.donationAmounts;
-
-    if (typeof props.attributes.donationAmounts === 'string') {
-        donationAmounts = props.attributes.donationAmounts.split(', ');
+    if (typeof donationAmounts === 'string') {
+        donationAmounts = donationAmounts.split(', ');
     }
 
     // 🎉 Render the donation form.
@@ -244,7 +252,7 @@ const DonationForm = (props) => {
         <div className={'donation-form-block-wrap'}>
             {stripeConnected === false && (
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                    <AlertIcon className={css(styles.noticeIcon)}/>
+                    <AlertIcon className={css(styles.noticeIcon)} />
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>
                         {__(
                             'Stripe needs to be connected in order to begin accepting donations.',
@@ -255,7 +263,7 @@ const DonationForm = (props) => {
             )}
             {!props.attributes.liveMode && stripeConnected && (
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                    <AlertIcon className={css(styles.noticeIcon)}/>
+                    <AlertIcon className={css(styles.noticeIcon)} />
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>
                         {__(
                             'Test mode is enabled. No live payments will be accepted for this donation form.',
@@ -267,7 +275,7 @@ const DonationForm = (props) => {
             <div className={`donation-form-block ${css(styles.formContainer)}`}>
                 {isLoading && (
                     <div className={`donation-form-loading-wrap ${css(styles.loadingWrap)}`}>
-                        <Spinner/>
+                        <Spinner />
                     </div>
                 )}
                 {props.attributes.backgroundUrl && (
@@ -300,7 +308,7 @@ const DonationForm = (props) => {
                                         styles.currencyFieldWrap
                                     )}`}
                                 >
-                                    <DollarIcon className={css(styles.currencyIcon)}/>
+                                    <DollarIcon className={css(styles.currencyIcon)} />
                                     <CurrencyInput
                                         className={css(styles.currencyField)}
                                         name="amount"
@@ -358,7 +366,7 @@ const DonationForm = (props) => {
                                     )}`}
                                 >
                                     <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                        <UserIcon className={`${css(styles.fieldIcon)}`}/>
+                                        <UserIcon className={`${css(styles.fieldIcon)}`} />
                                         <input
                                             className={`donation-form-field donation-form-first-name ${css(
                                                 styles.textField,
@@ -382,7 +390,7 @@ const DonationForm = (props) => {
                                         required={false}
                                     />
                                     <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                        <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`}/>
+                                        <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`} />
                                         <input
                                             className={`donation-form-field donation-form-first-email ${css(
                                                 styles.textField,
@@ -403,17 +411,17 @@ const DonationForm = (props) => {
                                         )}`}
                                     >
                                         {props.attributes.donateBtnText}
-                                        <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                        <CaretIcon className={css(styles.donateBtnIcon)} />
                                     </button>
                                 </div>
                                 {
                                     // 🙅‍ Validation error message (if any).
                                     errorFields.length > 0 &&
-                                    errorFields.map((error, index) => (
-                                        <ErrorMessage key={index} styles={styles}>
-                                            {error.message}
-                                        </ErrorMessage>
-                                    ))
+                                        errorFields.map((error, index) => (
+                                            <ErrorMessage key={index} styles={styles}>
+                                                {error.message}
+                                            </ErrorMessage>
+                                        ))
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
                             </form>
@@ -444,7 +452,7 @@ const DonationForm = (props) => {
                                     )}`}
                                 >
                                     {__('Complete Donation', 'donation-form-block')}
-                                    <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                    <CaretIcon className={css(styles.donateBtnIcon)} />
                                 </button>
                             </form>
                         </div>
@@ -471,7 +479,8 @@ const DonationForm = (props) => {
                                             styles.donationReceiptEmailText
                                         )}`}
                                     >
-                                        Your receipt has been sent to <strong>{email}</strong>
+                                        {__('Your receipt has been sent to', 'donation-form-block')}{' '}
+                                        <strong>{email}</strong>
                                     </p>
                                 </>
                             )}
@@ -581,7 +590,7 @@ const DonationForm = (props) => {
                                 onClick={resetForm}
                             >
                                 {__('Give Again', 'donation-form-block')}
-                                <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                <CaretIcon className={css(styles.donateBtnIcon)} />
                             </button>
                         </div>
                     )}
@@ -589,7 +598,7 @@ const DonationForm = (props) => {
                         // 🔒 SSL secure if actually https.
                         window.location.protocol === 'https:' && (
                             <div className={`donation-form-secure-wrap ${css(styles.secureFooter)}`}>
-                                <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`}/>
+                                <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`} />
                                 {__('100% Secure Donation', 'donation-form-block')}
                             </div>
                         )}
@@ -606,7 +615,7 @@ DonationForm.defaultProps = {
 function ErrorMessage({children, styles}) {
     return (
         <div className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
-            <ErrorIcon className={css(styles.noticeIcon)}/>
+            <ErrorIcon className={css(styles.noticeIcon)} />
             <p className={css(styles.formParagraph, styles.noticeParagraph)}>{children}</p>
         </div>
     );
