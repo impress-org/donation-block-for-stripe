@@ -115,9 +115,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         }
     }, [stripeConnected, stripeConnectionFlow]);
 
-    console.log(dfbAdminLocalVars);
-    console.log(dfbAdminLocalVars.can_add_fee);
-
     return (
         <Fragment>
             <Fragment>
