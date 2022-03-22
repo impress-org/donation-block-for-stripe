@@ -1,4 +1,4 @@
-import {sprintf, __} from '@wordpress/i18n';
+import {__} from '@wordpress/i18n';
 import DonationForm from './donationForm';
 import {
     PanelBody,
@@ -19,7 +19,7 @@ import {usePageVisibility} from 'react-page-visibility';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
-import useCheckStripeConnect from './useCheckStripeConnect';
+import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
 import RepeatableControl from './components/RepeatableControl';
 import StripeDisconnectModal from './components/StripeDisconnectModal';
@@ -114,9 +114,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             runLottieAnimation('fireworks', document.getElementById('dfb-connected-lottie'));
         }
     }, [stripeConnected, stripeConnectionFlow]);
-
-    console.log(dfbAdminLocalVars);
-    console.log(dfbAdminLocalVars.can_add_fee);
 
     return (
         <Fragment>

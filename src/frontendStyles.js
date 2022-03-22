@@ -242,6 +242,9 @@ export default class StyleSheetFactory {
             stripePaymentWrap: {
                 minHeight: '200px',
             },
+            donationReceipt: {
+               minHeight: '520px',
+            },
             donationReceiptEmailText: {
                 textAlign: 'center',
                 margin: '0 0 30px',

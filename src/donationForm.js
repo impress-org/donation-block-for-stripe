@@ -14,8 +14,22 @@ import {ReactComponent as UserIcon} from './images/user.svg';
 import {ReactComponent as CaretIcon} from './images/caret-right.svg';
 import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
-import useCheckStripeConnect from './useCheckStripeConnect';
+import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
+
+function getDefaultStep(donationFormId) {
+    const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
+    if (!clientSecret) {
+        return 1;
+    }
+
+    const formId = new URLSearchParams(window.location.search).get('form_id');
+    if (formId !== donationFormId) {
+        return 1;
+    }
+
+    return 3;
+}
 
 /**
  * 💚 Donation Form.
@@ -39,7 +53,7 @@ const DonationForm = (props) => {
         message: '',
         error: false,
     });
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(getDefaultStep(props.attributes.formId));
     const stripe = useMemo(() => {
         if (!props.attributes.stripeTestPubKey || !props.attributes.stripeLivePubKey) {
             return;
@@ -61,9 +75,6 @@ const DonationForm = (props) => {
         }, [stripe]);
     }
 
-    // Checks url for payment success query params.
-    checkPaymentStatus();
-
     const updateDonationAmount = (amount) => {
         amount = amount.replace('$', '');
         setDonationAmount(amount);
@@ -73,6 +84,7 @@ const DonationForm = (props) => {
         setErrorMessage(null);
         setErrorFields([]);
         setStep(1);
+        setIsLoading(false);
     };
 
     // 🤠 Handle the first step of the form.
@@ -162,57 +174,64 @@ const DonationForm = (props) => {
     };
 
     // 🏃‍ Fetches the payment intent status after payment submission.
-    async function checkPaymentStatus() {
-        const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
+    useEffect(() => {
 
+        const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
         if (!clientSecret || handledIntent === clientSecret) {
             return;
         }
 
         const formId = new URLSearchParams(window.location.search).get('form_id');
-
         if (formId !== props.attributes.formId) {
             return;
         }
 
-        const {paymentIntent} = await stripe.retrievePaymentIntent(clientSecret);
+        setIsLoading(true);
 
-        setStep(3);
-        setDonationAmount(paymentIntent.amount / 100);
-        setEmail(paymentIntent.receipt_email);
-        setHandledIntent(clientSecret);
+        stripe.retrievePaymentIntent(clientSecret).then((response) => {
 
-        switch (paymentIntent.status) {
-            case 'succeeded':
-                setPaymentStatus({
-                    status: 'Successful',
-                    message: `Thank you for your $${donationAmount} donation!`,
-                    error: false,
-                });
-                break;
-            case 'processing':
-                setPaymentStatus({
-                    status: 'Processing',
-                    message: __('Your payment is processing.', 'donation-form-block'),
-                    error: false,
-                });
-                break;
-            case 'requires_payment_method':
-                setPaymentStatus({
-                    status: 'Not successful',
-                    message: __('Your payment was not successful, please try again.', 'donation-form-block'),
-                    error: true,
-                });
-                break;
-            default:
-                setPaymentStatus({
-                    status: paymentIntent.status,
-                    message: __('Something went wrong, please try again.', 'donation-form-block'),
-                    error: true,
-                });
-                break;
-        }
-    }
+            const paymentIntent = response.paymentIntent;
+            const newDonationAmount = (paymentIntent.amount / 100).toString();
+
+            setDonationAmount(newDonationAmount);
+            setHandledIntent(clientSecret);
+            setIsLoading(false);
+            setEmail(paymentIntent.receipt_email);
+            setStep(3);
+
+            // Set the payment status accordingly.
+            switch (paymentIntent.status) {
+                case 'succeeded':
+                    setPaymentStatus({
+                        status: 'Successful',
+                        message: `Thank you for your $${newDonationAmount} donation!`,
+                        error: false,
+                    });
+                    break;
+                case 'processing':
+                    setPaymentStatus({
+                        status: 'Processing',
+                        message: __('Your payment is processing.', 'donation-form-block'),
+                        error: false,
+                    });
+                    break;
+                case 'requires_payment_method':
+                    setPaymentStatus({
+                        status: 'Not successful',
+                        message: __('Your payment was not successful, please try again.', 'donation-form-block'),
+                        error: true,
+                    });
+                    break;
+                default:
+                    setPaymentStatus({
+                        status: paymentIntent.status,
+                        message: __('Something went wrong, please try again.', 'donation-form-block'),
+                        error: true,
+                    });
+                    break;
+            }
+        });
+    }, [stripe]);
 
     // 🎊 Confetti animation on successful payment completion.
     if (step === 3) {
@@ -222,11 +241,10 @@ const DonationForm = (props) => {
     const checkStripeConnected = useCheckStripeConnect();
     const stripeConnected = typeof props.stripeConnected !== 'undefined' ? props.stripeConnected : checkStripeConnected;
 
-    // 👀 Ensure donation amounts comes in as an array.
+    // 🧹 Ensure donation amounts comes in as an array.
     let donationAmounts = props.attributes.donationAmounts;
-
-    if (typeof props.attributes.donationAmounts === 'string') {
-        donationAmounts = props.attributes.donationAmounts.split(', ');
+    if (typeof donationAmounts === 'string') {
+        donationAmounts = donationAmounts.split(', ');
     }
 
     // 🎉 Render the donation form.
@@ -440,7 +458,8 @@ const DonationForm = (props) => {
                         </div>
                     )}
                     {3 === step && (
-                        <div id={'donation-form-receipt'} className="donation-form-receipt-step">
+                        <div id={'donation-form-receipt'} className={`donation-form-receipt-step ${css(
+                            styles.donationReceipt )}`} >
                             {'' !== paymentStatus.status && true !== paymentStatus.error && (
                                 <>
                                     <div
@@ -461,7 +480,8 @@ const DonationForm = (props) => {
                                             styles.donationReceiptEmailText
                                         )}`}
                                     >
-                                        Your receipt has been sent to <strong>{email}</strong>
+                                        {__('Your receipt has been sent to', 'donation-form-block')}{' '}
+                                        <strong>{email}</strong>
                                     </p>
                                 </>
                             )}
