@@ -19,6 +19,7 @@ import runLottieAnimation from './runLottieAnimation';
 
 function getDefaultStep(donationFormId) {
     const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
+
     if (!clientSecret) {
         return 1;
     }
@@ -87,7 +88,6 @@ const DonationForm = (props) => {
         setIsLoading(false);
     };
 
-    // 🤠 Handle the first step of the form.
     const handleAmountSubmit = (e) => {
         e.preventDefault();
 
@@ -175,7 +175,6 @@ const DonationForm = (props) => {
 
     // 🏃‍ Fetches the payment intent status after payment submission.
     useEffect(() => {
-
         const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
         if (!clientSecret || handledIntent === clientSecret) {
             return;
@@ -189,7 +188,6 @@ const DonationForm = (props) => {
         setIsLoading(true);
 
         stripe.retrievePaymentIntent(clientSecret).then((response) => {
-
             const paymentIntent = response.paymentIntent;
             const newDonationAmount = (paymentIntent.amount / 100).toString();
 
@@ -429,6 +427,9 @@ const DonationForm = (props) => {
                     )}
                     {2 === step && (
                         <div className={`donation-form-payment-step`}>
+                            <span className="donation-form-edit" onClick={() => setStep(1)}>
+                                {__('Edit Donation', 'donation-form-block')}
+                            </span>
                             <div
                                 className={`donation-form-payment-summary ${css(
                                     styles.noticeBase,
@@ -458,8 +459,10 @@ const DonationForm = (props) => {
                         </div>
                     )}
                     {3 === step && (
-                        <div id={'donation-form-receipt'} className={`donation-form-receipt-step ${css(
-                            styles.donationReceipt )}`} >
+                        <div
+                            id={'donation-form-receipt'}
+                            className={`donation-form-receipt-step ${css(styles.donationReceipt)}`}
+                        >
                             {'' !== paymentStatus.status && true !== paymentStatus.error && (
                                 <>
                                     <div
