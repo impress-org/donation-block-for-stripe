@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name:       Donation Block for Stripe by GiveWP
+ * Plugin URI:        https://go.givewp.com/donation-block-for-stripe
  * Description:       A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.
  * Requires at least: 5.2
  * Requires PHP:      7.2
@@ -10,8 +11,6 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       donation-form-block
- *
- * @package           create-block
  */
 
 use GiveDonationBlock\Bootstrap;
