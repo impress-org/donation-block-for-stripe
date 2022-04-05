@@ -118,8 +118,8 @@ export default class StyleSheetFactory {
                 margin: '30px 0 0',
             },
             noticeDonation: {
-                background: `${color(`${props.attributes.color}`).lighten(0.8)}`,
-                border: `1px solid ${color(`${props.attributes.color}`).lighten(0.6)}`,
+                background: `${color(`${props.attributes.color}`).lighten(1.22)}`,
+                border: `1px solid ${color(`${props.attributes.color}`).lighten(0.9)}`,
                 margin: '0 0 30px',
             },
             noticeDonationParagraph: {
@@ -243,7 +243,7 @@ export default class StyleSheetFactory {
                 minHeight: '200px',
             },
             donationReceipt: {
-               minHeight: '520px',
+                minHeight: '520px',
             },
             donationReceiptEmailText: {
                 textAlign: 'center',
@@ -288,6 +288,75 @@ export default class StyleSheetFactory {
                 margin: '40px auto 20px',
                 display: 'block',
             },
+            // Donation Summary Notice on Step 2.
+            editDonationNotice: {
+                '@media (max-width: 599px)': {
+                    display: 'block',
+                    textAlign: 'center',
+                },
+            },
+            donationSummaryAmountWrap: {
+                margin: '0 6px 0 0',
+                '@media (max-width: 599px)': {
+                    display: 'block',
+                },
+            },
+            donationSummaryAmountText: {
+                fontSize: '24px',
+                fontWeight: '600',
+                margin: '0',
+            },
+            donationSummaryText: {
+                margin: '0',
+                padding: '0',
+                lineHeight: '1.2',
+            },
+            donationSummaryCurrencyIcon: {
+                fontSize: '16px',
+                margin: '0 2px 0 0',
+                position: 'relative',
+                top: '-4px',
+            },
+            donationPaymentInstructions: {
+                fontSize: '14px',
+            },
+            donationTypeText: {
+                textTransform: 'uppercase',
+                fontWeight: '500',
+                fontSize: '14px',
+            },
+            editDonationBtn: {
+                fontSize: '13px',
+                background: '#FFF',
+                border: `1px solid ${color(`${props.attributes.color}`).lighten(0.8)}`,
+                color: `${color(`${props.attributes.color}`)}`,
+                borderRadius: '6px',
+                whiteSpace: 'nowrap',
+                marginLeft: 'auto',
+                ':hover': {
+                    border: `1px solid ${color(`${props.attributes.color}`).lighten(0.2)}`,
+                },
+                '@media (max-width: 599px)': {
+                    margin: '10px 0'
+                },
+            },
+            heartIconWrap: {
+                background: `${color(`${props.attributes.color}`).lighten(0.8)}`,
+                borderRadius: '100%',
+                padding: '5px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '60px',
+                width: '60px',
+                margin: '0 10px 0 0',
+                '@media (max-width: 599px)': {
+                    display: 'none',
+                },
+            },
+            heartIcon: {
+                color: '#FFF',
+            }
         });
     }
 }

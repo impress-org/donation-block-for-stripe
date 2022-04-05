@@ -14,6 +14,7 @@ import {ReactComponent as UserIcon} from './images/user.svg';
 import {ReactComponent as CaretIcon} from './images/caret-right.svg';
 import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
+import {ReactComponent as HeartIcon} from './images/heart.svg';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
 
@@ -427,19 +428,39 @@ const DonationForm = (props) => {
                     )}
                     {2 === step && (
                         <div className={`donation-form-payment-step`}>
-                            <span className="donation-form-edit" onClick={() => setStep(1)}>
-                                {__('Edit Donation', 'donation-form-block')}
-                            </span>
                             <div
                                 className={`donation-form-payment-summary ${css(
                                     styles.noticeBase,
-                                    styles.noticeInfo,
-                                    styles.noticeDonation
+                                    styles.noticeDonation,
+                                    styles.editDonationNotice
                                 )}`}
                             >
-                                <p
-                                    className={css(styles.noticeDonationParagraph)}
-                                >{`Complete your $${donationAmount} one-time donation`}</p>
+                                <div className={css(styles.heartIconWrap)}>
+                                    <HeartIcon className={css(styles.heartIcon)} />
+                                </div>
+                                <div>
+                                    <p className={css(styles.donationSummaryText)}>
+                                        <span className={css(styles.donationSummaryAmountWrap)}>
+                                            <span className={css(styles.donationSummaryCurrencyIcon)}>$</span>
+                                            <span
+                                                className={css(styles.donationSummaryAmountText)}
+                                            >{`${donationAmount}`}</span>
+                                        </span>
+                                        <span className={css(styles.donationTypeText)}>
+                                            {__('One-time donation', 'donation-form-block')}
+                                        </span>
+                                    </p>
+                                    <p className={css(styles.donationPaymentInstructions)}>
+                                        {__('Please complete your payment below 👇', 'donation-form-block')}
+                                    </p>
+                                </div>
+
+                                <button
+                                    className={`donation-form-edit ${css(styles.editDonationBtn)}`}
+                                    onClick={() => setStep(1)}
+                                >
+                                    {__('Edit Donation', 'donation-form-block')}
+                                </button>
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
                                 <div className={`donation-form-payment-intent ${css(styles.stripePaymentWrap)}`}></div>
