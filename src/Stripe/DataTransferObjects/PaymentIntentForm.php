@@ -27,6 +27,11 @@ class PaymentIntentForm
     public $amount;
 
     /**
+     * @var string|null
+     */
+    public $paymentIntent;
+
+    /**
      * @var string
      */
     public $liveMode;
@@ -43,6 +48,7 @@ class PaymentIntentForm
         $object->lastName = $data['lastName'];
         $object->email = $data['email'];
         $object->amount = $data['amount'];
+        $object->paymentIntent = $data['paymentIntent'];
         $object->liveMode = $data['liveMode'];
         $object->nonce = $data['nonce'];
         return $object;

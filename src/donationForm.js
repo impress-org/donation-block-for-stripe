@@ -50,6 +50,7 @@ const DonationForm = (props) => {
     const [errorFields, setErrorFields] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [paymentIntent, setPaymentIntent] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState({
         status: '',
         message: '',
@@ -96,6 +97,7 @@ const DonationForm = (props) => {
         if (props.backend) {
             return;
         }
+        console.log(paymentIntent);
 
         setIsLoading(true);
 
@@ -106,6 +108,7 @@ const DonationForm = (props) => {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
+                paymentIntent,
                 liveMode: props.attributes.liveMode,
                 nonce: window.donationFormBlock.nonce,
             })
@@ -123,6 +126,7 @@ const DonationForm = (props) => {
                     setStep(2);
                     // 🤗 Proceed with Stripe.
                     const clientSecret = data.clientSecret;
+                    setPaymentIntent(data.paymentIntent);
                     const appearance = {
                         theme: 'stripe',
                         variables: {
