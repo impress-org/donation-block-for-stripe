@@ -118,8 +118,8 @@ export default class StyleSheetFactory {
                 margin: '30px 0 0',
             },
             noticeDonation: {
-                background: `${color(`${props.attributes.color}`).lighten(1.22)}`,
-                border: `1px solid ${color(`${props.attributes.color}`).lighten(0.9)}`,
+                background: `${color(props.attributes.color).lighten(1.22)}`,
+                border: `1px solid ${color(props.attributes.color).lighten(0.9)}`,
                 margin: '0 0 30px',
             },
             noticeDonationParagraph: {
@@ -147,8 +147,8 @@ export default class StyleSheetFactory {
             },
             buttonPrimary: {
                 ':hover': {
-                    background: `${color(`${props.attributes.color}`).lighten(0.2)}`,
-                    border: `3px solid ${color(`${props.attributes.color}`).lighten(0.2)}`,
+                    background: `${color(props.attributes.color).lighten(0.2)}`,
+                    border: `3px solid ${color(props.attributes.color).lighten(0.2)}`,
                 },
             },
             buttonSelected: {
@@ -328,20 +328,20 @@ export default class StyleSheetFactory {
             editDonationBtn: {
                 fontSize: '13px',
                 background: '#FFF',
-                border: `1px solid ${color(`${props.attributes.color}`).lighten(0.8)}`,
-                color: `${color(`${props.attributes.color}`)}`,
+                border: `1px solid ${color(props.attributes.color).lighten(0.8)}`,
+                color: `${color(props.attributes.color)}`,
                 borderRadius: '6px',
                 whiteSpace: 'nowrap',
                 marginLeft: 'auto',
                 ':hover': {
-                    border: `1px solid ${color(`${props.attributes.color}`).lighten(0.2)}`,
+                    border: `1px solid ${color(props.attributes.color).lighten(0.2)}`,
                 },
                 '@media (max-width: 599px)': {
                     margin: '10px 0'
                 },
             },
             heartIconWrap: {
-                background: `${color(`${props.attributes.color}`).lighten(0.8)}`,
+                background: `${color(props.attributes.color).lighten(0.8)}`,
                 borderRadius: '100%',
                 padding: '5px',
                 display: 'flex',
