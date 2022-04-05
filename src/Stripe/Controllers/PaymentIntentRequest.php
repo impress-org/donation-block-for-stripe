@@ -126,6 +126,10 @@ class PaymentIntentRequest
             return false;
         }
 
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
         // Is the add-on installed but not active (lazy people...sheesh!)?
         $stripeInstalled = (bool)array_filter(
             get_plugins(),
