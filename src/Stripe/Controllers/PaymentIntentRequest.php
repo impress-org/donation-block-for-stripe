@@ -34,36 +34,41 @@ class PaymentIntentRequest
             ]);
         }
 
-        if ($data->liveMode) {
-            $secretKey = $stripeData->liveSecretKey;
-        } else {
-            $secretKey = $stripeData->testSecretKey;
+        $url = 'https://api.stripe.com/v1/payment_intents';
+        $args = [
+            'amount' => $data->amount,
+            'currency' => 'USD',
+            'receipt_email' => $data->email,
+            'application_fee_amount' => $this->canAddFee() ? ceil($data->amount * 0.02) : 0,
+            'automatic_payment_methods' => [
+                'enabled' => 'true',
+            ],
+        ];
+
+        // Update payment intent or create a new one?
+        if ($data->paymentIntent) {
+            // Update URL to update payment intent.
+            $url = $url . '/' . $data->paymentIntent;
+            // Remove automatic_payment_methods from args.
+            unset($args['automatic_payment_methods']);
         }
 
-        $paymentIntent = wp_remote_post(
-            'https://api.stripe.com/v1/payment_intents',
+        $paymentIntentRequest = wp_remote_post(
+            $url,
             [
-                'headers' => ['Authorization' => 'Bearer ' . $secretKey],
+                'headers' => ['Authorization' => 'Bearer ' . ($data->liveMode ? $stripeData->liveSecretKey : $stripeData->testSecretKey)],
                 'user-agent' => 'WordPress GiveDonationBlock/' . DONATION_BLOCK_VERSION . ' (https://givewp.com)',
-                'body' => [
-                    'amount' => $data->amount,
-                    'currency' => 'USD',
-                    'receipt_email' => $data->email,
-                    'application_fee_amount' => $this->canAddFee() ? ceil($data->amount * 0.02) : 0,
-                    'automatic_payment_methods' => [
-                        'enabled' => 'true',
-                    ],
-                ]
+                'body' => $args
             ]
         );
 
-        if (is_wp_error($paymentIntent)) {
+        if (is_wp_error($paymentIntentRequest)) {
             wp_send_json_error([
                 'error' => 'wordpress_error',
                 'message' => 'There was an error setting up your donation. Please contact the site owner.',
             ]);
         } else {
-            $apiBody = json_decode(wp_remote_retrieve_body($paymentIntent));
+            $apiBody = json_decode(wp_remote_retrieve_body($paymentIntentRequest));
 
             // Check for Stripe errors
             if (isset($apiBody->error)) {
@@ -74,6 +79,7 @@ class PaymentIntentRequest
             } else {
                 wp_send_json_success([
                     'clientSecret' => $apiBody->client_secret,
+                    'paymentIntent' => $apiBody->id,
                 ]);
             }
         }
@@ -113,6 +119,7 @@ class PaymentIntentRequest
 
         $data['amount'] = (int)$data['amount'];
         $data['nonce'] = $postData['nonce'] ?? '';
+        $data['paymentIntent'] = $postData['paymentIntent'] ?? null;
         $data['lastName'] = !empty($postData['lastName']) ? sanitize_text_field($postData['lastName']) : null;
         $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
 
@@ -124,6 +131,10 @@ class PaymentIntentRequest
         // Is the Stripe Pro add-on active?
         if (defined('GIVE_STRIPE_VERSION')) {
             return false;
+        }
+
+        if (!function_exists('get_plugins')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
 
         // Is the add-on installed but not active (lazy people...sheesh!)?
