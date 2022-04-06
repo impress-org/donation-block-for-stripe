@@ -28,4 +28,8 @@ node_modules/
 # dotenv environment variables file
 .env
 
+# No composer stuff
 /vendor/
+
+# No language files
+/languages/*
