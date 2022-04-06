@@ -9,7 +9,7 @@ jobs:
         uses: impress-org/givewp-github-actions/.github/workflows/wp-org-release.yml@master
         with:
             plugin_slug: donation-block-for-stripe-by-givewp
-            zip_name: donation-form-block
+            zip_name: donation-block-for-stripe-by-givewp
         secrets:
             SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
             SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
