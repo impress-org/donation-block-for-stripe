@@ -1,6 +1,9 @@
 import {StyleSheet} from 'aphrodite';
 import color from 'color';
 
+/**
+ * Styles for the Donation Form frontend using Aphrodite.
+ */
 export default class StyleSheetFactory {
     static getSheet(props) {
         return StyleSheet.create({
@@ -118,8 +121,8 @@ export default class StyleSheetFactory {
                 margin: '30px 0 0',
             },
             noticeDonation: {
-                background: `${color(props.attributes.color).lighten(1.22)}`,
-                border: `1px solid ${color(props.attributes.color).lighten(0.9)}`,
+                background: `${lightenBy(color(props.attributes.color), 50)}`,
+                border: `1px solid ${lightenBy(color(props.attributes.color), 10)}`,
                 margin: '0 0 30px',
             },
             noticeDonationParagraph: {
@@ -359,4 +362,16 @@ export default class StyleSheetFactory {
             }
         });
     }
+}
+
+/**
+ * Helper function for colors to lighten more accurately.
+ *
+ * @param color
+ * @param amount
+ * @returns {*}
+ */
+function lightenBy(color, amount) {
+    const lightness = color.lightness();
+    return color.lightness(lightness + amount);
 }
