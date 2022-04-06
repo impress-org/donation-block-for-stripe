@@ -7,6 +7,7 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build",
+		"dev": "NODE_ENV=\"development\" npm run build",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
