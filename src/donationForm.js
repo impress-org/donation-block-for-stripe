@@ -97,7 +97,6 @@ const DonationForm = (props) => {
         if (props.backend) {
             return;
         }
-        console.log(paymentIntent);
 
         setIsLoading(true);
 
