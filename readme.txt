@@ -117,7 +117,10 @@ Not currently. For access to Stripe donation forms with support for recurring do
 == Changelog ==
 
 = 1.0.3 =
-* TBD
+* 🙅‍ If you're are a GiveWP active license holder this plugin now will remove the 2% Stripe fee.
+* 🎨 Improved the receipt step's user experience by preventing a flash of the default amount and step 1. Step 3 is now immediately displayed and the same confetti animation is used.
+* 😎 Donor's can now edit their donation after moving on to the payment step. The UI also received an improvement. 
+* Added app identification for Stripe.
 
 = 1.0.2 =
 * Fixed zip issue preventing the rendering of the block. 
