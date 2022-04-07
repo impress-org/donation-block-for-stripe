@@ -14,3 +14,7 @@ composer.lock
 package.json
 package-lock.json
 README.md
+
+output.log
+docker_tag
+DOCKER_ENV
