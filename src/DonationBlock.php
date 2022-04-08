@@ -45,15 +45,15 @@ class DonationBlock
         }
 
         $stripeData = StripeData::fromOption();
+        $livePublishableKey = $stripeData->livePublishableKey ?? '';
+        $testPublishableKey = $stripeData->testPublishableKey ?? '';
 
         ob_start(); ?>
 
         <div id="donation-form-block-<?php
         echo esc_html($attributes['formId']); ?>" class="root-donation-block"
-             data-stripe-live-pub-key="<?php
-             echo esc_html($stripeData->livePublishableKey) ?? ''; ?>"
-             data-stripe-test-pub-key="<?php
-             echo esc_html($stripeData->testPublishableKey) ?? ''; ?>"
+             data-stripe-live-pub-key="<?php esc_html_e($livePublishableKey); ?>"
+             data-stripe-test-pub-key="<?php esc_html_e($testPublishableKey); ?>"
             <?php
             // 🔁 Loop through and set attributes per block.
             foreach ($attributes as $key => $value) :
