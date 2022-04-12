@@ -192,7 +192,7 @@ const DonationForm = (props) => {
                 case 'succeeded':
                     setPaymentStatus({
                         status: 'Successful',
-                        message: `Thank you for your $${newDonationAmount} donation!`,
+                        message: `Thank you for your ${props.attributes.currencySymbol + newDonationAmount} donation!`,
                         error: false,
                     });
                     break;
@@ -427,7 +427,7 @@ const DonationForm = (props) => {
                                 <div>
                                     <p className={css(styles.donationSummaryText)}>
                                         <span className={css(styles.donationSummaryAmountWrap)}>
-                                            <span className={css(styles.donationSummaryCurrencyIcon)}>$</span>
+                                            <span className={css(styles.donationSummaryCurrencyIcon)}>{props.attributes.currencySymbol}</span>
                                             <span
                                                 className={css(styles.donationSummaryAmountText)}
                                             >{`${donationAmount}`}</span>
@@ -565,7 +565,7 @@ const DonationForm = (props) => {
                                                 styles.donationReceiptDetailsListItemSpan
                                             )}`}
                                         >
-                                            ${donationAmount}
+                                            {props.attributes.currencySymbol + donationAmount}
                                         </span>
                                     </li>
                                     <li
