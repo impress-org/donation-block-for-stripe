@@ -51,7 +51,7 @@ export default function AmountLevels({
                         <input
                             type="text"
                             value={amount}
-                            onChange={(event) => updateAmount(index, event.target.value)}
+                            onChange={(event) => updateAmount(index, parseInt(event.target.value, 10))}
                         />
                         <Button className={styles.removeAmountLevel} isSmall isSecondary onClick={() => removeRow(index)}>
                             <Dashicon

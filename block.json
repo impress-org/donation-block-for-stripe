@@ -14,17 +14,17 @@
         "donationAmounts": {
             "type": "array",
             "default": [
-                "5",
-                "10",
-                "25",
-                "50",
-                "100",
-                "250"
+                5,
+                10,
+                25,
+                50,
+                100,
+                250
             ]
         },
         "initialDefaultAmount": {
-            "type": "string",
-            "default": "50"
+            "type": "integer",
+            "default": 50
         },
         "backgroundId": {
             "type": "integer",
