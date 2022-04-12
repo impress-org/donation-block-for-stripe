@@ -51,6 +51,7 @@ const colors = [
  * @return {WPElement} Element to render.
  */
 export default function Edit({attributes, setAttributes, instanceId}) {
+
     const blockProps = useBlockProps();
     const {donationAmounts, defaultAmount, countryCode, currencyCode, currencySymbol, backgroundId, color, liveMode, preview} =
         attributes;

@@ -1,7 +1,6 @@
 import {__} from '@wordpress/i18n';
 import {useState, useEffect} from '@wordpress/element';
 import {BaseControl, PanelRow, Button, Dashicon} from '@wordpress/components';
-
 import styles from './styles.module.scss';
 import CurrencyInput from 'react-currency-input-field';
 

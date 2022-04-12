@@ -17,6 +17,7 @@ import {ReactComponent as HeartIcon} from './images/heart.svg';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import getDefaultStep from './helperFunctions/getDefaultStep';
+import {zeroDecimalCodes} from './helperFunctions/zeroDecimalCurrencies';
 
 /**
  * 💚 Donation Form.
@@ -86,10 +87,15 @@ const DonationForm = (props) => {
 
         setIsLoading(true);
 
+        // 💵 How much should be charged? Converts to cents for non-zero decimal currencies.
+        const chargeAmount = zeroDecimalCodes.includes(props.attributes.currencyCode) ? donationAmount : donationAmount * 100;
+
+        console.log(chargeAmount);
+
         // 🟢 Good to go.
         axios
             .post('/?dfb_donation-block-stripe-action=getStripeIntent', {
-                amount: donationAmount * 100,
+                amount: chargeAmount,
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
