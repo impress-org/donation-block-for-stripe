@@ -1,6 +1,6 @@
 import {__} from '@wordpress/i18n';
 import {useState, useEffect} from '@wordpress/element';
-import {BaseControl, PanelRow, Button} from '@wordpress/components';
+import {BaseControl, PanelRow, Button, Dashicon} from '@wordpress/components';
 
 import styles from './styles.module.scss';
 
@@ -16,7 +16,10 @@ export default function AmountLevels({
     const [defaultAmount, setDefaultAmount] = useState(initialDefaultAmount);
 
     const addRow = () => {
-        setAmounts((prevAmounts) => [...prevAmounts, 100]);
+        setAmounts((prevAmounts) => {
+            const max = Math.max( ...prevAmounts );
+            return [...prevAmounts, max*2];
+        });
     };
 
     const removeRow = (index) => setAmounts((oldData) => oldData.filter((_, i) => i !== index));
@@ -37,7 +40,7 @@ export default function AmountLevels({
 
     return (
         <BaseControl {...baseControlProps}>
-            <div className="rows">
+            <div className={styles.amountLevelsWrap}>
                 {amounts.map((amount, index) => (
                     <PanelRow className={styles.repeatableComponent} key={index}>
                         <input
@@ -50,8 +53,11 @@ export default function AmountLevels({
                             value={amount}
                             onChange={(event) => updateAmount(index, event.target.value)}
                         />
-                        <Button isSmall isSecondary onClick={() => removeRow(index)}>
-                            X
+                        <Button className={styles.removeAmountLevel} isSmall isSecondary onClick={() => removeRow(index)}>
+                            <Dashicon
+                                icon="no-alt"
+                                style={{ fontSize: "18px", width: "18px", height: "18px" }}
+                            />
                         </Button>
                     </PanelRow>
                 ))}

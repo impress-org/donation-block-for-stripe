@@ -182,6 +182,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         </PanelRow>
                         <PanelRow>
                             <AmountLevels
+                                label={__('Amount Levels', 'donation-form-block')}
+                                help={__('Add or remove donation amount levels to the form. Use the radio to adjust the default donation amount.', 'donation-form-block')}
                                 donationAmounts={donationAmounts}
                                 initialDefaultAmount={initialDefaultAmount}
                                 defaultChanged={(newDefault) => setAttributes({initialDefaultAmount: newDefault})}
