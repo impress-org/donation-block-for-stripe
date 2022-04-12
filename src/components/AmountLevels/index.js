@@ -6,19 +6,18 @@ import styles from './styles.module.scss';
 
 export default function AmountLevels({
     donationAmounts,
-    initialDefaultAmount,
+    defaultAmount,
     amountChanged,
     defaultChanged,
     ...baseControlProps
 }) {
-
     const [amounts, setAmounts] = useState(donationAmounts);
-    const [defaultAmount, setDefaultAmount] = useState(initialDefaultAmount);
+    const [newDefaultAmount, setNewDefaultAmount] = useState(defaultAmount);
 
     const addRow = () => {
         setAmounts((prevAmounts) => {
-            const max = Math.max( ...prevAmounts );
-            return [...prevAmounts, max*2];
+            const max = Math.max(...prevAmounts);
+            return [...prevAmounts, max * 2];
         });
     };
 
@@ -35,8 +34,8 @@ export default function AmountLevels({
     }, [amounts]);
 
     useEffect(() => {
-        defaultChanged(defaultAmount);
-    }, [defaultAmount]);
+        defaultChanged(newDefaultAmount);
+    }, [newDefaultAmount]);
 
     return (
         <BaseControl {...baseControlProps}>
@@ -46,18 +45,20 @@ export default function AmountLevels({
                         <input
                             type="radio"
                             checked={amount === defaultAmount}
-                            onChange={() => setDefaultAmount(amount)}
+                            onChange={() => setNewDefaultAmount(amount)}
                         />
                         <input
                             type="text"
                             value={amount}
                             onChange={(event) => updateAmount(index, parseInt(event.target.value, 10))}
                         />
-                        <Button className={styles.removeAmountLevel} isSmall isSecondary onClick={() => removeRow(index)}>
-                            <Dashicon
-                                icon="no-alt"
-                                style={{ fontSize: "18px", width: "18px", height: "18px" }}
-                            />
+                        <Button
+                            className={styles.removeAmountLevel}
+                            isSmall
+                            isSecondary
+                            onClick={() => removeRow(index)}
+                        >
+                            <Dashicon icon="no-alt" style={{fontSize: '18px', width: '18px', height: '18px'}} />
                         </Button>
                     </PanelRow>
                 ))}

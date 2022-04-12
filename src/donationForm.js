@@ -42,7 +42,7 @@ function getDefaultStep(donationFormId) {
  */
 const DonationForm = (props) => {
     const styles = StyleSheetFactory.getSheet(props);
-    const [donationAmount, setDonationAmount] = useState(props.attributes.initialDefaultAmount);
+    const [donationAmount, setDonationAmount] = useState(props.attributes.defaultAmount);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -67,9 +67,10 @@ const DonationForm = (props) => {
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
 
+    // Update the default amount when changed by admin.
     useEffect(() => {
-        setDonationAmount(props.attributes.initialDefaultAmount);
-    }, [props.attributes.initialDefaultAmount])
+        setDonationAmount(props.attributes.defaultAmount);
+    }, [props.attributes.defaultAmount])
 
     if (!props.backend) {
         useEffect(() => {

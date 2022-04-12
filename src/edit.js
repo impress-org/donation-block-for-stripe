@@ -50,7 +50,7 @@ const colors = [
  */
 export default function Edit({attributes, setAttributes, instanceId}) {
     const blockProps = useBlockProps();
-    const {donationAmounts, initialDefaultAmount, backgroundId, color, liveMode, preview} = attributes;
+    const {donationAmounts, defaultAmount, backgroundId, color, liveMode, preview} = attributes;
 
     // 🖼 Preview image when an admin hovers over the block.
     if (preview) {
@@ -185,8 +185,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                 label={__('Amount Levels', 'donation-form-block')}
                                 help={__('Add or remove donation amount levels to the form. Use the radio to adjust the default donation amount.', 'donation-form-block')}
                                 donationAmounts={donationAmounts}
-                                initialDefaultAmount={initialDefaultAmount}
-                                defaultChanged={(newDefault) => setAttributes({initialDefaultAmount: newDefault})}
+                                defaultAmount={defaultAmount}
+                                defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
                                 amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
                             />
                         </PanelRow>

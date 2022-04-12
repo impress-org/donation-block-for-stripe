@@ -22,7 +22,7 @@
                 250
             ]
         },
-        "initialDefaultAmount": {
+        "defaultAmount": {
             "type": "integer",
             "default": 50
         },
