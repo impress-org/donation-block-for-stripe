@@ -300,7 +300,7 @@ const DonationForm = (props) => {
                                         maxLength={6}
                                         value={donationAmount}
                                         defaultValue={donationAmount}
-                                        onValueChange={(value, name) => setDonationAmount(amount)}
+                                        onValueChange={(value) => setDonationAmount(value)}
                                     />
                                 </div>
                                 <div
