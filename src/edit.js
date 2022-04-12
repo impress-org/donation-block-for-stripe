@@ -10,6 +10,7 @@ import {
     ColorPalette,
     Dashicon,
     ExternalLink,
+    SelectControl,
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
@@ -22,6 +23,7 @@ import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import StripeDisconnectModal from './components/StripeDisconnectModal';
 import AmountLevels from './components/AmountLevels';
+import {listCountries} from './helperFunctions/countryCurrencies';
 
 // 🎨 Color picker colors.
 const colors = [
@@ -50,7 +52,8 @@ const colors = [
  */
 export default function Edit({attributes, setAttributes, instanceId}) {
     const blockProps = useBlockProps();
-    const {donationAmounts, defaultAmount, backgroundId, color, liveMode, preview} = attributes;
+    const {donationAmounts, defaultAmount, countryCode, currencyCode, currencySymbol, backgroundId, color, liveMode, preview} =
+        attributes;
 
     // 🖼 Preview image when an admin hovers over the block.
     if (preview) {
@@ -108,6 +111,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             runLottieAnimation('fireworks', 'dfb-connected-lottie');
         }
     }, [stripeConnected, stripeConnectionFlow]);
+
+    const currencyOptions = [...listCountries()].map((country) => {
+        return {
+            label: `${country.flag} ${country.name}: ${country.currency.name} (${country.currency.symbol})`,
+            value: country.code,
+        };
+    });
 
     return (
         <Fragment>
@@ -181,16 +191,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             </div>
                         </PanelRow>
                         <PanelRow>
-                            <AmountLevels
-                                label={__('Amount Levels', 'donation-form-block')}
-                                help={__('Add or remove donation amount levels to the form. Use the radio to adjust the default donation amount.', 'donation-form-block')}
-                                donationAmounts={donationAmounts}
-                                defaultAmount={defaultAmount}
-                                defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
-                                amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
-                            />
-                        </PanelRow>
-                        <PanelRow>
                             <div>
                                 <label className={'dfb-label'}>{__('Primary Color', 'donation-form-block')}</label>
                                 <div className={'dfb-color-picker'}>
@@ -207,6 +207,40 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     {__('Choose the primary color for this donation form.', 'donation-form-block')}
                                 </p>
                             </div>
+                        </PanelRow>
+                    </PanelBody>
+                    <PanelBody title={__('Donation Settings', 'donation-form-block')} initialOpen={false}>
+                        <PanelRow>
+                            <SelectControl
+                                label={__('Currency', 'donation-form-block')}
+                                value={countryCode}
+                                help={__(
+                                    'Select the currency for this donation form. Be sure to ensure your Stripe account can accept the chosen currency.',
+                                    'donation-form-block'
+                                )}
+                                options={currencyOptions}
+                                onChange={(value) => {
+                                    const selectedCurrency = [...listCountries()].find((o) => o.code === value);
+                                    setAttributes({
+                                        countryCode: selectedCurrency.code,
+                                        currencyCode: selectedCurrency.currency.code,
+                                        currencySymbol: selectedCurrency.currency.symbol
+                                    });
+                                }}
+                            />
+                        </PanelRow>
+                        <PanelRow>
+                            <AmountLevels
+                                label={__('Amount Levels', 'donation-form-block')}
+                                help={__(
+                                    'Add or remove donation amount levels to the form. Use the radio to adjust the default donation amount.',
+                                    'donation-form-block'
+                                )}
+                                donationAmounts={donationAmounts}
+                                defaultAmount={defaultAmount}
+                                defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
+                                amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
+                            />
                         </PanelRow>
                     </PanelBody>
                     <PanelBody title={__('Content Settings', 'donation-form-block')} initialOpen={false}>

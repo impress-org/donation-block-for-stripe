@@ -34,6 +34,18 @@
             "type": "string",
             "default": ""
         },
+        "countryCode": {
+            "type": "string",
+            "default": "US"
+        },
+        "currencyCode": {
+            "type": "string",
+            "default": "USD"
+        },
+        "currencySymbol": {
+            "type": "string",
+            "default": "$"
+        },
         "color": {
             "type": "string",
             "default": "#1E8CBE"
