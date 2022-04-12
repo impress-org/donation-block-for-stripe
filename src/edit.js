@@ -10,7 +10,6 @@ import {
     ColorPalette,
     Dashicon,
     ExternalLink,
-    Modal,
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
@@ -20,9 +19,9 @@ import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
-import runLottieAnimation from './runLottieAnimation';
-import RepeatableControl from './components/RepeatableControl';
+import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import StripeDisconnectModal from './components/StripeDisconnectModal';
+import AmountLevels from './components/AmountLevels';
 
 // 🎨 Color picker colors.
 const colors = [
@@ -51,8 +50,7 @@ const colors = [
  */
 export default function Edit({attributes, setAttributes, instanceId}) {
     const blockProps = useBlockProps();
-
-    const {donationAmounts, backgroundId, color, liveMode, preview} = attributes;
+    const {donationAmounts, defaultAmount, backgroundId, color, liveMode, preview} = attributes;
 
     // 🖼 Preview image when an admin hovers over the block.
     if (preview) {
@@ -66,10 +64,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             </Fragment>
         );
     }
-
-    const updateDonationAmounts = (newDonationAmounts) => {
-        setAttributes({donationAmounts: newDonationAmounts});
-    };
 
     const removeBackground = () => {
         setAttributes({
@@ -111,7 +105,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
 
     useEffect(() => {
         if (stripeConnected && stripeConnectionFlow) {
-            runLottieAnimation('fireworks', document.getElementById('dfb-connected-lottie'));
+            runLottieAnimation('fireworks', 'dfb-connected-lottie');
         }
     }, [stripeConnected, stripeConnectionFlow]);
 
@@ -187,13 +181,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             </div>
                         </PanelRow>
                         <PanelRow>
-                            <RepeatableControl
-                                label={__('Donation Amounts', 'donation-form-block')}
-                                addLabel={__('Add Amount', 'donation-form-block')}
-                                initialData={donationAmounts}
-                                newValue="50"
-                                onChange={updateDonationAmounts}
-                                Control={TextControl}
+                            <AmountLevels
+                                label={__('Amount Levels', 'donation-form-block')}
+                                help={__('Add or remove donation amount levels to the form. Use the radio to adjust the default donation amount.', 'donation-form-block')}
+                                donationAmounts={donationAmounts}
+                                defaultAmount={defaultAmount}
+                                defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
+                                amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
                             />
                         </PanelRow>
                         <PanelRow>

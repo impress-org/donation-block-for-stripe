@@ -16,22 +16,8 @@ import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
 import {ReactComponent as HeartIcon} from './images/heart.svg';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
-import runLottieAnimation from './runLottieAnimation';
-
-function getDefaultStep(donationFormId) {
-    const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
-
-    if (!clientSecret) {
-        return 1;
-    }
-
-    const formId = new URLSearchParams(window.location.search).get('form_id');
-    if (formId !== donationFormId) {
-        return 1;
-    }
-
-    return 3;
-}
+import runLottieAnimation from './helperFunctions/runLottieAnimation';
+import getDefaultStep from './helperFunctions/getDefaultStep';
 
 /**
  * 💚 Donation Form.
@@ -42,7 +28,7 @@ function getDefaultStep(donationFormId) {
  */
 const DonationForm = (props) => {
     const styles = StyleSheetFactory.getSheet(props);
-    const [donationAmount, setDonationAmount] = useState('25');
+    const [donationAmount, setDonationAmount] = useState(props.attributes.defaultAmount);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -67,6 +53,11 @@ const DonationForm = (props) => {
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
 
+    // Update the default amount when changed by admin.
+    useEffect(() => {
+        setDonationAmount(props.attributes.defaultAmount);
+    }, [props.attributes.defaultAmount]);
+
     if (!props.backend) {
         useEffect(() => {
             stripe.registerAppInfo({
@@ -77,11 +68,6 @@ const DonationForm = (props) => {
             });
         }, [stripe]);
     }
-
-    const updateDonationAmount = (amount) => {
-        amount = amount.replace('$', '');
-        setDonationAmount(amount);
-    };
 
     const resetForm = () => {
         setErrorMessage(null);
@@ -199,7 +185,7 @@ const DonationForm = (props) => {
             setHandledIntent(clientSecret);
             setIsLoading(false);
             setEmail(paymentIntent.receipt_email);
-            setStep(3);
+            runLottieAnimation('confetti-partyyy', 'lottie');
 
             // Set the payment status accordingly.
             switch (paymentIntent.status) {
@@ -234,11 +220,6 @@ const DonationForm = (props) => {
             }
         });
     }, [stripe]);
-
-    // 🎊 Confetti animation on successful payment completion.
-    if (step === 3) {
-        runLottieAnimation('confetti-partyyy', document.getElementById('lottie'));
-    }
 
     const checkStripeConnected = useCheckStripeConnect();
     const stripeConnected = typeof props.stripeConnected !== 'undefined' ? props.stripeConnected : checkStripeConnected;
@@ -319,7 +300,7 @@ const DonationForm = (props) => {
                                         maxLength={6}
                                         value={donationAmount}
                                         defaultValue={donationAmount}
-                                        onValueChange={(value, name) => updateDonationAmount(value)}
+                                        onValueChange={(value) => setDonationAmount(value)}
                                     />
                                 </div>
                                 <div
@@ -341,7 +322,7 @@ const DonationForm = (props) => {
                                                 )}`}
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    updateDonationAmount(amount);
+                                                    setDonationAmount(amount);
                                                 }}
                                             >
                                                 <span className={css(styles.btnDollarSymbol)}>$</span>
