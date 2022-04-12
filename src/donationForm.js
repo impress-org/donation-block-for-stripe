@@ -67,8 +67,6 @@ const DonationForm = (props) => {
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
 
-    console.log(props.attributes.initialDefaultAmount);
-
     useEffect(() => {
         setDonationAmount(props.attributes.initialDefaultAmount);
     }, [props.attributes.initialDefaultAmount])
