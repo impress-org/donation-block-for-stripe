@@ -3704,7 +3704,7 @@ export const listCountries = () => {
             currency: {
                 code: 'TRY',
                 name: 'Turkish lira',
-                symbol: null,
+                symbol: '₺',
             },
             language: {
                 code: 'tr',

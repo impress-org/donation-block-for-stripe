@@ -35,9 +35,10 @@ class PaymentIntentRequest
         }
 
         $url = 'https://api.stripe.com/v1/payment_intents';
+
         $args = [
             'amount' => $data->amount,
-            'currency' => 'USD',
+            'currency' => $data->currency,
             'receipt_email' => $data->email,
             'application_fee_amount' => $this->canAddFee() ? ceil($data->amount * 0.02) : 0,
             'automatic_payment_methods' => [
@@ -121,6 +122,7 @@ class PaymentIntentRequest
         $data['nonce'] = $postData['nonce'] ?? '';
         $data['paymentIntent'] = $postData['paymentIntent'] ?? null;
         $data['lastName'] = !empty($postData['lastName']) ? sanitize_text_field($postData['lastName']) : null;
+        $data['currency'] = !empty($postData['currency']) ? sanitize_text_field($postData['currency']) : null;
         $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
 
         return PaymentIntentForm::fromArray($data);

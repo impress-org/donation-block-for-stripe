@@ -12,7 +12,6 @@ import {ReactComponent as LockIcon} from './images/lock.svg';
 import {ReactComponent as MailIcon} from './images/mail.svg';
 import {ReactComponent as UserIcon} from './images/user.svg';
 import {ReactComponent as CaretIcon} from './images/caret-right.svg';
-import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
 import {ReactComponent as HeartIcon} from './images/heart.svg';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
@@ -94,6 +93,7 @@ const DonationForm = (props) => {
                 lastName: lastName,
                 email: email,
                 paymentIntent,
+                currency: props.attributes.currencyCode,
                 liveMode: props.attributes.liveMode,
                 nonce: window.donationFormBlock.nonce,
             })
@@ -291,7 +291,9 @@ const DonationForm = (props) => {
                                         styles.currencyFieldWrap
                                     )}`}
                                 >
-                                    <DollarIcon className={css(styles.currencyIcon)} />
+                                    <p className={css(styles.currencyIcon)}>
+                                        {props.attributes.currencySymbol}
+                                    </p>
                                     <CurrencyInput
                                         className={css(styles.currencyField)}
                                         name="amount"
@@ -325,7 +327,7 @@ const DonationForm = (props) => {
                                                     setDonationAmount(amount);
                                                 }}
                                             >
-                                                <span className={css(styles.btnDollarSymbol)}>$</span>
+                                                <span className={css(styles.btnDollarSymbol)}>{props.attributes.currencySymbol}</span>
                                                 {amount}
                                             </button>
                                         );
