@@ -10,7 +10,6 @@ import {
     ColorPalette,
     Dashicon,
     ExternalLink,
-    Modal,
 } from '@wordpress/components';
 import {Fragment, useState, useEffect} from '@wordpress/element';
 import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
@@ -21,8 +20,8 @@ import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './runLottieAnimation';
-import RepeatableControl from './components/RepeatableControl';
 import StripeDisconnectModal from './components/StripeDisconnectModal';
+import AmountLevels from './components/AmountLevels';
 
 // 🎨 Color picker colors.
 const colors = [
@@ -51,8 +50,7 @@ const colors = [
  */
 export default function Edit({attributes, setAttributes, instanceId}) {
     const blockProps = useBlockProps();
-
-    const {donationAmounts, backgroundId, color, liveMode, preview} = attributes;
+    const {donationAmounts, initialDefaultAmount, backgroundId, color, liveMode, preview} = attributes;
 
     // 🖼 Preview image when an admin hovers over the block.
     if (preview) {
@@ -66,10 +64,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             </Fragment>
         );
     }
-
-    const updateDonationAmounts = (newDonationAmounts) => {
-        setAttributes({donationAmounts: newDonationAmounts});
-    };
 
     const removeBackground = () => {
         setAttributes({
@@ -187,13 +181,11 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             </div>
                         </PanelRow>
                         <PanelRow>
-                            <RepeatableControl
-                                label={__('Donation Amounts', 'donation-form-block')}
-                                addLabel={__('Add Amount', 'donation-form-block')}
-                                initialData={donationAmounts}
-                                newValue="50"
-                                onChange={updateDonationAmounts}
-                                Control={TextControl}
+                            <AmountLevels
+                                donationAmounts={donationAmounts}
+                                initialDefaultAmount={initialDefaultAmount}
+                                defaultChanged={(newDefault) => setAttributes({initialDefaultAmount: newDefault})}
+                                amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
                             />
                         </PanelRow>
                         <PanelRow>

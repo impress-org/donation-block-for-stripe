@@ -42,7 +42,7 @@ function getDefaultStep(donationFormId) {
  */
 const DonationForm = (props) => {
     const styles = StyleSheetFactory.getSheet(props);
-    const [donationAmount, setDonationAmount] = useState('25');
+    const [donationAmount, setDonationAmount] = useState(props.attributes.initialDefaultAmount);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -67,6 +67,10 @@ const DonationForm = (props) => {
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
 
+    useEffect(() => {
+        setDonationAmount(props.attributes.initialDefaultAmount);
+    }, [props.attributes.initialDefaultAmount])
+
     if (!props.backend) {
         useEffect(() => {
             stripe.registerAppInfo({
@@ -79,7 +83,6 @@ const DonationForm = (props) => {
     }
 
     const updateDonationAmount = (amount) => {
-        amount = amount.replace('$', '');
         setDonationAmount(amount);
     };
 
@@ -254,7 +257,7 @@ const DonationForm = (props) => {
         <div className={'donation-form-block-wrap'}>
             {stripeConnected === false && (
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                    <AlertIcon className={css(styles.noticeIcon)} />
+                    <AlertIcon className={css(styles.noticeIcon)}/>
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>
                         {__(
                             'Stripe needs to be connected in order to begin accepting donations.',
@@ -265,7 +268,7 @@ const DonationForm = (props) => {
             )}
             {!props.attributes.liveMode && stripeConnected && (
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                    <AlertIcon className={css(styles.noticeIcon)} />
+                    <AlertIcon className={css(styles.noticeIcon)}/>
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>
                         {__(
                             'Test mode is enabled. No live payments will be accepted for this donation form.',
@@ -277,7 +280,7 @@ const DonationForm = (props) => {
             <div className={`donation-form-block ${css(styles.formContainer)}`}>
                 {isLoading && (
                     <div className={`donation-form-loading-wrap ${css(styles.loadingWrap)}`}>
-                        <Spinner />
+                        <Spinner/>
                     </div>
                 )}
                 {props.attributes.backgroundUrl && (
@@ -310,7 +313,7 @@ const DonationForm = (props) => {
                                         styles.currencyFieldWrap
                                     )}`}
                                 >
-                                    <DollarIcon className={css(styles.currencyIcon)} />
+                                    <DollarIcon className={css(styles.currencyIcon)}/>
                                     <CurrencyInput
                                         className={css(styles.currencyField)}
                                         name="amount"
@@ -368,7 +371,7 @@ const DonationForm = (props) => {
                                     )}`}
                                 >
                                     <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                        <UserIcon className={`${css(styles.fieldIcon)}`} />
+                                        <UserIcon className={`${css(styles.fieldIcon)}`}/>
                                         <input
                                             className={`donation-form-field donation-form-first-name ${css(
                                                 styles.textField,
@@ -392,7 +395,7 @@ const DonationForm = (props) => {
                                         required={false}
                                     />
                                     <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                        <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`} />
+                                        <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`}/>
                                         <input
                                             className={`donation-form-field donation-form-first-email ${css(
                                                 styles.textField,
@@ -413,17 +416,17 @@ const DonationForm = (props) => {
                                         )}`}
                                     >
                                         {props.attributes.donateBtnText}
-                                        <CaretIcon className={css(styles.donateBtnIcon)} />
+                                        <CaretIcon className={css(styles.donateBtnIcon)}/>
                                     </button>
                                 </div>
                                 {
                                     // 🙅‍ Validation error message (if any).
                                     errorFields.length > 0 &&
-                                        errorFields.map((error, index) => (
-                                            <ErrorMessage key={index} styles={styles}>
-                                                {error.message}
-                                            </ErrorMessage>
-                                        ))
+                                    errorFields.map((error, index) => (
+                                        <ErrorMessage key={index} styles={styles}>
+                                            {error.message}
+                                        </ErrorMessage>
+                                    ))
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
                             </form>
@@ -439,7 +442,7 @@ const DonationForm = (props) => {
                                 )}`}
                             >
                                 <div className={css(styles.heartIconWrap)}>
-                                    <HeartIcon className={css(styles.heartIcon)} />
+                                    <HeartIcon className={css(styles.heartIcon)}/>
                                 </div>
                                 <div>
                                     <p className={css(styles.donationSummaryText)}>
@@ -477,7 +480,7 @@ const DonationForm = (props) => {
                                     )}`}
                                 >
                                     {__('Complete Donation', 'donation-form-block')}
-                                    <CaretIcon className={css(styles.donateBtnIcon)} />
+                                    <CaretIcon className={css(styles.donateBtnIcon)}/>
                                 </button>
                             </form>
                         </div>
@@ -618,7 +621,7 @@ const DonationForm = (props) => {
                                 onClick={resetForm}
                             >
                                 {__('Give Again', 'donation-form-block')}
-                                <CaretIcon className={css(styles.donateBtnIcon)} />
+                                <CaretIcon className={css(styles.donateBtnIcon)}/>
                             </button>
                         </div>
                     )}
@@ -626,7 +629,7 @@ const DonationForm = (props) => {
                         // 🔒 SSL secure if actually https.
                         window.location.protocol === 'https:' && (
                             <div className={`donation-form-secure-wrap ${css(styles.secureFooter)}`}>
-                                <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`} />
+                                <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`}/>
                                 {__('100% Secure Donation', 'donation-form-block')}
                             </div>
                         )}
@@ -643,7 +646,7 @@ DonationForm.defaultProps = {
 function ErrorMessage({children, styles}) {
     return (
         <div className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
-            <ErrorIcon className={css(styles.noticeIcon)} />
+            <ErrorIcon className={css(styles.noticeIcon)}/>
             <p className={css(styles.formParagraph, styles.noticeParagraph)}>{children}</p>
         </div>
     );
