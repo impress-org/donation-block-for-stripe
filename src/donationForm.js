@@ -16,22 +16,8 @@ import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
 import {ReactComponent as HeartIcon} from './images/heart.svg';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
-import runLottieAnimation from './runLottieAnimation';
-
-function getDefaultStep(donationFormId) {
-    const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
-
-    if (!clientSecret) {
-        return 1;
-    }
-
-    const formId = new URLSearchParams(window.location.search).get('form_id');
-    if (formId !== donationFormId) {
-        return 1;
-    }
-
-    return 3;
-}
+import runLottieAnimation from './helperFunctions/runLottieAnimation';
+import getDefaultStep from './helperFunctions/getDefaultStep';
 
 /**
  * 💚 Donation Form.
@@ -70,7 +56,7 @@ const DonationForm = (props) => {
     // Update the default amount when changed by admin.
     useEffect(() => {
         setDonationAmount(props.attributes.defaultAmount);
-    }, [props.attributes.defaultAmount])
+    }, [props.attributes.defaultAmount]);
 
     if (!props.backend) {
         useEffect(() => {
@@ -203,7 +189,7 @@ const DonationForm = (props) => {
             setHandledIntent(clientSecret);
             setIsLoading(false);
             setEmail(paymentIntent.receipt_email);
-            setStep(3);
+            runLottieAnimation('confetti-partyyy', 'lottie');
 
             // Set the payment status accordingly.
             switch (paymentIntent.status) {
@@ -239,11 +225,6 @@ const DonationForm = (props) => {
         });
     }, [stripe]);
 
-    // 🎊 Confetti animation on successful payment completion.
-    if (step === 3) {
-        runLottieAnimation('confetti-partyyy', document.getElementById('lottie'));
-    }
-
     const checkStripeConnected = useCheckStripeConnect();
     const stripeConnected = typeof props.stripeConnected !== 'undefined' ? props.stripeConnected : checkStripeConnected;
 
@@ -258,7 +239,7 @@ const DonationForm = (props) => {
         <div className={'donation-form-block-wrap'}>
             {stripeConnected === false && (
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                    <AlertIcon className={css(styles.noticeIcon)}/>
+                    <AlertIcon className={css(styles.noticeIcon)} />
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>
                         {__(
                             'Stripe needs to be connected in order to begin accepting donations.',
@@ -269,7 +250,7 @@ const DonationForm = (props) => {
             )}
             {!props.attributes.liveMode && stripeConnected && (
                 <div className={`donation-form-notice ${css(styles.noticeBase)}`}>
-                    <AlertIcon className={css(styles.noticeIcon)}/>
+                    <AlertIcon className={css(styles.noticeIcon)} />
                     <p className={css(styles.formParagraph, styles.noticeParagraph)}>
                         {__(
                             'Test mode is enabled. No live payments will be accepted for this donation form.',
@@ -281,7 +262,7 @@ const DonationForm = (props) => {
             <div className={`donation-form-block ${css(styles.formContainer)}`}>
                 {isLoading && (
                     <div className={`donation-form-loading-wrap ${css(styles.loadingWrap)}`}>
-                        <Spinner/>
+                        <Spinner />
                     </div>
                 )}
                 {props.attributes.backgroundUrl && (
@@ -314,7 +295,7 @@ const DonationForm = (props) => {
                                         styles.currencyFieldWrap
                                     )}`}
                                 >
-                                    <DollarIcon className={css(styles.currencyIcon)}/>
+                                    <DollarIcon className={css(styles.currencyIcon)} />
                                     <CurrencyInput
                                         className={css(styles.currencyField)}
                                         name="amount"
@@ -372,7 +353,7 @@ const DonationForm = (props) => {
                                     )}`}
                                 >
                                     <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                        <UserIcon className={`${css(styles.fieldIcon)}`}/>
+                                        <UserIcon className={`${css(styles.fieldIcon)}`} />
                                         <input
                                             className={`donation-form-field donation-form-first-name ${css(
                                                 styles.textField,
@@ -396,7 +377,7 @@ const DonationForm = (props) => {
                                         required={false}
                                     />
                                     <div className={`donation-form-field-wrap ${css(styles.fieldIconWrap)}`}>
-                                        <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`}/>
+                                        <MailIcon className={`${css(styles.fieldIcon, styles.emailIcon)}`} />
                                         <input
                                             className={`donation-form-field donation-form-first-email ${css(
                                                 styles.textField,
@@ -417,17 +398,17 @@ const DonationForm = (props) => {
                                         )}`}
                                     >
                                         {props.attributes.donateBtnText}
-                                        <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                        <CaretIcon className={css(styles.donateBtnIcon)} />
                                     </button>
                                 </div>
                                 {
                                     // 🙅‍ Validation error message (if any).
                                     errorFields.length > 0 &&
-                                    errorFields.map((error, index) => (
-                                        <ErrorMessage key={index} styles={styles}>
-                                            {error.message}
-                                        </ErrorMessage>
-                                    ))
+                                        errorFields.map((error, index) => (
+                                            <ErrorMessage key={index} styles={styles}>
+                                                {error.message}
+                                            </ErrorMessage>
+                                        ))
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
                             </form>
@@ -443,7 +424,7 @@ const DonationForm = (props) => {
                                 )}`}
                             >
                                 <div className={css(styles.heartIconWrap)}>
-                                    <HeartIcon className={css(styles.heartIcon)}/>
+                                    <HeartIcon className={css(styles.heartIcon)} />
                                 </div>
                                 <div>
                                     <p className={css(styles.donationSummaryText)}>
@@ -481,7 +462,7 @@ const DonationForm = (props) => {
                                     )}`}
                                 >
                                     {__('Complete Donation', 'donation-form-block')}
-                                    <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                    <CaretIcon className={css(styles.donateBtnIcon)} />
                                 </button>
                             </form>
                         </div>
@@ -622,7 +603,7 @@ const DonationForm = (props) => {
                                 onClick={resetForm}
                             >
                                 {__('Give Again', 'donation-form-block')}
-                                <CaretIcon className={css(styles.donateBtnIcon)}/>
+                                <CaretIcon className={css(styles.donateBtnIcon)} />
                             </button>
                         </div>
                     )}
@@ -630,7 +611,7 @@ const DonationForm = (props) => {
                         // 🔒 SSL secure if actually https.
                         window.location.protocol === 'https:' && (
                             <div className={`donation-form-secure-wrap ${css(styles.secureFooter)}`}>
-                                <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`}/>
+                                <LockIcon className={`donation-form-lock-icon ${css(styles.iconLock)}`} />
                                 {__('100% Secure Donation', 'donation-form-block')}
                             </div>
                         )}
@@ -647,7 +628,7 @@ DonationForm.defaultProps = {
 function ErrorMessage({children, styles}) {
     return (
         <div className={`donation-form-notice ${css(styles.noticeBase, styles.noticeValidationError)}`}>
-            <ErrorIcon className={css(styles.noticeIcon)}/>
+            <ErrorIcon className={css(styles.noticeIcon)} />
             <p className={css(styles.formParagraph, styles.noticeParagraph)}>{children}</p>
         </div>
     );

@@ -19,7 +19,7 @@ import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
 import './editor.scss';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
-import runLottieAnimation from './runLottieAnimation';
+import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import StripeDisconnectModal from './components/StripeDisconnectModal';
 import AmountLevels from './components/AmountLevels';
 
@@ -105,7 +105,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
 
     useEffect(() => {
         if (stripeConnected && stripeConnectionFlow) {
-            runLottieAnimation('fireworks', document.getElementById('dfb-connected-lottie'));
+            runLottieAnimation('fireworks', 'dfb-connected-lottie');
         }
     }, [stripeConnected, stripeConnectionFlow]);
 
