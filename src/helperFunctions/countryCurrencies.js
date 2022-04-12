@@ -286,7 +286,7 @@ export const listCountries = () => {
                 code: 'bn',
                 name: 'Bengali',
             },
-            flag: '',
+            flag: '🇧🇩',
         },
         {
             name: 'Barbados',

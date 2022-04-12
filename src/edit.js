@@ -114,7 +114,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
 
     const currencyOptions = [...listCountries()].map((country) => {
         return {
-            label: `${country.flag} ${country.name}: ${country.currency.name} (${country.currency.symbol})`,
+            label: `${country.name} ${country.flag}: ${country.currency.code} (${country.currency.symbol})`,
             value: country.code,
         };
     });
@@ -224,7 +224,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     setAttributes({
                                         countryCode: selectedCurrency.code,
                                         currencyCode: selectedCurrency.currency.code,
-                                        currencySymbol: selectedCurrency.currency.symbol
+                                        currencySymbol: selectedCurrency.currency.symbol,
+                                        languageCode: selectedCurrency.language.code
                                     });
                                 }}
                             />
@@ -240,6 +241,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                 defaultAmount={defaultAmount}
                                 defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
                                 amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
+                                attributes={attributes}
                             />
                         </PanelRow>
                     </PanelBody>

@@ -38,6 +38,10 @@
             "type": "string",
             "default": "US"
         },
+        "languageCode": {
+            "type": "string",
+            "default": "en"
+        },
         "currencyCode": {
             "type": "string",
             "default": "USD"
