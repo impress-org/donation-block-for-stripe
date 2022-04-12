@@ -69,10 +69,6 @@ const DonationForm = (props) => {
         }, [stripe]);
     }
 
-    const updateDonationAmount = (amount) => {
-        setDonationAmount(amount);
-    };
-
     const resetForm = () => {
         setErrorMessage(null);
         setErrorFields([]);
@@ -304,7 +300,7 @@ const DonationForm = (props) => {
                                         maxLength={6}
                                         value={donationAmount}
                                         defaultValue={donationAmount}
-                                        onValueChange={(value, name) => updateDonationAmount(value)}
+                                        onValueChange={(value, name) => setDonationAmount(amount)}
                                     />
                                 </div>
                                 <div
@@ -326,7 +322,7 @@ const DonationForm = (props) => {
                                                 )}`}
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    updateDonationAmount(amount);
+                                                    setDonationAmount(amount);
                                                 }}
                                             >
                                                 <span className={css(styles.btnDollarSymbol)}>$</span>
