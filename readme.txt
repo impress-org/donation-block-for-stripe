@@ -25,6 +25,7 @@ Payments are facilitated using Stripe's new Payment Element – a simple, secure
 === 💳 Why Use Stripe for Donations? ===
 
 * 18+ supported payment methods
+* Supports all currencies that Stripe supports
 * Accept credit and debit card donations on your website
 * Supports payment wallets including Google Pay, and Apple Pay
 * Bank redirects, like iDEAL, EPS, Giropay and more. This helps improve conversion rates and reduce fraud with non-US consumers.
@@ -59,6 +60,11 @@ This plugin does not add any unnecessary top-level menu items to the WordPress a
 * Primary Color - The main color of the donation form
 * Donation Amounts - The donation amounts to be displayed on the form
 
+**Donation Options**
+
+* Donation Amounts - The donation amounts to be displayed on the form
+* Default Currency - Adjust the currency to be used on the form, use any that Stripe supports
+
 **Content**
 
 * Main Heading - The main heading of the donation form
@@ -75,8 +81,8 @@ _In order to maintain and support this plugin, GiveWP collects a 2% fee on all t
 
 = 💡 Use-Cases = 
 
-* Kickstart your business idea 
-* Add a tip jar to your blog
+* Add a tip jar or buy me a coffee option to your blog
+* Kickstart your business idea with a donation form
 * Give family and friends a simple way to donate for an event 
 * Start fundraising for your nonprofit as quickly as possible 
 * Accept Stripe payments for any reason
