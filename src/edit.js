@@ -124,7 +124,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         <Fragment>
             <Fragment>
                 <InspectorControls>
-                    <PanelBody title={__('Appearance Settings', 'donation-form-block')} initialOpen={true}>
+                    <PanelBody title={__('Appearance Settings', 'donation-form-block')} initialOpen={false}>
                         <PanelRow>
                             <div className="dfb-background-uploader">
                                 <p className={'dfb-label'}>
@@ -293,7 +293,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         </PanelRow>
                     </PanelBody>
                     {userIsAdmin && (
-                        <PanelBody title={__('Stripe Connection', 'donation-form-block')} initialOpen={true}>
+                        <PanelBody title={__('Stripe Connection', 'donation-form-block')} initialOpen={false}>
                             {stripeConnected === false && (
                                 <PanelRow>
                                     <div id="dfb-stripe-connect-wrap">
