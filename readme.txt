@@ -10,21 +10,22 @@ A beautiful WordPress donation form block for Stripe by GiveWP. Accept Stripe do
 
 == Description ==
 
-Add a Stripe-powered donation form to your website in a few seconds with the WordPress Donation Form Block for Stripe by GiveWP.
+Add a Stripe donation form to your website in a few seconds with the WordPress Donation Form Block for Stripe by GiveWP.
 
-This "lite" version of GiveWP provides you with the style and functionality of a GiveWP form without all the setup. Start accepting Stripe donations immediately.
+This "lite" version of GiveWP provides you with the style and functionality of a GiveWP form without all the setup. Start accepting Stripe donations immediately. [Learn more about how it works in our documentation](https://go.givewp.com/dfb-r-doc). 
 
 Want more? Use the full GiveWP donation plugin which includes full-featured fundraising reports, a donor database, and unlimited donation forms. [Download GiveWP for free from our website](https://go.givewp.com/dfb-r-free).
 
 === ✨ Block Features ===
 
-This block provides Stripe-powered donation forms that work great on any device, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.
+This block provides Stripe donation forms that work great on any device, built for WordPress' block editor. Once installed, the block is easily inserted into your WordPress website and is designed to be easily customized to fit your needs.
 
 Payments are facilitated using Stripe's new Payment Element – a simple, secure, and modern payment form. You can easily adjust the payment methods within your Stripe account's payment method settings.
 
-=== 💳 18+ supported payment methods: ===
+=== 💳 Why Use Stripe for Donations? ===
 
-* Accept credit and debit card donations
+* 18+ supported payment methods
+* Accept credit and debit card donations on your website
 * Supports payment wallets including Google Pay, and Apple Pay
 * Bank redirects, like iDEAL, EPS, Giropay and more. This helps improve conversion rates and reduce fraud with non-US consumers.
 * Donate now, Pay Later - Reach customers who want to pay in installments with Klarna and Afterpay.
@@ -72,14 +73,23 @@ This plugin does not add any unnecessary top-level menu items to the WordPress a
 
 _In order to maintain and support this plugin, GiveWP collects a 2% fee on all transactions. You can upgrade to the full GiveWP plugin with the Stripe add-on to avoid this transaction fee. [Learn more here](https://go.givewp.com/dfb-r-stripe)_
 
+= 💡 Use-Cases = 
+
+* Kickstart your business idea 
+* Add a tip jar to your blog
+* Give family and friends a simple way to donate for an event 
+* Start fundraising for your nonprofit as quickly as possible 
+* Accept Stripe payments for any reason
+
 = 👩‍💻 Development Notes =
 Know some code? Great! We love open source contribution. Please visit this plugin's [GitHub repository](https://github.com/impress-org/donation-block-for-stripe) if you'd like to learn more about how to contribute to the development of this block.
 
 = 💚 About the GiveWP Team =
-[GiveWP](https://givewp.com) is part of StellarWP, a Liquid Web Family Brands. Our donation plugin is backed by a growing team of WordPress developers, support engineers, customer success managers, and marketing professionals who’ve worked with WordPress and nonprofits since 2009. This means GiveWP is made with best practices in mind; extremely extensible and customizable, stable, and reliable. We’ll be here in years to come for you and your nonprofit organization.
+[GiveWP](https://go.givewp.com/dfb-r-home) is part of StellarWP, a Liquid Web Family Brands. Our donation plugin is backed by a growing team of WordPress developers, support engineers, customer success managers, and marketing professionals who’ve worked with WordPress and nonprofits since 2009. This means GiveWP is made with best practices in mind; extremely extensible and customizable, stable, and reliable. We’ll be here in years to come for you and your nonprofit organization.
 
 Stay in touch with us for important plugin news and updates:
 
+* [Donation Form Block Documentation](https://go.givewp.com/dfb-r-doc)
 * [GiveWP Website](https://go.givewp.com/dfb-r-home)
 * [Download GiveWP Free](https://go.givewp.com/dfb-r-free)
 * [GiveWP Newsletter](https://go.givewp.com/dfb-r-subscribe)
@@ -87,7 +97,7 @@ Stay in touch with us for important plugin news and updates:
 
 == Installation ==
 
-Do you have a WordPress website? Great! You can use this block on your site. Simply log into your WP-Admin and go to Plugins > Add New. Once there search "Donation Block for Stripe by GiveWP". Once you find the plugin, click "Install Now".
+Do you have a WordPress website? Great! You can use this block on your site to add a donation form in a few simple steps. Log into your WP-Admin and go to Plugins > Add New. Once there search "Donation Form Block for Stripe by GiveWP." Once you find the plugin, click "Install Now."
 
 Alternatively, when in the block editor open up the block editor and click the "Add Block" button. Once there, type "Donation" and you should see the block display in the list of available blocks. Simply click to install and add the block to your page.
 
@@ -96,7 +106,7 @@ Alternatively, when in the block editor open up the block editor and click the "
 = How is the WordPress Donation Form Block for Stripe different from a GiveWP Donation Form block? =
 
 This block contains a single form with a connection to Stripe. It does not have the additional access to PayPal and other payment gateway options, reporting, donor database, or campaign features that the free download of GiveWP provides. If you would like more information about GiveWP, please visit our website.
-[Learn More](https://givewp.com)
+[Learn More](https://go.givewp.com/dfb-r-home)
 
 = Is there a "Pro" version of this block with more features? =
 
