@@ -9,7 +9,6 @@ export default function AmountLevels({
     defaultAmount,
     amountChanged,
     defaultChanged,
-    attributes,
     ...baseControlProps
 }) {
     const [amounts, setAmounts] = useState(donationAmounts);
@@ -38,6 +37,8 @@ export default function AmountLevels({
         defaultChanged(newDefaultAmount);
     }, [newDefaultAmount]);
 
+    console.log(window.navigator.language);
+
     return (
         <BaseControl {...baseControlProps}>
             <div className={styles.amountLevelsWrap}>
@@ -53,7 +54,7 @@ export default function AmountLevels({
                             allowNegativeValue={false}
                             maxLength={9}
                             value={amount}
-                            intlConfig={{locale: `${attributes.languageCode}-${attributes.countryCode}`}}
+                            intlConfig={{locale: window.navigator.language}}
                             onValueChange={(value) => {
                                 updateAmount(index, value)
                             }}

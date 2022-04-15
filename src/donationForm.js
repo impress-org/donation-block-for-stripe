@@ -52,7 +52,7 @@ const DonationForm = (props) => {
             : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey);
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
-    const currencyFormatter = new Intl.NumberFormat(`${props.attributes.languageCode}-${props.attributes.countryCode}`);
+    const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
 
     // Update the default amount when changed by admin.
     useEffect(() => {
@@ -307,7 +307,7 @@ const DonationForm = (props) => {
                                         maxLength={9}
                                         value={donationAmount}
                                         defaultValue={donationAmount}
-                                        intlConfig={{ locale: `${props.attributes.languageCode}-${props.attributes.countryCode}` }}
+                                        intlConfig={{ locale: window.navigator.language }}
                                         onValueChange={(value) => setDonationAmount(value)}
                                     />
                                 </div>

@@ -242,7 +242,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                 defaultAmount={defaultAmount}
                                 defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
                                 amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
-                                attributes={attributes}
                             />
                         </PanelRow>
                     </PanelBody>

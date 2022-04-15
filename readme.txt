@@ -1,8 +1,8 @@
 === Donation Form Block for Stripe ===
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
 Tags:              donation, donate, stripe, fundraise, block
-Tested up to:      5.9
-Stable tag:        1.0.3
+Tested up to:      6.0
+Stable tag:        1.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,9 @@ Not currently. For access to Stripe donation forms with support for recurring do
 3. Sparks of JOY! Enthrall your donors with a confetti POP upon successful donation.
 
 == Changelog ==
+
+= 1.1.0 =
+
 
 = 1.0.3 =
 * 🙅‍ If you're are a GiveWP active license holder this plugin now will remove the 2% Stripe fee.
