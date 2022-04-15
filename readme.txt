@@ -133,7 +133,11 @@ Not currently. For access to Stripe donation forms with support for recurring do
 == Changelog ==
 
 = 1.1.0 =
-
+* ✨ New: You can now adjust the default donation amount using an intuitive radio selector on the donation amount repeater field.
+* ✨ New: You can now switch the currency! Yippee. We added support for additional currencies with locale-based formatting.
+* Updated the readme.txt with additional text and descriptions. Props to @taylorfromteamgive for the PR 🎉
+* Fix: Prevent PHP notices on a fresh install related to Stripe keys with conditional.
+* Fix: Allow multiple Stripe payment elements to mount on a single page. This is a rare edge case, but nonetheless it's possible and now working.
 
 = 1.0.3 =
 * 🙅‍ If you're are a GiveWP active license holder this plugin now will remove the 2% Stripe fee.
