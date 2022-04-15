@@ -90,8 +90,6 @@ const DonationForm = (props) => {
         // 💵 How much should be charged? Converts to cents for non-zero decimal currencies.
         const chargeAmount = zeroDecimalCodes.includes(props.attributes.currencyCode) ? donationAmount : donationAmount * 100;
 
-        console.log(chargeAmount);
-
         // 🟢 Good to go.
         axios
             .post('/?dfb_donation-block-stripe-action=getStripeIntent', {
