@@ -12,12 +12,12 @@ import {ReactComponent as LockIcon} from './images/lock.svg';
 import {ReactComponent as MailIcon} from './images/mail.svg';
 import {ReactComponent as UserIcon} from './images/user.svg';
 import {ReactComponent as CaretIcon} from './images/caret-right.svg';
-import {ReactComponent as DollarIcon} from './images/dollar.svg';
 import {ReactComponent as ErrorIcon} from './images/stop.svg';
 import {ReactComponent as HeartIcon} from './images/heart.svg';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import getDefaultStep from './helperFunctions/getDefaultStep';
+import {zeroDecimalCodes} from './helperFunctions/zeroDecimalCurrencies';
 
 /**
  * 💚 Donation Form.
@@ -52,6 +52,7 @@ const DonationForm = (props) => {
             : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey);
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
+    const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
 
     // Update the default amount when changed by admin.
     useEffect(() => {
@@ -86,14 +87,18 @@ const DonationForm = (props) => {
 
         setIsLoading(true);
 
+        // 💵 How much should be charged? Converts to cents for non-zero decimal currencies.
+        const chargeAmount = zeroDecimalCodes.includes(props.attributes.currencyCode) ? donationAmount : donationAmount * 100;
+
         // 🟢 Good to go.
         axios
             .post('/?dfb_donation-block-stripe-action=getStripeIntent', {
-                amount: donationAmount * 100,
+                amount: chargeAmount,
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
                 paymentIntent,
+                currency: props.attributes.currencyCode,
                 liveMode: props.attributes.liveMode,
                 nonce: window.donationFormBlock.nonce,
             })
@@ -192,7 +197,7 @@ const DonationForm = (props) => {
                 case 'succeeded':
                     setPaymentStatus({
                         status: 'Successful',
-                        message: `Thank you for your $${newDonationAmount} donation!`,
+                        message: `Thank you for your ${props.attributes.currencySymbol + currencyFormatter.format(newDonationAmount)} donation!`,
                         error: false,
                     });
                     break;
@@ -291,15 +296,18 @@ const DonationForm = (props) => {
                                         styles.currencyFieldWrap
                                     )}`}
                                 >
-                                    <DollarIcon className={css(styles.currencyIcon)} />
+                                    <p className={css(styles.currencyIcon)}>
+                                        {props.attributes.currencySymbol}
+                                    </p>
                                     <CurrencyInput
                                         className={css(styles.currencyField)}
                                         name="amount"
                                         allowDecimals={true}
                                         allowNegativeValue={false}
-                                        maxLength={6}
+                                        maxLength={9}
                                         value={donationAmount}
                                         defaultValue={donationAmount}
+                                        intlConfig={{ locale: window.navigator.language }}
                                         onValueChange={(value) => setDonationAmount(value)}
                                     />
                                 </div>
@@ -325,8 +333,8 @@ const DonationForm = (props) => {
                                                     setDonationAmount(amount);
                                                 }}
                                             >
-                                                <span className={css(styles.btnDollarSymbol)}>$</span>
-                                                {amount}
+                                                <span className={css(styles.btnDollarSymbol)}>{props.attributes.currencySymbol}</span>
+                                                {currencyFormatter.format(amount)}
                                             </button>
                                         );
                                     })}
@@ -425,10 +433,10 @@ const DonationForm = (props) => {
                                 <div>
                                     <p className={css(styles.donationSummaryText)}>
                                         <span className={css(styles.donationSummaryAmountWrap)}>
-                                            <span className={css(styles.donationSummaryCurrencyIcon)}>$</span>
+                                            <span className={css(styles.donationSummaryCurrencyIcon)}>{props.attributes.currencySymbol}</span>
                                             <span
                                                 className={css(styles.donationSummaryAmountText)}
-                                            >{`${donationAmount}`}</span>
+                                            >{`${currencyFormatter.format(donationAmount)}`}</span>
                                         </span>
                                         <span className={css(styles.donationTypeText)}>
                                             {__('One-time donation', 'donation-form-block')}
@@ -563,7 +571,7 @@ const DonationForm = (props) => {
                                                 styles.donationReceiptDetailsListItemSpan
                                             )}`}
                                         >
-                                            ${donationAmount}
+                                            {props.attributes.currencySymbol + currencyFormatter.format(donationAmount)}
                                         </span>
                                     </li>
                                     <li

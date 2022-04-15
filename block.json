@@ -2,7 +2,7 @@
     "$schema": "https://json.schemastore.org/block.json",
     "apiVersion": 2,
     "name": "givewp/donation-form-block",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "title": "Donation Form Block for Stripe",
     "category": "widgets",
     "icon": "smiley",
@@ -33,6 +33,18 @@
         "backgroundUrl": {
             "type": "string",
             "default": ""
+        },
+        "countryCode": {
+            "type": "string",
+            "default": "US"
+        },
+        "currencyCode": {
+            "type": "string",
+            "default": "USD"
+        },
+        "currencySymbol": {
+            "type": "string",
+            "default": "$"
         },
         "color": {
             "type": "string",

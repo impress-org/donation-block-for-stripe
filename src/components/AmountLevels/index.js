@@ -1,8 +1,8 @@
 import {__} from '@wordpress/i18n';
 import {useState, useEffect} from '@wordpress/element';
 import {BaseControl, PanelRow, Button, Dashicon} from '@wordpress/components';
-
 import styles from './styles.module.scss';
+import CurrencyInput from 'react-currency-input-field';
 
 export default function AmountLevels({
     donationAmounts,
@@ -37,6 +37,8 @@ export default function AmountLevels({
         defaultChanged(newDefaultAmount);
     }, [newDefaultAmount]);
 
+    console.log(window.navigator.language);
+
     return (
         <BaseControl {...baseControlProps}>
             <div className={styles.amountLevelsWrap}>
@@ -47,10 +49,15 @@ export default function AmountLevels({
                             checked={amount === defaultAmount}
                             onChange={() => setNewDefaultAmount(amount)}
                         />
-                        <input
-                            type="text"
+                        <CurrencyInput
+                            allowDecimals={true}
+                            allowNegativeValue={false}
+                            maxLength={9}
                             value={amount}
-                            onChange={(event) => updateAmount(index, parseInt(event.target.value, 10))}
+                            intlConfig={{locale: window.navigator.language}}
+                            onValueChange={(value) => {
+                                updateAmount(index, value)
+                            }}
                         />
                         <Button
                             className={styles.removeAmountLevel}
