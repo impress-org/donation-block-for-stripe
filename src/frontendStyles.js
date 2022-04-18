@@ -215,6 +215,9 @@ export default class StyleSheetFactory {
                 top: '10px',
                 left: '20px',
                 fontSize: '36px',
+                lineHeight: '58px',
+                margin: '0',
+                padding: '0',
             },
             currencyField: {
                 width: '100%',
@@ -251,7 +254,11 @@ export default class StyleSheetFactory {
             },
             donationReceiptEmailText: {
                 textAlign: 'center',
+                fontSize: '16px',
+                padding: '0',
+                lineHeight: '1.4',
                 margin: '0 0 30px',
+
             },
             donationReceiptDetails: {
                 fontWeight: '600',
@@ -310,19 +317,22 @@ export default class StyleSheetFactory {
                 fontWeight: '600',
                 margin: '0',
             },
-            donationSummaryText: {
-                margin: '0',
-                padding: '0',
-                lineHeight: '1.2',
-            },
             donationSummaryCurrencyIcon: {
                 fontSize: '16px',
                 margin: '0 2px 0 0',
                 position: 'relative',
                 top: '-4px',
             },
+            donationSummaryText: {
+                margin: '0',
+                padding: '0',
+                lineHeight: '1.4',
+            },
             donationPaymentInstructions: {
                 fontSize: '14px',
+                lineHeight: '1.4',
+                margin: '0',
+                padding: '0',
             },
             donationTypeText: {
                 textTransform: 'uppercase',
@@ -331,14 +341,17 @@ export default class StyleSheetFactory {
             },
             editDonationBtn: {
                 fontSize: '13px',
+                lineHeight: '1',
                 background: '#FFF',
                 border: `1px solid ${color(props.attributes.color).lighten(0.8)}`,
                 color: `${color(props.attributes.color)}`,
                 borderRadius: '6px',
                 whiteSpace: 'nowrap',
                 marginLeft: 'auto',
+                padding: '12px 18px',
                 ':hover': {
                     border: `1px solid ${color(props.attributes.color).lighten(0.2)}`,
+                    cursor: 'pointer',
                 },
                 '@media (max-width: 599px)': {
                     margin: '10px 0'
