@@ -6,6 +6,7 @@ import color from 'color';
  */
 export default class StyleSheetFactory {
     static getSheet(props) {
+
         return StyleSheet.create({
             formContainer: {
                 backgroundColor: '#fff',
@@ -190,6 +191,11 @@ export default class StyleSheetFactory {
                 lineHeight: '20px',
                 height: '55px',
                 width: '100%',
+                transition: 'background 0.15s ease, border 0.15s ease, box-shadow 0.15s ease, color 0.15s ease',
+                ':focus': {
+                    borderColor: `${color(props.attributes.color).alpha(0.50)}`,
+                    boxShadow: `inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15), 0 0 0 3px ${color(props.attributes.color).alpha(0.25)}, 0 1px 1px 0 rgba(0, 0, 0, 0.08)`
+                }
             },
             textFieldIcon: {
                 paddingLeft: '45px',
@@ -225,7 +231,7 @@ export default class StyleSheetFactory {
                 fontSize: '36px',
                 padding: '0 20px',
                 letterSpacing: '0',
-                boxShadow: 'none',
+                boxShadow: 'inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15)',
                 border: '2px solid #424242',
                 borderRadius: '8px',
                 textAlign: 'right',
@@ -233,7 +239,11 @@ export default class StyleSheetFactory {
                 lineHeight: '1',
                 boxSizing: 'border-box',
                 color: '#333',
-                ':hover': {},
+                transition: 'background 0.15s ease, border 0.15s ease, box-shadow 0.15s ease, color 0.15s ease',
+                ':focus': {
+                    borderColor: `${color(props.attributes.color).alpha(0.50)}`,
+                    boxShadow: `inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15), 0 0 0 3px ${color(props.attributes.color).alpha(0.25)}, 0 1px 1px 0 rgba(0, 0, 0, 0.08)`
+                }
             },
             secureFooter: {
                 display: 'flex',
