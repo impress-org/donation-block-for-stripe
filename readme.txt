@@ -133,7 +133,9 @@ Not currently. For access to Stripe donation forms with support for recurring do
 == Changelog ==
 
 = 1.1.1 =
-
+* New: 🌈 Added pretty Stripe-style focus effects to the input fields for better UX.
+* New: 🙋‍ There is now a new documentation/support element to Gutenberg sidebar for users who need assistance.
+* Tweak: 🎨 Adjusted CSS for better cross-theme compatibility.
 
 = 1.1.0 =
 * ✨ New: You can now adjust the default donation amount using an intuitive radio selector on the donation amount repeater field.
