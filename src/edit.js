@@ -18,6 +18,7 @@ import {useSelect} from '@wordpress/data';
 import {usePageVisibility} from 'react-page-visibility';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
+import {ReactComponent as QuestionIcon} from './images/question.svg';
 import './editor.scss';
 import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './helperFunctions/runLottieAnimation';
@@ -411,6 +412,16 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                             )}
                                         </p>
                                     )}
+                                </div>
+                            </PanelRow>
+                            <PanelRow>
+                                <div className="dfb-docs-support-panel-row">
+                                    <QuestionIcon className="dfb-docs-support-panel-row__icon" />
+                                    <p>
+                                        <span>{__('Have Questions?', 'donation-form-block')}</span>
+                                        <br />
+                                        <a href="https://go.givewp.com/dfb-r-doc" target="_blank">{__('View docs', 'donation-form-block')}</a> {__('or', 'donation-form-block')} <a href="https://wordpress.org/support/plugin/donation-block-for-stripe-by-givewp/" target="_blank">{__('ask support', 'donation-form-block')}</a>.
+                                    </p>
                                 </div>
                             </PanelRow>
                         </PanelBody>
