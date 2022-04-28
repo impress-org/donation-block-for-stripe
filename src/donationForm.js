@@ -126,9 +126,14 @@ const DonationForm = (props) => {
                         },
                     };
                     elements.current = stripe.elements({appearance, clientSecret});
-                    const linkAuthenticationElement = elements.current.create('linkAuthentication', {defaultValues: {email: email}});
+
+                    // 🔗 Enable Stripe Link?
+                    if(props.attributes.enableLink) {
+                        const linkAuthenticationElement = elements.current.create('linkAuthentication', {defaultValues: {email: email}});
+                        linkAuthenticationElement.mount(`.donation-form-link-authentication-element-${props.attributes.formId}`);
+                    }
+
                     const paymentElement = elements.current.create('payment');
-                    linkAuthenticationElement.mount(`.donation-form-link-authentication-element-${props.attributes.formId}`);
                     paymentElement.mount(`.donation-form-payment-intent-${props.attributes.formId}`);
                     paymentElement.on('ready', function (event) {
                         setIsLoading(false);

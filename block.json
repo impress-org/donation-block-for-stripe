@@ -70,6 +70,10 @@
             "type": "string",
             "default": "Donate Now"
         },
+        "enableLink": {
+            "type": "boolean",
+            "default": false
+        },
         "formId": {
             "type": "integer",
             "default": 0

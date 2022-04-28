@@ -52,10 +52,19 @@ const colors = [
  * @return {WPElement} Element to render.
  */
 export default function Edit({attributes, setAttributes, instanceId}) {
-
     const blockProps = useBlockProps();
-    const {donationAmounts, defaultAmount, countryCode, currencyCode, currencySymbol, backgroundId, color, liveMode, preview} =
-        attributes;
+    const {
+        donationAmounts,
+        defaultAmount,
+        countryCode,
+        enableLink,
+        currencyCode,
+        currencySymbol,
+        backgroundId,
+        color,
+        liveMode,
+        preview,
+    } = attributes;
 
     // 🖼 Preview image when an admin hovers over the block.
     if (preview) {
@@ -227,11 +236,34 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         countryCode: selectedCurrency.code,
                                         currencyCode: selectedCurrency.currency.code,
                                         currencySymbol: selectedCurrency.currency.symbol,
-                                        languageCode: selectedCurrency.language.code
+                                        languageCode: selectedCurrency.language.code,
                                     });
                                 }}
                             />
                         </PanelRow>
+                        {currencyCode === 'USD' && (
+                            <PanelRow>
+                                <ToggleControl
+                                    label={__('Enable Stripe Link', 'donation-form-block')}
+                                    help={
+                                        <>
+                                            {__(
+                                                'This option allows donors to give using their saved payment methods with Stripe Link. Currently, this option is only available for US donors.',
+                                                'donation-form-block'
+                                            )}
+                                            <ExternalLink href={'https://support.stripe.com/questions/link-faq'}>
+                                                {__('Link FAQ', 'donation-form-block')}
+                                            </ExternalLink>
+                                        </>
+                                    }
+                                    className={'dfb-stripe-link-toggle'}
+                                    checked={enableLink}
+                                    onChange={(value) => {
+                                        setAttributes({enableLink: value});
+                                    }}
+                                />
+                            </PanelRow>
+                        )}
                         <PanelRow>
                             <AmountLevels
                                 label={__('Amount Levels', 'donation-form-block')}
@@ -420,7 +452,17 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     <p>
                                         <span>{__('Have Questions?', 'donation-form-block')}</span>
                                         <br />
-                                        <a href="https://go.givewp.com/dfb-r-doc" target="_blank">{__('View docs', 'donation-form-block')}</a> {__('or', 'donation-form-block')} <a href="https://wordpress.org/support/plugin/donation-block-for-stripe-by-givewp/" target="_blank">{__('ask support', 'donation-form-block')}</a>.
+                                        <a href="https://go.givewp.com/dfb-r-doc" target="_blank">
+                                            {__('View docs', 'donation-form-block')}
+                                        </a>{' '}
+                                        {__('or', 'donation-form-block')}{' '}
+                                        <a
+                                            href="https://wordpress.org/support/plugin/donation-block-for-stripe-by-givewp/"
+                                            target="_blank"
+                                        >
+                                            {__('ask support', 'donation-form-block')}
+                                        </a>
+                                        .
                                     </p>
                                 </div>
                             </PanelRow>
