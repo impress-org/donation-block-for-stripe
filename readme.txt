@@ -28,7 +28,7 @@ Payments are facilitated using Stripe's new Payment Element – a simple, secure
 * Supports all currencies that Stripe supports
 * Accept credit and debit card donations on your website
 * Supports payment wallets including Google Pay, and Apple Pay
-* Bank redirects, like iDEAL, EPS, Giropay and more. This helps improve conversion rates and reduce fraud with non-US consumers.
+* Bank redirects, like iDEAL, EPS, Giropay and more. This helps improve conversion rates and reduce fraud with non-US donors.
 * Donate now, Pay Later - Reach customers who want to pay in installments with Klarna and Afterpay.
 
 **Additional payment method features:**
