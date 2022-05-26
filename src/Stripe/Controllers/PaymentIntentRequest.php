@@ -41,9 +41,7 @@ class PaymentIntentRequest
             'currency' => $data->currency,
             'receipt_email' => $data->email,
             'application_fee_amount' => $this->canAddFee() ? ceil($data->amount * 0.02) : 0,
-            'automatic_payment_methods' => [
-                'enabled' => 'true',
-            ],
+            'payment_method_types' => ['card', 'link']
         ];
 
         // Update payment intent or create a new one?
@@ -57,7 +55,10 @@ class PaymentIntentRequest
         $paymentIntentRequest = wp_remote_post(
             $url,
             [
-                'headers' => ['Authorization' => 'Bearer ' . ($data->liveMode ? $stripeData->liveSecretKey : $stripeData->testSecretKey)],
+                'headers' => [
+                    'Authorization' => 'Bearer ' . ($data->liveMode ? $stripeData->liveSecretKey : $stripeData->testSecretKey),
+                    'Stripe-Version' => '2020-08-27;link_beta=v1'
+                ],
                 'user-agent' => 'WordPress GiveDonationBlock/' . DONATION_BLOCK_VERSION . ' (https://givewp.com)',
                 'body' => $args
             ]

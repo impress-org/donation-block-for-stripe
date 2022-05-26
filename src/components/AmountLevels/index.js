@@ -37,8 +37,6 @@ export default function AmountLevels({
         defaultChanged(newDefaultAmount);
     }, [newDefaultAmount]);
 
-    console.log(window.navigator.language);
-
     return (
         <BaseControl {...baseControlProps}>
             <div className={styles.amountLevelsWrap}>

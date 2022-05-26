@@ -51,6 +51,7 @@ const DonationForm = (props) => {
             ? null
             : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey, {
                 betas: ['link_beta_3'],
+                apiVersion: '2020-08-27;link_beta=v1'
             });
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
