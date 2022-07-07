@@ -50,8 +50,7 @@ const DonationForm = (props) => {
         return props.backend
             ? null
             : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey, {
-                betas: ['link_beta_3'],
-                apiVersion: '2020-08-27;link_beta=v1'
+                betas: props.attributes.enableLink ? ['link_default_integration_beta_1'] : []
             });
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
@@ -126,15 +125,16 @@ const DonationForm = (props) => {
                             colorPrimary: props.attributes.color,
                         },
                     };
-                    elements.current = stripe.elements({appearance, clientSecret});
+                    elements.current = stripe.elements({clientSecret, appearance});
 
-                    // 🔗 Enable Stripe Link?
-                    if(props.attributes.enableLink) {
-                        const linkAuthenticationElement = elements.current.create('linkAuthentication', {defaultValues: {email: email}});
-                        linkAuthenticationElement.mount(`.donation-form-link-authentication-element-${props.attributes.formId}`);
-                    }
+                    const paymentElement = elements.current.create('payment', {
+                        defaultValues: {
+                            billingDetails: {
+                                email: email,
+                            },
+                        },
+                    });
 
-                    const paymentElement = elements.current.create('payment');
                     paymentElement.mount(`.donation-form-payment-intent-${props.attributes.formId}`);
                     paymentElement.on('ready', function (event) {
                         setIsLoading(false);
@@ -464,8 +464,6 @@ const DonationForm = (props) => {
                                 </button>
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
-                                <div className={`donation-form-link-authentication-element-${props.attributes.formId}`}></div>
-
                                 <div className={`donation-form-payment-intent-${props.attributes.formId} ${css(styles.stripePaymentWrap)}`}></div>
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
                                 <button
