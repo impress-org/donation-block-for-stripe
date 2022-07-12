@@ -57,7 +57,6 @@ class PaymentIntentRequest
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . ($data->liveMode ? $stripeData->liveSecretKey : $stripeData->testSecretKey),
-                    'Stripe-Version' => '2020-08-27;link_beta=v1'
                 ],
                 'user-agent' => 'WordPress GiveDonationBlock/' . DONATION_BLOCK_VERSION . ' (https://givewp.com)',
                 'body' => $args
