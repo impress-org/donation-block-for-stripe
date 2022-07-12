@@ -1,6 +1,6 @@
 {
 	"name": "donation-blocks-for-stripe",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"description": "A beautiful donation form block for Stripe by GiveWP. Accept donations in minutes.",
 	"author": "GiveWP",
 	"license": "GPL-2.0-or-later",

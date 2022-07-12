@@ -2,7 +2,7 @@
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
 Tags:              donation, donate, stripe, fundraise, block
 Tested up to:      6.0
-Stable tag:        1.1.1
+Stable tag:        1.2.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,10 @@ Not currently. For access to Stripe donation forms with support for recurring do
 3. Sparks of JOY! Enthrall your donors with a confetti POP upon successful donation.
 
 == Changelog ==
+
+= 1.2.0 =
+* New: 🔗 Added integration with [Stripe Link](https://support.stripe.com/questions/link-faq) for faster donations. You can enable this new feature under the block's "Donation Settings" settings panel.
+* Tweak: 🎨 Adjusted CSS for better cross-theme compatibility.
 
 = 1.1.1 =
 * New: 🌈 Added pretty Stripe-style focus effects to the input fields for better UX.

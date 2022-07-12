@@ -36,10 +36,11 @@ $font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, s
     }
 }
 
-.dfb-stripe-live-mode-toggle {
+.dfb-stripe-live-mode-toggle, .dfb-stripe-link-toggle {
 
     .components-external-link {
-        display: inline-block;
+        display: block;
+        width: max-content;
         margin: 10px 0 20px;
     }
 

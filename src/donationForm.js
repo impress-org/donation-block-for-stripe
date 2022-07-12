@@ -49,7 +49,9 @@ const DonationForm = (props) => {
         }
         return props.backend
             ? null
-            : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey);
+            : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey, {
+                betas: props.attributes.enableLink ? ['link_default_integration_beta_1'] : []
+            });
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
     const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
@@ -123,8 +125,16 @@ const DonationForm = (props) => {
                             colorPrimary: props.attributes.color,
                         },
                     };
-                    elements.current = stripe.elements({appearance, clientSecret});
-                    const paymentElement = elements.current.create('payment');
+                    elements.current = stripe.elements({clientSecret, appearance});
+
+                    const paymentElement = elements.current.create('payment', {
+                        defaultValues: {
+                            billingDetails: {
+                                email: email,
+                            },
+                        },
+                    });
+
                     paymentElement.mount(`.donation-form-payment-intent-${props.attributes.formId}`);
                     paymentElement.on('ready', function (event) {
                         setIsLoading(false);
@@ -446,7 +456,6 @@ const DonationForm = (props) => {
                                         {__('Please complete your payment below 👇', 'donation-form-block')}
                                     </p>
                                 </div>
-
                                 <button
                                     className={`donation-form-edit ${css(styles.editDonationBtn)}`}
                                     onClick={() => setStep(1)}

@@ -99,6 +99,7 @@ export default class StyleSheetFactory {
                 padding: '10px 15px',
                 borderRadius: '6px',
                 maxWidth: '650px',
+                boxSizing: 'border-box',
             },
             noticeIcon: {
                 marginRight: '10px',
@@ -258,6 +259,9 @@ export default class StyleSheetFactory {
             },
             stripePaymentWrap: {
                 minHeight: '200px',
+            },
+            linkEmailField: {
+              margin: '0 0 20px',
             },
             donationReceipt: {
                 minHeight: '520px',
