@@ -67,7 +67,14 @@ class DonationBlock
                 echo esc_html($value); ?>"
             <?php
             endforeach; ?>
-        ></div>
+        >
+            <?php if(!is_ssl()) : ?>
+                <div class="donation-form-block__error" style="font-size:16px; color: #252121; background: #f4a9a9; border: 1px solid #eb3131; padding: 10px 14px; margin: 0 0 15px; border-radius: 5px;">
+                    <?php
+                    echo esc_html__('Your site is not using HTTPS. Please enable HTTPS to use the donation form.', 'donation-form-block'); ?>
+                </div>
+            <?php endif; ?>
+        </div>
         <?php
         // return clean buffer
         return ob_get_clean();

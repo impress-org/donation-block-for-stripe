@@ -18,6 +18,7 @@ import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import getDefaultStep from './helperFunctions/getDefaultStep';
 import {zeroDecimalCodes} from './helperFunctions/zeroDecimalCurrencies';
+import {ReCAPTCHA} from 'react-google-recaptcha';
 
 /**
  * 💚 Donation Form.
@@ -49,9 +50,12 @@ const DonationForm = (props) => {
         }
         return props.backend
             ? null
-            : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey, {
-                betas: props.attributes.enableLink ? ['link_default_integration_beta_1'] : []
-            });
+            : Stripe(
+                  props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey,
+                  {
+                      betas: props.attributes.enableLink ? ['link_default_integration_beta_1'] : [],
+                  }
+              );
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
     const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
@@ -90,7 +94,9 @@ const DonationForm = (props) => {
         setIsLoading(true);
 
         // 💵 How much should be charged? Converts to cents for non-zero decimal currencies.
-        const chargeAmount = zeroDecimalCodes.includes(props.attributes.currencyCode) ? donationAmount : donationAmount * 100;
+        const chargeAmount = zeroDecimalCodes.includes(props.attributes.currencyCode)
+            ? donationAmount
+            : donationAmount * 100;
 
         // 🟢 Good to go.
         axios
@@ -207,7 +213,9 @@ const DonationForm = (props) => {
                 case 'succeeded':
                     setPaymentStatus({
                         status: 'Successful',
-                        message: `Thank you for your ${props.attributes.currencySymbol + currencyFormatter.format(newDonationAmount)} donation!`,
+                        message: `Thank you for your ${
+                            props.attributes.currencySymbol + currencyFormatter.format(newDonationAmount)
+                        } donation!`,
                         error: false,
                     });
                     break;
@@ -306,9 +314,7 @@ const DonationForm = (props) => {
                                         styles.currencyFieldWrap
                                     )}`}
                                 >
-                                    <p className={css(styles.currencyIcon)}>
-                                        {props.attributes.currencySymbol}
-                                    </p>
+                                    <p className={css(styles.currencyIcon)}>{props.attributes.currencySymbol}</p>
                                     <CurrencyInput
                                         className={css(styles.currencyField)}
                                         name="amount"
@@ -317,7 +323,7 @@ const DonationForm = (props) => {
                                         maxLength={9}
                                         value={donationAmount}
                                         defaultValue={donationAmount}
-                                        intlConfig={{ locale: window.navigator.language }}
+                                        intlConfig={{locale: window.navigator.language}}
                                         onValueChange={(value) => setDonationAmount(value)}
                                     />
                                 </div>
@@ -343,7 +349,9 @@ const DonationForm = (props) => {
                                                     setDonationAmount(amount);
                                                 }}
                                             >
-                                                <span className={css(styles.btnDollarSymbol)}>{props.attributes.currencySymbol}</span>
+                                                <span className={css(styles.btnDollarSymbol)}>
+                                                    {props.attributes.currencySymbol}
+                                                </span>
                                                 {currencyFormatter.format(amount)}
                                             </button>
                                         );
@@ -443,7 +451,9 @@ const DonationForm = (props) => {
                                 <div>
                                     <p className={css(styles.donationSummaryText)}>
                                         <span className={css(styles.donationSummaryAmountWrap)}>
-                                            <span className={css(styles.donationSummaryCurrencyIcon)}>{props.attributes.currencySymbol}</span>
+                                            <span className={css(styles.donationSummaryCurrencyIcon)}>
+                                                {props.attributes.currencySymbol}
+                                            </span>
                                             <span
                                                 className={css(styles.donationSummaryAmountText)}
                                             >{`${currencyFormatter.format(donationAmount)}`}</span>
@@ -464,8 +474,13 @@ const DonationForm = (props) => {
                                 </button>
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
-                                <div className={`donation-form-payment-intent-${props.attributes.formId} ${css(styles.stripePaymentWrap)}`}></div>
+                                <div
+                                    className={`donation-form-payment-intent-${props.attributes.formId} ${css(
+                                        styles.stripePaymentWrap
+                                    )}`}
+                                ></div>
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
+                                <ReCAPTCHA sitekey="AIzaSyC-7G2Yr4qUhwRY6t4arZ_Os85voK_NWsM" onChange={onChange} />
                                 <button
                                     className={`donation-form-submit ${css(
                                         styles.buttonPrimary,
