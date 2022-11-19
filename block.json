@@ -78,6 +78,14 @@
             "type": "integer",
             "default": 0
         },
+        "recaptchaSiteKey": {
+            "type": "string",
+            "default": ""
+        },
+        "recaptchaSecretKey": {
+            "type": "string",
+            "default": ""
+        },
         "liveMode": {
             "type": "boolean",
             "default": false

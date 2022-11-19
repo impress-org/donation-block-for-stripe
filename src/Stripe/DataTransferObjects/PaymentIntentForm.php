@@ -32,6 +32,11 @@ class PaymentIntentForm
     public $currency;
 
     /**
+     * @var string
+     */
+    public $reCaptcha;
+
+    /**
      * @var string|null
      */
     public $paymentIntent;
@@ -56,6 +61,7 @@ class PaymentIntentForm
         $object->currency = $data['currency'];
         $object->paymentIntent = $data['paymentIntent'];
         $object->liveMode = $data['liveMode'];
+        $object->reCaptcha = $data['recaptcha'];
         $object->nonce = $data['nonce'];
         return $object;
     }

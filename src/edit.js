@@ -58,6 +58,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         defaultAmount,
         countryCode,
         enableLink,
+        recaptchaSiteKey,
+        recaptchaSecretKey,
         currencyCode,
         currencySymbol,
         backgroundId,
@@ -275,6 +277,22 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                 defaultAmount={defaultAmount}
                                 defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
                                 amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
+                            />
+                        </PanelRow>
+                        <PanelRow>
+                            <TextControl
+                                label={__('Site Key', 'donation-form-block')}
+                                help={__('Please enter your site key.', 'donation-form-block')}
+                                value={attributes.recaptchaSiteKey}
+                                onChange={(value) => setAttributes({recaptchaSiteKey: value})}
+                            />
+                        </PanelRow>
+                        <PanelRow>
+                            <TextControl
+                                label={__('Secret Key', 'donation-form-block')}
+                                help={__('Please enter your site secret key.', 'donation-form-block')}
+                                value={attributes.recaptchaSecretKey}
+                                onChange={(value) => console.log(value)}
                             />
                         </PanelRow>
                     </PanelBody>

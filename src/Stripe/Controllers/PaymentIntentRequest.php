@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace GiveDonationBlock\Stripe\Controllers;
 
+use Give_License;
 use GiveDonationBlock\Stripe\DataTransferObjects\PaymentIntentForm;
 use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
-
-use Give_License;
 
 use function sanitize_text_field;
 use function wp_send_json_error;
@@ -33,6 +32,8 @@ class PaymentIntentRequest
                 'message' => 'Stripe is not connected. Please notify site owner to connect.',
             ]);
         }
+
+        $this->validateRecaptcha($data);
 
         $url = 'https://api.stripe.com/v1/payment_intents';
 
@@ -126,6 +127,55 @@ class PaymentIntentRequest
         $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
 
         return PaymentIntentForm::fromArray($data);
+    }
+
+    /**
+     * @param $data
+     * @return void
+     */
+    public function validateRecaptcha($data)
+    {
+        // Verify reCaptcha
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $reCaptchaTest = wp_remote_post($url, [
+            'body' => [
+                'secret' => '6LdzYc4gAAAAAJiXgqPAugqPpJufcw9BE85WdNyn',
+                'response' => $data->reCaptcha,
+                'remoteip' => $_SERVER['REMOTE_ADDR']
+            ]
+        ]);
+
+        if (is_wp_error($reCaptchaTest)) {
+            wp_send_json_error([
+                'error' => 'wordpress_error',
+                'message' => __(
+                    __(
+                        'There was an error setting up your donation. Please contact the site owner.',
+                        'donation-form-block'
+                    ),
+                    'donation-form-block'
+                ),
+            ]);
+        } else {
+            $apiBody = json_decode(wp_remote_retrieve_body($reCaptchaTest));
+
+            // Check for Stripe errors
+            if (isset($apiBody->{'error-codes'})) {
+                wp_send_json_error([
+                    'error' => 'stripe_error',
+                    'message' => __(
+                        __(
+                            'There was an error confirming you\'re not a robot. Please try again or contact the site owner for further help.'
+                        ),
+                        'donation-form-block'
+                    ),
+                ]);
+            } else {
+                wp_send_json_success([
+                    'success' => true
+                ]);
+            }
+        }
     }
 
     public static function canAddFee(): bool

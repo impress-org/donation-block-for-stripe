@@ -1,4 +1,4 @@
-import {useMemo, useRef, useState, useEffect} from '@wordpress/element';
+import {useMemo, useRef, useState, useEffect, createRef} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
@@ -18,7 +18,7 @@ import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import getDefaultStep from './helperFunctions/getDefaultStep';
 import {zeroDecimalCodes} from './helperFunctions/zeroDecimalCurrencies';
-import {ReCAPTCHA} from 'react-google-recaptcha';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 /**
  * 💚 Donation Form.
@@ -58,6 +58,7 @@ const DonationForm = (props) => {
               );
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
+    const recaptchaRef = createRef();
     const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
 
     // Update the default amount when changed by admin.
@@ -101,6 +102,7 @@ const DonationForm = (props) => {
         // 🟢 Good to go.
         axios
             .post('/?dfb_donation-block-stripe-action=getStripeIntent', {
+                reCaptcha: recaptchaRef.current.getValue(),
                 amount: chargeAmount,
                 firstName: firstName,
                 lastName: lastName,
@@ -157,6 +159,7 @@ const DonationForm = (props) => {
     // 💰 Payment.
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
+
         setIsLoading(true);
 
         const {paymentIntent, error} = await stripe.confirmPayment({
@@ -433,6 +436,10 @@ const DonationForm = (props) => {
                                         ))
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
+
+                                {props.attributes.recaptchaSiteKey && (
+                                    <ReCAPTCHA ref={recaptchaRef} sitekey={props.attributes.recaptchaSiteKey} />
+                                )}
                             </form>
                         </>
                     )}
@@ -480,7 +487,7 @@ const DonationForm = (props) => {
                                     )}`}
                                 ></div>
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
-                                <ReCAPTCHA sitekey="AIzaSyC-7G2Yr4qUhwRY6t4arZ_Os85voK_NWsM" onChange={onChange} />
+
                                 <button
                                     className={`donation-form-submit ${css(
                                         styles.buttonPrimary,
