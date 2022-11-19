@@ -33,6 +33,7 @@ class PaymentIntentRequest
             ]);
         }
 
+        // 🏴‍☠️ Ensure no reCaptcha fails
         $this->validateRecaptcha($data);
 
         $url = 'https://api.stripe.com/v1/payment_intents';

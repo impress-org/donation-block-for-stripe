@@ -58,6 +58,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         defaultAmount,
         countryCode,
         enableLink,
+        enableRecaptcha,
         recaptchaSiteKey,
         recaptchaSecretKey,
         currencyCode,
@@ -80,6 +81,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             </Fragment>
         );
     }
+
+    const [recaptchaState, setRecaptchaState] = useState(enableRecaptcha);
 
     const removeBackground = () => {
         setAttributes({
@@ -280,20 +283,45 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                             />
                         </PanelRow>
                         <PanelRow>
-                            <TextControl
-                                label={__('Site Key', 'donation-form-block')}
-                                help={__('Please enter your site key.', 'donation-form-block')}
-                                value={attributes.recaptchaSiteKey}
-                                onChange={(value) => setAttributes({recaptchaSiteKey: value})}
-                            />
-                        </PanelRow>
-                        <PanelRow>
-                            <TextControl
-                                label={__('Secret Key', 'donation-form-block')}
-                                help={__('Please enter your site secret key.', 'donation-form-block')}
-                                value={attributes.recaptchaSecretKey}
-                                onChange={(value) => console.log(value)}
-                            />
+                            <div className={'dfb-recaptcha-options-wrap'}>
+                                <ToggleControl
+                                    label={__("Enable Google's ReCAPTCHA", 'donation-form-block')}
+                                    help={
+                                        <>
+                                            {__(
+                                                'Many forms of fraud, including card testing, can be prevented by using ReCAPTCHA. ',
+                                                'donation-form-block'
+                                            )}
+                                            <ExternalLink href={'https://support.stripe.com/questions/link-faq'}>
+                                                {__('Link FAQ', 'donation-form-block')}
+                                            </ExternalLink>
+                                        </>
+                                    }
+                                    className={'dfb-recaptcha-link-toggle'}
+                                    checked={enableRecaptcha}
+                                    onChange={(value) => {
+                                        setRecaptchaState(value);
+                                        setAttributes({enableRecaptcha: value});
+                                    }}
+                                />
+                                <div
+                                    className={'dfb-recaptcha-options'}
+                                    style={{display: recaptchaState ? 'block' : 'none'}}
+                                >
+                                    <TextControl
+                                        label={__('Site Key', 'donation-form-block')}
+                                        help={__('Please enter your site key.', 'donation-form-block')}
+                                        value={attributes.recaptchaSiteKey}
+                                        onChange={(value) => setAttributes({recaptchaSiteKey: value})}
+                                    />
+                                    <TextControl
+                                        label={__('Secret Key', 'donation-form-block')}
+                                        help={__('Please enter your site secret key.', 'donation-form-block')}
+                                        value={attributes.recaptchaSecretKey}
+                                        onChange={(value) => console.log(value)}
+                                    />
+                                </div>
+                            </div>
                         </PanelRow>
                     </PanelBody>
                     <PanelBody title={__('Content Settings', 'donation-form-block')} initialOpen={false}>
