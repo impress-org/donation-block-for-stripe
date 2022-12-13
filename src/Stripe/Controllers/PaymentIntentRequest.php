@@ -136,6 +136,7 @@ class PaymentIntentRequest
      */
     public function validateRecaptcha($data)
     {
+
         // Verify reCaptcha
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $reCaptchaTest = wp_remote_post($url, [

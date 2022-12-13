@@ -18,6 +18,8 @@ class Bootstrap
         $block = new DonationBlock();
         add_action('init', [$block, 'registerBlock']);
         add_action('admin_enqueue_scripts', [$block, 'addAdminLocalizations']);
+        add_action( 'init', [$block, 'registerSettings'] );
+        add_action( 'rest_api_init', [$block, 'registerSettings'] );
 
         $stripeActionHandler = new RouteStripeActions();
         add_action('template_redirect', [$stripeActionHandler, '__invoke']);

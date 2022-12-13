@@ -86,10 +86,6 @@
             "type": "string",
             "default": ""
         },
-        "recaptchaSecretKey": {
-            "type": "string",
-            "default": ""
-        },
         "liveMode": {
             "type": "boolean",
             "default": false

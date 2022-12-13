@@ -1,20 +1,20 @@
 import {__} from '@wordpress/i18n';
 import DonationForm from './donationForm';
 import {
-    PanelBody,
-    PanelRow,
-    TextControl,
     Button,
-    ResponsiveWrapper,
-    ToggleControl,
     ColorPalette,
     Dashicon,
     ExternalLink,
+    PanelBody,
+    PanelRow,
+    ResponsiveWrapper,
     SelectControl,
+    TextControl,
+    ToggleControl,
 } from '@wordpress/components';
-import {Fragment, useState, useEffect} from '@wordpress/element';
-import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
-import {useSelect} from '@wordpress/data';
+import {Fragment, useEffect, useState} from '@wordpress/element';
+import {InspectorControls, MediaUpload, MediaUploadCheck, useBlockProps} from '@wordpress/block-editor';
+import {dispatch, useSelect} from '@wordpress/data';
 import {usePageVisibility} from 'react-page-visibility';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
@@ -82,7 +82,55 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         );
     }
 
-    const [recaptchaState, setRecaptchaState] = useState(enableRecaptcha);
+    const [recaptchaState, setRecaptchaState] = useState({
+        enabled: false,
+        recaptchaSiteKey: '',
+        recaptchaSecretKey: '',
+    });
+
+    const siteSettings = useSelect((select) => {
+        return select('core').getEntityRecord('root', 'site');
+    }, []);
+
+    useEffect(() => {
+        if (siteSettings) {
+            const {dfb_options} = siteSettings;
+            setRecaptchaState({
+                ...recaptchaState,
+                recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
+                recaptchaSecretKey: dfb_options.recaptcha_v2_secret_key,
+            });
+        }
+    }, [siteSettings]);
+
+    const submitRecaptchaCreds = () => {
+        // Admin entered a good token 👍.
+        // Save it and show a notice.
+        dispatch('core')
+            .saveEntityRecord('root', 'site', {
+                dfb_options: {
+                    recaptcha_v2_secret_key: recaptchaState.recaptchaSecretKey,
+                    recaptcha_v2_site_key: recaptchaState.recaptchaSiteKey,
+                },
+            })
+            .then((response) => {
+                dispatch('core/notices').createInfoNotice(
+                    __('🎉 Success! The API Keys have been saved.', 'donation-form-block'),
+                    {
+                        isDismissible: true,
+                        type: 'snackbar',
+                    }
+                );
+                setAttributes({recaptchaSiteKey: recaptchaSiteKey, recaptchaSecretKey: recaptchaSecretKey});
+            })
+            .catch((error) => {
+                dispatch('core/notices').createNotice(error.message, {
+                    isDismissible: true,
+                    type: 'snackbar',
+                });
+                setAttributes({recaptchaSiteKey: null, recaptchaSecretKey: null});
+            });
+    };
 
     const removeBackground = () => {
         setAttributes({
@@ -289,37 +337,52 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     help={
                                         <>
                                             {__(
-                                                'Many forms of fraud, including card testing, can be prevented by using ReCAPTCHA. ',
+                                                'Many forms of fraud, including card testing, can be prevented by using ReCAPTCHA. This is a free service provided by Google.',
                                                 'donation-form-block'
                                             )}
-                                            <ExternalLink href={'https://support.stripe.com/questions/link-faq'}>
-                                                {__('Link FAQ', 'donation-form-block')}
+                                            <ExternalLink href={'https://www.google.com/recaptcha/admin'}>
+                                                {__('Sign up for an API Key', 'donation-form-block')}
                                             </ExternalLink>
                                         </>
                                     }
                                     className={'dfb-recaptcha-link-toggle'}
                                     checked={enableRecaptcha}
                                     onChange={(value) => {
-                                        setRecaptchaState(value);
-                                        setAttributes({enableRecaptcha: value});
+                                        setRecaptchaState({
+                                            ...recaptchaState,
+                                            enabled: true,
+                                        });
+                                        setAttributes({...recaptchaState, enableRecaptcha: value});
                                     }}
                                 />
                                 <div
                                     className={'dfb-recaptcha-options'}
-                                    style={{display: recaptchaState ? 'block' : 'none'}}
+                                    style={{display: enableRecaptcha ? 'block' : 'none'}}
                                 >
-                                    <TextControl
-                                        label={__('Site Key', 'donation-form-block')}
-                                        help={__('Please enter your site key.', 'donation-form-block')}
-                                        value={attributes.recaptchaSiteKey}
-                                        onChange={(value) => setAttributes({recaptchaSiteKey: value})}
+                                    <label>{__('Site Key', 'donation-form-block')}</label>
+                                    <input
+                                        value={recaptchaState.recaptchaSiteKey}
+                                        type={'password'}
+                                        onChange={(e) => {
+                                            setRecaptchaState({...recaptchaState, recaptchaSiteKey: e.target.value});
+                                        }}
                                     />
-                                    <TextControl
-                                        label={__('Secret Key', 'donation-form-block')}
-                                        help={__('Please enter your site secret key.', 'donation-form-block')}
-                                        value={attributes.recaptchaSecretKey}
-                                        onChange={(value) => console.log(value)}
+                                    <p>{__('Please enter your site key.', 'donation-form-block')}</p>
+                                    <label>{__('Secret Key', 'donation-form-block')}</label>
+                                    <input
+                                        value={recaptchaState.recaptchaSecretKey}
+                                        type={'password'}
+                                        onChange={(e) => {
+                                            setRecaptchaState({
+                                                ...recaptchaState,
+                                                recaptchaSecretKey: e.target.value,
+                                            });
+                                        }}
                                     />
+                                    <p>{__('Please enter your secret key.', 'donation-form-block')}</p>
+                                    <Button isSecondary onClick={() => submitRecaptchaCreds()}>
+                                        {__('Save Keys', 'blocks-for-github')}
+                                    </Button>
                                 </div>
                             </div>
                         </PanelRow>
