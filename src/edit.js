@@ -94,7 +94,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         if (siteSettings) {
             const {dfb_options} = siteSettings;
             setRecaptchaState({
-                ...recaptchaState,
                 recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
                 recaptchaSecretKey: dfb_options.recaptcha_v2_secret_key,
             });
