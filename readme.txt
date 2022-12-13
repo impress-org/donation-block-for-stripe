@@ -1,8 +1,8 @@
 === Donation Form Block for Stripe ===
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
 Tags:              donation, donate, stripe, fundraise, block
-Tested up to:      6.1
-Stable tag:        1.2.0
+Tested up to:      6.2
+Stable tag:        1.3.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,10 @@ Not currently. For access to Stripe donation forms with support for recurring do
 3. Sparks of JOY! Enthrall your donors with a confetti POP upon successful donation.
 
 == Changelog ==
+
+= 1.3.0 =
+* New: 🤖❌ Added an integration with Google ReCAPTCHA version 2 to help prevent spam donations.
+* Fix: 🔗 Resolved an issue with Stripe's "Link" always being enabled regardless of the setting selected. 
 
 = 1.2.0 =
 * New: 🔗 Added integration with [Stripe Link](https://support.stripe.com/questions/link-faq) for faster donations. You can enable this new feature under the block's "Donation Settings" settings panel.
