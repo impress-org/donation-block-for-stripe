@@ -335,7 +335,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         <PanelRow>
                             <div className={'dfb-recaptcha-options-wrap'}>
                                 <ToggleControl
-                                    label={__("Enable Google's ReCAPTCHA", 'donation-form-block')}
+                                    label={__('Enable Google ReCAPTCHA', 'donation-form-block')}
                                     help={
                                         <>
                                             {__(
@@ -357,17 +357,23 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     className={'dfb-recaptcha-options'}
                                     style={{display: enableRecaptcha ? 'block' : 'none'}}
                                 >
-                                    <label>{__('Site Key', 'donation-form-block')}</label>
+                                    <label className={'dfb-label'}>{__('Site Key', 'donation-form-block')}</label>
                                     <input
+                                        className={'dfb-input'}
                                         value={recaptchaState.recaptchaSiteKey}
                                         type={'password'}
                                         onChange={(e) => {
                                             setRecaptchaState({...recaptchaState, recaptchaSiteKey: e.target.value});
                                         }}
                                     />
-                                    <p>{__('Please enter your site key.', 'donation-form-block')}</p>
-                                    <label>{__('Secret Key', 'donation-form-block')}</label>
+                                    <p className={'dfb-help-text'}>
+                                        {__('Please enter your site key.', 'donation-form-block')}
+                                    </p>
+                                    <label className={'dfb-label dfb-label-secret-key'}>
+                                        {__('Secret Key', 'donation-form-block')}
+                                    </label>
                                     <input
+                                        className={'dfb-input'}
                                         value={recaptchaState.recaptchaSecretKey}
                                         type={'password'}
                                         onChange={(e) => {
@@ -377,7 +383,9 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                             });
                                         }}
                                     />
-                                    <p>{__('Please enter your secret key.', 'donation-form-block')}</p>
+                                    <p className={'dfb-help-text'}>
+                                        {__('Please enter your secret key.', 'donation-form-block')}
+                                    </p>
                                     <Button isSecondary onClick={() => submitRecaptchaCreds()}>
                                         {__('Save Keys', 'blocks-for-github')}
                                     </Button>
