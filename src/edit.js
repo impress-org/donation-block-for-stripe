@@ -60,7 +60,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         enableLink,
         enableRecaptcha,
         recaptchaSiteKey,
-        recaptchaSecretKey,
         currencyCode,
         currencySymbol,
         backgroundId,
@@ -83,7 +82,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     }
 
     const [recaptchaState, setRecaptchaState] = useState({
-        enabled: false,
         recaptchaSiteKey: '',
         recaptchaSecretKey: '',
     });
@@ -99,6 +97,10 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                 ...recaptchaState,
                 recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
                 recaptchaSecretKey: dfb_options.recaptcha_v2_secret_key,
+            });
+            setAttributes({
+                enableRecaptcha: enableRecaptcha,
+                recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
             });
         }
     }, [siteSettings]);
@@ -348,11 +350,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     className={'dfb-recaptcha-link-toggle'}
                                     checked={enableRecaptcha}
                                     onChange={(value) => {
-                                        setRecaptchaState({
-                                            ...recaptchaState,
-                                            enabled: true,
-                                        });
-                                        setAttributes({...recaptchaState, enableRecaptcha: value});
+                                        setAttributes({enableRecaptcha: value});
                                     }}
                                 />
                                 <div

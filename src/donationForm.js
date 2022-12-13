@@ -99,19 +99,29 @@ const DonationForm = (props) => {
             ? donationAmount
             : donationAmount * 100;
 
+        let data = {
+            amount: chargeAmount,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            paymentIntent,
+            currency: props.attributes.currencyCode,
+            liveMode: props.attributes.liveMode,
+            nonce: window.donationFormBlock.nonce,
+        };
+
+        if (props.attributes.enableRecaptcha) {
+            data.enableRecaptcha = props.attributes.enableRecaptcha;
+            data.reCaptcha = recaptchaRef.current.getValue();
+        }
+
+        if (props.attributes.enableLink) {
+            data.enableLink = props.attributes.enableLink;
+        }
+
         // 🟢 Good to go.
         axios
-            .post('/?dfb_donation-block-stripe-action=getStripeIntent', {
-                reCaptcha: recaptchaRef.current.getValue(),
-                amount: chargeAmount,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                paymentIntent,
-                currency: props.attributes.currencyCode,
-                liveMode: props.attributes.liveMode,
-                nonce: window.donationFormBlock.nonce,
-            })
+            .post('/?dfb_donation-block-stripe-action=getStripeIntent', data)
             .then(function (response) {
                 const data = response.data.data;
                 // 🧐 Validation.
@@ -123,6 +133,7 @@ const DonationForm = (props) => {
                         setErrorFields(data.fields);
                     }
                 } else {
+                    setErrorMessage(null);
                     setStep(2);
                     // 🤗 Proceed with Stripe.
                     const clientSecret = data.clientSecret;
@@ -437,7 +448,7 @@ const DonationForm = (props) => {
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
 
-                                {props.attributes.recaptchaSiteKey && (
+                                {props.attributes.enableRecaptcha && props.attributes.recaptchaSiteKey && (
                                     <ReCAPTCHA ref={recaptchaRef} sitekey={props.attributes.recaptchaSiteKey} />
                                 )}
                             </form>

@@ -34,7 +34,9 @@ class PaymentIntentRequest
         }
 
         // 🏴‍☠️ Ensure no reCaptcha fails
-        $this->validateRecaptcha($data);
+        if ($data->enableRecaptcha) {
+            $this->validateRecaptcha($data);
+        }
 
         $url = 'https://api.stripe.com/v1/payment_intents';
 
@@ -43,7 +45,7 @@ class PaymentIntentRequest
             'currency' => $data->currency,
             'receipt_email' => $data->email,
             'application_fee_amount' => $this->canAddFee() ? ceil($data->amount * 0.02) : 0,
-            'payment_method_types' => ['card', 'link']
+            'payment_method_types' => $data->enableLink ? ['card', 'link'] : ['card'],
         ];
 
         // Update payment intent or create a new one?
@@ -126,22 +128,26 @@ class PaymentIntentRequest
         $data['lastName'] = !empty($postData['lastName']) ? sanitize_text_field($postData['lastName']) : null;
         $data['currency'] = !empty($postData['currency']) ? sanitize_text_field($postData['currency']) : null;
         $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
+        $data['enableLink'] = !empty($postData['enableLink']) ? $postData['enableLink'] : false;
+        $data['enableRecaptcha'] = !empty($postData['enableRecaptcha']) ? $postData['enableRecaptcha'] : null;
+        $data['reCaptcha'] = !empty($postData['reCaptcha']) ? $postData['reCaptcha'] : null;
 
         return PaymentIntentForm::fromArray($data);
     }
 
     /**
      * @param $data
-     * @return void
+     * @return bool|void
      */
     public function validateRecaptcha($data)
     {
+        $blockOptions = get_option('dfb_options');
 
         // Verify reCaptcha
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $reCaptchaTest = wp_remote_post($url, [
             'body' => [
-                'secret' => '6LdzYc4gAAAAAJiXgqPAugqPpJufcw9BE85WdNyn',
+                'secret' => $blockOptions['recaptcha_v2_secret_key'],
                 'response' => $data->reCaptcha,
                 'remoteip' => $_SERVER['REMOTE_ADDR']
             ]
@@ -164,7 +170,7 @@ class PaymentIntentRequest
             // Check for Stripe errors
             if (isset($apiBody->{'error-codes'})) {
                 wp_send_json_error([
-                    'error' => 'stripe_error',
+                    'error' => 'recaptcha_error',
                     'message' => __(
                         __(
                             'There was an error confirming you\'re not a robot. Please try again or contact the site owner for further help.'
@@ -173,9 +179,7 @@ class PaymentIntentRequest
                     ),
                 ]);
             } else {
-                wp_send_json_success([
-                    'success' => true
-                ]);
+                return true;
             }
         }
     }
