@@ -123,9 +123,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         type: 'snackbar',
                     }
                 );
-                setAttributes({recaptchaSiteKey: recaptchaSiteKey, recaptchaSecretKey: recaptchaSecretKey});
+                setAttributes({
+                    recaptchaSiteKey: recaptchaState.recaptchaSiteKey,
+                    recaptchaSecretKey: recaptchaState.recaptchaSecretKey,
+                });
             })
             .catch((error) => {
+                console.log(error);
                 dispatch('core/notices').createNotice(error.message, {
                     isDismissible: true,
                     type: 'snackbar',

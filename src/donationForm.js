@@ -449,7 +449,11 @@ const DonationForm = (props) => {
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
 
                                 {props.attributes.enableRecaptcha && props.attributes.recaptchaSiteKey && (
-                                    <ReCAPTCHA ref={recaptchaRef} sitekey={props.attributes.recaptchaSiteKey} />
+                                    <ReCAPTCHA
+                                        className={`donation-form-recaptcha ${css(styles.formRecaptcha)}`}
+                                        ref={recaptchaRef}
+                                        sitekey={props.attributes.recaptchaSiteKey}
+                                    />
                                 )}
                             </form>
                         </>

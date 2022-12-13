@@ -6,7 +6,6 @@ import color from 'color';
  */
 export default class StyleSheetFactory {
     static getSheet(props) {
-
         return StyleSheet.create({
             formContainer: {
                 backgroundColor: '#fff',
@@ -194,9 +193,11 @@ export default class StyleSheetFactory {
                 width: '100%',
                 transition: 'background 0.15s ease, border 0.15s ease, box-shadow 0.15s ease, color 0.15s ease',
                 ':focus': {
-                    borderColor: `${color(props.attributes.color).alpha(0.50)}`,
-                    boxShadow: `inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15), 0 0 0 3px ${color(props.attributes.color).alpha(0.25)}, 0 1px 1px 0 rgba(0, 0, 0, 0.08)`
-                }
+                    borderColor: `${color(props.attributes.color).alpha(0.5)}`,
+                    boxShadow: `inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15), 0 0 0 3px ${color(
+                        props.attributes.color
+                    ).alpha(0.25)}, 0 1px 1px 0 rgba(0, 0, 0, 0.08)`,
+                },
             },
             textFieldIcon: {
                 paddingLeft: '45px',
@@ -242,9 +243,11 @@ export default class StyleSheetFactory {
                 color: '#333',
                 transition: 'background 0.15s ease, border 0.15s ease, box-shadow 0.15s ease, color 0.15s ease',
                 ':focus': {
-                    borderColor: `${color(props.attributes.color).alpha(0.50)}`,
-                    boxShadow: `inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15), 0 0 0 3px ${color(props.attributes.color).alpha(0.25)}, 0 1px 1px 0 rgba(0, 0, 0, 0.08)`
-                }
+                    borderColor: `${color(props.attributes.color).alpha(0.5)}`,
+                    boxShadow: `inset 0px 1.2px 6.3px rgba(0, 0, 0, 0.15), 0 0 0 3px ${color(
+                        props.attributes.color
+                    ).alpha(0.25)}, 0 1px 1px 0 rgba(0, 0, 0, 0.08)`,
+                },
             },
             secureFooter: {
                 display: 'flex',
@@ -261,7 +264,7 @@ export default class StyleSheetFactory {
                 minHeight: '200px',
             },
             linkEmailField: {
-              margin: '0 0 20px',
+                margin: '0 0 20px',
             },
             donationReceipt: {
                 minHeight: '520px',
@@ -272,7 +275,6 @@ export default class StyleSheetFactory {
                 padding: '0',
                 lineHeight: '1.4',
                 margin: '0 0 30px',
-
             },
             donationReceiptDetails: {
                 fontWeight: '600',
@@ -368,7 +370,7 @@ export default class StyleSheetFactory {
                     cursor: 'pointer',
                 },
                 '@media (max-width: 599px)': {
-                    margin: '10px 0'
+                    margin: '10px 0',
                 },
             },
             heartIconWrap: {
@@ -387,7 +389,13 @@ export default class StyleSheetFactory {
             },
             heartIcon: {
                 color: '#FFF',
-            }
+            },
+            formRecaptcha: {
+                margin: '20px auto 0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            },
         });
     }
 }
