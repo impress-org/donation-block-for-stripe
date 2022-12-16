@@ -387,7 +387,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         }}
                                     />
                                     <p className={'dfb-help-text'}>
-                                        {__('Please enter your secret key.', 'donation-form-block')}
+                                        {__('Enter your secret key.', 'donation-form-block')}
                                     </p>
                                     <Button isSecondary onClick={() => submitRecaptchaCreds()}>
                                         {__('Save Keys', 'blocks-for-github')}
