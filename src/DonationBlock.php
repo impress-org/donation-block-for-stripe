@@ -51,12 +51,41 @@ class DonationBlock
                             'recaptcha_v2_site_key' => [
                                 'type' => 'string',
                             ],
+                            'recaptcha_v2_enabled_blocks' => [
+                                'type' => 'array',
+                            ],
                         ]
                     ],
                 ],
                 'default' => '',
             ]
         );
+
+//        register_post_meta( '', '_my_custom_bool', [
+//            'show_in_rest' => true,
+//            'single' => true,
+//            'auth_callback' => '__return_true',
+//            'type' => 'boolean',
+//        ] );
+//
+//        register_post_meta( '', 'enable_recaptcha', [
+//            'type'          => 'object',
+//            'single'        => true,
+//            'auth_callback' => '__return_true',
+//            'show_in_rest'  => [
+//                'schema' => [
+//                    'type'       => 'object',
+//                    'properties' => [
+//                        'block_id' => [
+//                            'type' => 'string',
+//                        ],
+//                        'enabled' => [
+//                            'type' => 'boolean',
+//                        ],
+//                    ],
+//                ],
+//            ],
+//        ]);
     }
 
     public function renderBlock($attributes)

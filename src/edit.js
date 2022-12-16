@@ -58,7 +58,6 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         defaultAmount,
         countryCode,
         enableLink,
-        enableRecaptcha,
         recaptchaSiteKey,
         currencyCode,
         currencySymbol,
@@ -81,7 +80,10 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         );
     }
 
+    const postId = useSelect((select) => select('core/editor').getCurrentPostId(), []);
+
     const [recaptchaState, setRecaptchaState] = useState({
+        enableRecaptcha: false,
         recaptchaSiteKey: '',
         recaptchaSecretKey: '',
     });
@@ -93,12 +95,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     useEffect(() => {
         if (siteSettings) {
             const {dfb_options} = siteSettings;
+
             setRecaptchaState({
+                enableRecaptcha: dfb_options.recaptcha_v2_enabled_blocks.includes(blockProps.id),
                 recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
                 recaptchaSecretKey: dfb_options.recaptcha_v2_secret_key,
             });
             setAttributes({
-                enableRecaptcha: enableRecaptcha,
                 recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
             });
         }
@@ -351,14 +354,38 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         </>
                                     }
                                     className={'dfb-recaptcha-link-toggle'}
-                                    checked={enableRecaptcha}
+                                    checked={recaptchaState.enableRecaptcha}
                                     onChange={(value) => {
-                                        setAttributes({enableRecaptcha: value});
+                                        // add item to array
+                                        const recaptchaBlocks = [
+                                            ...siteSettings.dfb_options.recaptcha_v2_enabled_blocks,
+                                            postId + '_' + instanceId,
+                                        ];
+
+                                        dispatch('core').saveEntityRecord('root', 'site', {
+                                            dfb_options: {
+                                                ...siteSettings.dfb_options,
+                                                recaptcha_v2_enabled_blocks: recaptchaBlocks,
+                                            },
+                                        });
+                                        setRecaptchaState({...recaptchaState, enableRecaptcha: value});
+
+                                        // Save option to database using dispatch
+                                        // dispatch('core/editor')
+                                        //     .editPost({
+                                        //         meta: {
+                                        //             enable_recaptcha: ,
+                                        //         },
+                                        //     })
+                                        //     .then(function (response) {
+                                        //         dispatch('core/editor').savePost();
+                                        //     });
+                                        // setRecaptchaState({...recaptchaState, recaptchaSiteKey: value});
                                     }}
                                 />
                                 <div
                                     className={'dfb-recaptcha-options'}
-                                    style={{display: enableRecaptcha ? 'block' : 'none'}}
+                                    style={{display: recaptchaState.enableRecaptcha ? 'block' : 'none'}}
                                 >
                                     <label className={'dfb-label'}>{__('Site Key', 'donation-form-block')}</label>
                                     <input

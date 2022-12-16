@@ -209,9 +209,7 @@ const DonationForm = (props) => {
         if (formId !== props.attributes.formId) {
             return;
         }
-
         setIsLoading(true);
-
         stripe.retrievePaymentIntent(clientSecret).then((response) => {
             const paymentIntent = response.paymentIntent;
             const newDonationAmount = (paymentIntent.amount / 100).toString();
