@@ -342,7 +342,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     help={
                                         <>
                                             {__(
-                                                'Many forms of fraud, including card testing, can be prevented by using ReCAPTCHA. This is a free service provided by Google.',
+                                                'Many forms of fraud, including card testing, can be prevented by using ReCAPTCHA, a free service provided by Google. ',
                                                 'donation-form-block'
                                             )}
                                             <ExternalLink href={'https://www.google.com/recaptcha/admin'}>
