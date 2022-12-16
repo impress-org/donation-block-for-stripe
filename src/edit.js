@@ -370,7 +370,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         }}
                                     />
                                     <p className={'dfb-help-text'}>
-                                        {__('Please enter your site key.', 'donation-form-block')}
+                                        {__('Enter your site key.', 'donation-form-block')}
                                     </p>
                                     <label className={'dfb-label dfb-label-secret-key'}>
                                         {__('Secret Key', 'donation-form-block')}
