@@ -133,7 +133,7 @@ Not currently. For access to Stripe donation forms with support for recurring do
 == Changelog ==
 
 = 1.3.0 =
-* New: 🤖❌ Added an integration with Google ReCAPTCHA version 2 to help prevent spam donations.
+* New: 🤖❌ Added an integration with Google reCAPTCHA version 2 to help prevent spam donations.
 * Fix: 🔗 Resolved an issue with Stripe's "Link" always being enabled regardless of the setting selected. 
 
 = 1.2.0 =
