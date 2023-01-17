@@ -58,7 +58,7 @@ const DonationForm = (props) => {
               );
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
-    const recaptchaRef = createRef();
+    const recaptchaRef = useRef(null);
     const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
 
     // Update the default amount when changed by admin.
@@ -111,8 +111,7 @@ const DonationForm = (props) => {
         };
 
         if (props.attributes.enableRecaptcha) {
-            data.enableRecaptcha = props.attributes.enableRecaptcha;
-            data.reCaptcha = recaptchaRef.current.getValue();
+            data.recaptchaToken = recaptchaRef.current.getValue();
         }
 
         if (props.attributes.enableLink) {

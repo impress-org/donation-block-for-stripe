@@ -34,7 +34,7 @@ class PaymentIntentRequest
         }
 
         // 🏴‍☠️ Ensure no reCaptcha fails
-        if ($data->enableRecaptcha) {
+        if (get_option('dfb_options')['recaptcha_v2_enable'] === true) {
             $this->validateRecaptcha($data);
         }
 
@@ -129,8 +129,7 @@ class PaymentIntentRequest
         $data['currency'] = !empty($postData['currency']) ? sanitize_text_field($postData['currency']) : null;
         $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
         $data['enableLink'] = !empty($postData['enableLink']) ? $postData['enableLink'] : false;
-        $data['enableRecaptcha'] = !empty($postData['enableRecaptcha']) ? $postData['enableRecaptcha'] : null;
-        $data['reCaptcha'] = !empty($postData['reCaptcha']) ? $postData['reCaptcha'] : null;
+        $data['recaptchaToken'] = !empty($postData['recaptchaToken']) ? $postData['recaptchaToken'] : null;
 
         return PaymentIntentForm::fromArray($data);
     }
@@ -141,14 +140,24 @@ class PaymentIntentRequest
      */
     public function validateRecaptcha($data)
     {
-        $blockOptions = get_option('dfb_options');
+
+        // Verify the captcha has been there's a token.
+        if (!$data->recaptchaToken) {
+            wp_send_json_error([
+                'error' => 'wordpress_error',
+                'message' => __(
+                    'Please confirm you are not a human by clicking the checkbox below.',
+                    'donation-form-block'
+                ),
+            ]);
+        }
 
         // Verify reCaptcha
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $reCaptchaTest = wp_remote_post($url, [
             'body' => [
-                'secret' => $blockOptions['recaptcha_v2_secret_key'],
-                'response' => $data->reCaptcha,
+                'secret' => get_option('dfb_options')['recaptcha_v2_secret_key'],
+                'response' => $data->recaptchaToken,
                 'remoteip' => $_SERVER['REMOTE_ADDR']
             ]
         ]);
@@ -157,10 +166,7 @@ class PaymentIntentRequest
             wp_send_json_error([
                 'error' => 'wordpress_error',
                 'message' => __(
-                    __(
-                        'There was an error setting up your donation. Please contact the site owner.',
-                        'donation-form-block'
-                    ),
+                    'There was an error setting up your donation. Please contact the site owner.',
                     'donation-form-block'
                 ),
             ]);
