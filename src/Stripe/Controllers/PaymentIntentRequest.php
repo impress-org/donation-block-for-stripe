@@ -140,9 +140,8 @@ class PaymentIntentRequest
      */
     public function validateRecaptcha($data)
     {
-
         // Verify the captcha has been there's a token.
-        if (!$data->recaptchaToken) {
+        if (empty($data->recaptchaToken)) {
             wp_send_json_error([
                 'error' => 'wordpress_error',
                 'message' => __(
