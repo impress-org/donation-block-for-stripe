@@ -33,7 +33,7 @@ class PaymentIntentRequest
             ]);
         }
 
-        // 🏴‍☠️ Ensure no reCaptcha fails
+        // 🏴‍☠️ Ensure no reCAPTCHA fails
         if (get_option('dfb_options')['recaptcha_v2_enable'] === true) {
             $this->validateRecaptcha($data);
         }

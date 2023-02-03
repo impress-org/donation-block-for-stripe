@@ -340,7 +340,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                         <PanelRow>
                             <div className={'dfb-recaptcha-options-wrap'}>
                                 <ToggleControl
-                                    label={__('Enable Google ReCAPTCHA', 'donation-form-block')}
+                                    label={__('Enable Google reCAPTCHA', 'donation-form-block')}
                                     help={
                                         <>
                                             {__(
