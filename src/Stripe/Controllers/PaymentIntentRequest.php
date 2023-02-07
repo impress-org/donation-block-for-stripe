@@ -145,7 +145,7 @@ class PaymentIntentRequest
             wp_send_json_error([
                 'error' => 'wordpress_error',
                 'message' => __(
-                    'Please confirm you are not a human by clicking the checkbox below.',
+                    'Please confirm you are human by selecting the correct response below.',
                     'donation-form-block'
                 ),
             ]);
