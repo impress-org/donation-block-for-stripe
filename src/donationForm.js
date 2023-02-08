@@ -112,7 +112,7 @@ const DonationForm = (props) => {
             nonce: window.donationFormBlock.nonce,
         };
 
-        if (props.attributes.enableRecaptcha) {
+        if (props.attributes.recaptchaEnabled) {
             data.recaptchaToken = recaptchaRef.current.getValue();
         }
 
@@ -448,7 +448,7 @@ const DonationForm = (props) => {
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
 
                                 {(props.attributes.recaptchaEnabled ||
-                                    (props.backend && props.attributes.enableRecaptcha)) && (
+                                    (props.backend && props.attributes.enableRecaptchaBackend)) && (
                                     <ReCAPTCHA
                                         className={`donation-form-recaptcha ${css(styles.formRecaptcha)}`}
                                         ref={recaptchaRef}

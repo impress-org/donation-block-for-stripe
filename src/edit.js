@@ -58,7 +58,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         defaultAmount,
         countryCode,
         enableLink,
-        enableRecaptcha,
+        enableRecaptchaBackend,
         recaptchaSiteKey,
         currencyCode,
         currencySymbol,
@@ -82,7 +82,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
     }
 
     const [recaptchaState, setRecaptchaState] = useState({
-        enableRecaptcha: false,
+        enableRecaptchaBackend: false,
         recaptchaSiteKey: '',
     });
 
@@ -96,11 +96,11 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             setRecaptchaState({
                 recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
                 recaptchaSecretKey: dfb_options.recaptcha_v2_secret_key,
-                enableRecaptcha: dfb_options.recaptcha_v2_enable,
+                enableRecaptchaBackend: dfb_options.recaptcha_v2_enable,
             });
             setAttributes({
                 recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
-                enableRecaptcha: dfb_options.recaptcha_v2_enable,
+                enableRecaptchaBackend: dfb_options.recaptcha_v2_enable,
             });
         }
     }, [siteSettings]);
@@ -126,7 +126,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                 );
                 setAttributes({
                     recaptchaSiteKey: recaptchaState.recaptchaSiteKey,
-                    enableRecaptcha: true,
+                    enableRecaptchaBackend: true,
                 });
             })
             .catch((error) => {
@@ -353,7 +353,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                         </>
                                     }
                                     className={'dfb-recaptcha-link-toggle'}
-                                    checked={recaptchaState.enableRecaptcha ? 'checked' : ''}
+                                    checked={recaptchaState.enableRecaptchaBackend ? 'checked' : ''}
                                     onChange={(value) => {
                                         dispatch('core').saveEntityRecord('root', 'site', {
                                             dfb_options: {
@@ -361,13 +361,13 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                                 recaptcha_v2_enable: value,
                                             },
                                         });
-                                        setAttributes({enableRecaptcha: value});
-                                        setRecaptchaState({...recaptchaState, enableRecaptcha: value});
+                                        setAttributes({enableRecaptchaBackend: value});
+                                        setRecaptchaState({...recaptchaState, enableRecaptchaBackend: value});
                                     }}
                                 />
                                 <div
                                     className={'dfb-recaptcha-options'}
-                                    style={{display: recaptchaState.enableRecaptcha ? 'block' : 'none'}}
+                                    style={{display: recaptchaState.enableRecaptchaBackend ? 'block' : 'none'}}
                                 >
                                     <label className={'dfb-label'}>{__('Site Key', 'donation-form-block')}</label>
                                     <input
