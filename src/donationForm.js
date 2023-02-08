@@ -1,4 +1,4 @@
-import {useMemo, useRef, useState, useEffect, createRef} from '@wordpress/element';
+import {useEffect, useMemo, useRef, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
@@ -60,6 +60,8 @@ const DonationForm = (props) => {
     const elements = useRef(null);
     const recaptchaRef = useRef(null);
     const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
+
+    console.log(props.attributes.recaptchaEnabled);
 
     // Update the default amount when changed by admin.
     useEffect(() => {
@@ -445,7 +447,8 @@ const DonationForm = (props) => {
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
 
-                                {props.attributes.enableRecaptcha && props.attributes.recaptchaSiteKey && (
+                                {(props.attributes.recaptchaEnabled ||
+                                    (props.backend && props.attributes.enableRecaptcha)) && (
                                     <ReCAPTCHA
                                         className={`donation-form-recaptcha ${css(styles.formRecaptcha)}`}
                                         ref={recaptchaRef}
