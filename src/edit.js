@@ -1,20 +1,20 @@
 import {__} from '@wordpress/i18n';
 import DonationForm from './donationForm';
 import {
-    PanelBody,
-    PanelRow,
-    TextControl,
     Button,
-    ResponsiveWrapper,
-    ToggleControl,
     ColorPalette,
     Dashicon,
     ExternalLink,
+    PanelBody,
+    PanelRow,
+    ResponsiveWrapper,
     SelectControl,
+    TextControl,
+    ToggleControl,
 } from '@wordpress/components';
-import {Fragment, useState, useEffect} from '@wordpress/element';
-import {InspectorControls, MediaUpload, useBlockProps, MediaUploadCheck} from '@wordpress/block-editor';
-import {useSelect} from '@wordpress/data';
+import {Fragment, useEffect, useState} from '@wordpress/element';
+import {InspectorControls, MediaUpload, MediaUploadCheck, useBlockProps} from '@wordpress/block-editor';
+import {dispatch, useSelect} from '@wordpress/data';
 import {usePageVisibility} from 'react-page-visibility';
 import {ReactComponent as StripeIcon} from './images/stripe-s.svg';
 import {ReactComponent as GiveLogo} from './images/givewp-logo.svg';
@@ -58,6 +58,8 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         defaultAmount,
         countryCode,
         enableLink,
+        enableRecaptchaBackend,
+        recaptchaSiteKey,
         currencyCode,
         currencySymbol,
         backgroundId,
@@ -78,6 +80,64 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             </Fragment>
         );
     }
+
+    const [recaptchaState, setRecaptchaState] = useState({
+        enableRecaptchaBackend: false,
+        recaptchaSiteKey: '',
+    });
+
+    const siteSettings = useSelect((select) => {
+        return select('core').getEntityRecord('root', 'site');
+    }, []);
+
+    useEffect(() => {
+        if (siteSettings) {
+            const {dfb_options} = siteSettings;
+            setRecaptchaState({
+                recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
+                recaptchaSecretKey: dfb_options.recaptcha_v2_secret_key,
+                enableRecaptchaBackend: dfb_options.recaptcha_v2_enable,
+            });
+            setAttributes({
+                recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
+                enableRecaptchaBackend: dfb_options.recaptcha_v2_enable,
+            });
+        }
+    }, [siteSettings]);
+
+    const submitRecaptchaCreds = () => {
+        // Admin entered a good token 👍.
+        // Save it and show a notice.
+        dispatch('core')
+            .saveEntityRecord('root', 'site', {
+                dfb_options: {
+                    recaptcha_v2_secret_key: recaptchaState.recaptchaSecretKey,
+                    recaptcha_v2_site_key: recaptchaState.recaptchaSiteKey,
+                    recaptcha_v2_enable: true,
+                },
+            })
+            .then((response) => {
+                dispatch('core/notices').createInfoNotice(
+                    __('🎉 Success! The API Keys have been saved.', 'donation-form-block'),
+                    {
+                        isDismissible: true,
+                        type: 'snackbar',
+                    }
+                );
+                setAttributes({
+                    recaptchaSiteKey: recaptchaState.recaptchaSiteKey,
+                    enableRecaptchaBackend: true,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                dispatch('core/notices').createNotice(error.message, {
+                    isDismissible: true,
+                    type: 'snackbar',
+                });
+                setAttributes({recaptchaSiteKey: null, recaptchaSecretKey: null});
+            });
+    };
 
     const removeBackground = () => {
         setAttributes({
@@ -276,6 +336,73 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                 defaultChanged={(newDefault) => setAttributes({defaultAmount: newDefault})}
                                 amountChanged={(amounts) => setAttributes({donationAmounts: amounts})}
                             />
+                        </PanelRow>
+                        <PanelRow>
+                            <div className={'dfb-recaptcha-options-wrap'}>
+                                <ToggleControl
+                                    label={__('Enable Google reCAPTCHA', 'donation-form-block')}
+                                    help={
+                                        <>
+                                            {__(
+                                                'Enabling ReCAPTCHA will add a checkbox to the donation form that donors must check before submitting their donation. Many forms of fraud, including card testing, can be prevented by using ReCAPTCHA, a free service provided by Google. Note: enabling this option will enable ReCAPTCHA for all donation forms on your site. ',
+                                                'donation-form-block'
+                                            )}
+                                            <ExternalLink href={'https://www.google.com/recaptcha/admin'}>
+                                                {__('Sign up for an API Key', 'donation-form-block')}
+                                            </ExternalLink>
+                                        </>
+                                    }
+                                    className={'dfb-recaptcha-link-toggle'}
+                                    checked={recaptchaState.enableRecaptchaBackend ? 'checked' : ''}
+                                    onChange={(value) => {
+                                        dispatch('core').saveEntityRecord('root', 'site', {
+                                            dfb_options: {
+                                                ...siteSettings.dfb_options,
+                                                recaptcha_v2_enable: value,
+                                            },
+                                        });
+                                        setAttributes({enableRecaptchaBackend: value});
+                                        setRecaptchaState({...recaptchaState, enableRecaptchaBackend: value});
+                                    }}
+                                />
+                                <div
+                                    className={'dfb-recaptcha-options'}
+                                    style={{display: recaptchaState.enableRecaptchaBackend ? 'block' : 'none'}}
+                                >
+                                    <label className={'dfb-label'}>{__('Site Key', 'donation-form-block')}</label>
+                                    <input
+                                        className={'dfb-input'}
+                                        value={recaptchaState.recaptchaSiteKey}
+                                        type={'password'}
+                                        onChange={(e) => {
+                                            setRecaptchaState({...recaptchaState, recaptchaSiteKey: e.target.value});
+                                        }}
+                                    />
+                                    <p className={'dfb-help-text'}>
+                                        {__('Enter your site key.', 'donation-form-block')}
+                                    </p>
+                                    <label className={'dfb-label dfb-label-secret-key'}>
+                                        {__('Secret Key', 'donation-form-block')}
+                                    </label>
+                                    <input
+                                        className={'dfb-input'}
+                                        value={recaptchaState.recaptchaSecretKey}
+                                        type={'password'}
+                                        onChange={(e) => {
+                                            setRecaptchaState({
+                                                ...recaptchaState,
+                                                recaptchaSecretKey: e.target.value,
+                                            });
+                                        }}
+                                    />
+                                    <p className={'dfb-help-text'}>
+                                        {__('Enter your secret key.', 'donation-form-block')}
+                                    </p>
+                                    <Button isSecondary onClick={() => submitRecaptchaCreds()}>
+                                        {__('Save Keys', 'blocks-for-github')}
+                                    </Button>
+                                </div>
+                            </div>
                         </PanelRow>
                     </PanelBody>
                     <PanelBody title={__('Content Settings', 'donation-form-block')} initialOpen={false}>

@@ -1,4 +1,4 @@
-import {useMemo, useRef, useState, useEffect} from '@wordpress/element';
+import {useEffect, useMemo, useRef, useState} from '@wordpress/element';
 import cx from 'classnames';
 import {__} from '@wordpress/i18n';
 import CurrencyInput from 'react-currency-input-field';
@@ -18,6 +18,7 @@ import useCheckStripeConnect from './hooks/useCheckStripeConnect';
 import runLottieAnimation from './helperFunctions/runLottieAnimation';
 import getDefaultStep from './helperFunctions/getDefaultStep';
 import {zeroDecimalCodes} from './helperFunctions/zeroDecimalCurrencies';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 /**
  * 💚 Donation Form.
@@ -49,11 +50,15 @@ const DonationForm = (props) => {
         }
         return props.backend
             ? null
-            : Stripe(props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey, {
-                betas: props.attributes.enableLink ? ['link_default_integration_beta_1'] : []
-            });
+            : Stripe(
+                  props.attributes.liveMode ? props.attributes.stripeLivePubKey : props.attributes.stripeTestPubKey,
+                  {
+                      betas: props.attributes.enableLink ? ['link_default_integration_beta_1'] : [],
+                  }
+              );
     }, [props.attributes.stripeLivePubKey, props.attributes.stripeTestPubKey, props.backend]);
     const elements = useRef(null);
+    const recaptchaRef = useRef(null);
     const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
 
     // Update the default amount when changed by admin.
@@ -90,20 +95,32 @@ const DonationForm = (props) => {
         setIsLoading(true);
 
         // 💵 How much should be charged? Converts to cents for non-zero decimal currencies.
-        const chargeAmount = zeroDecimalCodes.includes(props.attributes.currencyCode) ? donationAmount : donationAmount * 100;
+        const chargeAmount = zeroDecimalCodes.includes(props.attributes.currencyCode)
+            ? donationAmount
+            : donationAmount * 100;
+
+        let data = {
+            amount: chargeAmount,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            paymentIntent,
+            currency: props.attributes.currencyCode,
+            liveMode: props.attributes.liveMode,
+            nonce: window.donationFormBlock.nonce,
+        };
+
+        if (props.attributes.recaptchaEnabled) {
+            data.recaptchaToken = recaptchaRef.current.getValue();
+        }
+
+        if (props.attributes.enableLink) {
+            data.enableLink = props.attributes.enableLink;
+        }
 
         // 🟢 Good to go.
         axios
-            .post('/?dfb_donation-block-stripe-action=getStripeIntent', {
-                amount: chargeAmount,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                paymentIntent,
-                currency: props.attributes.currencyCode,
-                liveMode: props.attributes.liveMode,
-                nonce: window.donationFormBlock.nonce,
-            })
+            .post('/?dfb_donation-block-stripe-action=getStripeIntent', data)
             .then(function (response) {
                 const data = response.data.data;
                 // 🧐 Validation.
@@ -115,6 +132,7 @@ const DonationForm = (props) => {
                         setErrorFields(data.fields);
                     }
                 } else {
+                    setErrorMessage(null);
                     setStep(2);
                     // 🤗 Proceed with Stripe.
                     const clientSecret = data.clientSecret;
@@ -151,6 +169,7 @@ const DonationForm = (props) => {
     // 💰 Payment.
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
+
         setIsLoading(true);
 
         const {paymentIntent, error} = await stripe.confirmPayment({
@@ -189,9 +208,7 @@ const DonationForm = (props) => {
         if (formId !== props.attributes.formId) {
             return;
         }
-
         setIsLoading(true);
-
         stripe.retrievePaymentIntent(clientSecret).then((response) => {
             const paymentIntent = response.paymentIntent;
             const newDonationAmount = (paymentIntent.amount / 100).toString();
@@ -207,7 +224,9 @@ const DonationForm = (props) => {
                 case 'succeeded':
                     setPaymentStatus({
                         status: 'Successful',
-                        message: `Thank you for your ${props.attributes.currencySymbol + currencyFormatter.format(newDonationAmount)} donation!`,
+                        message: `Thank you for your ${
+                            props.attributes.currencySymbol + currencyFormatter.format(newDonationAmount)
+                        } donation!`,
                         error: false,
                     });
                     break;
@@ -306,9 +325,7 @@ const DonationForm = (props) => {
                                         styles.currencyFieldWrap
                                     )}`}
                                 >
-                                    <p className={css(styles.currencyIcon)}>
-                                        {props.attributes.currencySymbol}
-                                    </p>
+                                    <p className={css(styles.currencyIcon)}>{props.attributes.currencySymbol}</p>
                                     <CurrencyInput
                                         className={css(styles.currencyField)}
                                         name="amount"
@@ -317,7 +334,7 @@ const DonationForm = (props) => {
                                         maxLength={9}
                                         value={donationAmount}
                                         defaultValue={donationAmount}
-                                        intlConfig={{ locale: window.navigator.language }}
+                                        intlConfig={{locale: window.navigator.language}}
                                         onValueChange={(value) => setDonationAmount(value)}
                                     />
                                 </div>
@@ -343,7 +360,9 @@ const DonationForm = (props) => {
                                                     setDonationAmount(amount);
                                                 }}
                                             >
-                                                <span className={css(styles.btnDollarSymbol)}>{props.attributes.currencySymbol}</span>
+                                                <span className={css(styles.btnDollarSymbol)}>
+                                                    {props.attributes.currencySymbol}
+                                                </span>
                                                 {currencyFormatter.format(amount)}
                                             </button>
                                         );
@@ -425,6 +444,15 @@ const DonationForm = (props) => {
                                         ))
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
+
+                                {(props.attributes.recaptchaEnabled ||
+                                    (props.backend && props.attributes.enableRecaptchaBackend)) && (
+                                    <ReCAPTCHA
+                                        className={`donation-form-recaptcha ${css(styles.formRecaptcha)}`}
+                                        ref={recaptchaRef}
+                                        sitekey={props.attributes.recaptchaSiteKey}
+                                    />
+                                )}
                             </form>
                         </>
                     )}
@@ -443,7 +471,9 @@ const DonationForm = (props) => {
                                 <div>
                                     <p className={css(styles.donationSummaryText)}>
                                         <span className={css(styles.donationSummaryAmountWrap)}>
-                                            <span className={css(styles.donationSummaryCurrencyIcon)}>{props.attributes.currencySymbol}</span>
+                                            <span className={css(styles.donationSummaryCurrencyIcon)}>
+                                                {props.attributes.currencySymbol}
+                                            </span>
                                             <span
                                                 className={css(styles.donationSummaryAmountText)}
                                             >{`${currencyFormatter.format(donationAmount)}`}</span>
@@ -464,8 +494,13 @@ const DonationForm = (props) => {
                                 </button>
                             </div>
                             <form onSubmit={handlePaymentSubmit}>
-                                <div className={`donation-form-payment-intent-${props.attributes.formId} ${css(styles.stripePaymentWrap)}`}></div>
+                                <div
+                                    className={`donation-form-payment-intent-${props.attributes.formId} ${css(
+                                        styles.stripePaymentWrap
+                                    )}`}
+                                ></div>
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
+
                                 <button
                                     className={`donation-form-submit ${css(
                                         styles.buttonPrimary,

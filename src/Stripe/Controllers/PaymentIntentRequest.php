@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace GiveDonationBlock\Stripe\Controllers;
 
+use Give_License;
 use GiveDonationBlock\Stripe\DataTransferObjects\PaymentIntentForm;
 use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
-
-use Give_License;
 
 use function sanitize_text_field;
 use function wp_send_json_error;
@@ -34,6 +33,11 @@ class PaymentIntentRequest
             ]);
         }
 
+        // 🏴‍☠️ Ensure no reCAPTCHA fails
+        if (get_option('dfb_options')['recaptcha_v2_enable'] === true) {
+            $this->validateRecaptcha($data);
+        }
+
         $url = 'https://api.stripe.com/v1/payment_intents';
 
         $args = [
@@ -41,7 +45,7 @@ class PaymentIntentRequest
             'currency' => $data->currency,
             'receipt_email' => $data->email,
             'application_fee_amount' => $this->canAddFee() ? ceil($data->amount * 0.02) : 0,
-            'payment_method_types' => ['card', 'link']
+            'payment_method_types' => $data->enableLink ? ['card', 'link'] : ['card'],
         ];
 
         // Update payment intent or create a new one?
@@ -124,8 +128,65 @@ class PaymentIntentRequest
         $data['lastName'] = !empty($postData['lastName']) ? sanitize_text_field($postData['lastName']) : null;
         $data['currency'] = !empty($postData['currency']) ? sanitize_text_field($postData['currency']) : null;
         $data['liveMode'] = !empty($postData['liveMode']) ? $postData['liveMode'] : null;
+        $data['enableLink'] = !empty($postData['enableLink']) ? $postData['enableLink'] : false;
+        $data['recaptchaToken'] = !empty($postData['recaptchaToken']) ? $postData['recaptchaToken'] : null;
 
         return PaymentIntentForm::fromArray($data);
+    }
+
+    /**
+     * @param $data
+     * @return bool|void
+     */
+    public function validateRecaptcha($data)
+    {
+        // Verify the captcha has been there's a token.
+        if (empty($data->recaptchaToken)) {
+            wp_send_json_error([
+                'error' => 'wordpress_error',
+                'message' => __(
+                    'Please confirm you are human by selecting the correct response below.',
+                    'donation-form-block'
+                ),
+            ]);
+        }
+
+        // Verify reCaptcha
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $reCaptchaTest = wp_remote_post($url, [
+            'body' => [
+                'secret' => get_option('dfb_options')['recaptcha_v2_secret_key'],
+                'response' => $data->recaptchaToken,
+                'remoteip' => $_SERVER['REMOTE_ADDR']
+            ]
+        ]);
+
+        if (is_wp_error($reCaptchaTest)) {
+            wp_send_json_error([
+                'error' => 'wordpress_error',
+                'message' => __(
+                    'There was an error setting up your donation. Please contact the site owner.',
+                    'donation-form-block'
+                ),
+            ]);
+        } else {
+            $apiBody = json_decode(wp_remote_retrieve_body($reCaptchaTest));
+
+            // Check for Stripe errors
+            if (isset($apiBody->{'error-codes'})) {
+                wp_send_json_error([
+                    'error' => 'recaptcha_error',
+                    'message' => __(
+                        __(
+                            'There was an error confirming you\'re not a robot. Please try again or contact the site owner for further help.'
+                        ),
+                        'donation-form-block'
+                    ),
+                ]);
+            } else {
+                return true;
+            }
+        }
     }
 
     public static function canAddFee(): bool

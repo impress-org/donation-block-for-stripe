@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace GiveDonationBlock;
 
-use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
 use GiveDonationBlock\Stripe\Controllers\PaymentIntentRequest as PaymentIntentRequest;
+use GiveDonationBlock\Stripe\DataTransferObjects\StripeData;
 
 class DonationBlock
 {
@@ -27,8 +27,38 @@ class DonationBlock
             'https://js.stripe.com/v3/'
         );
 
-        register_block_type(DONATION_BLOCK_PATH,
+        register_block_type(
+            DONATION_BLOCK_PATH,
             ['render_callback' => [$this, 'renderBlock']]
+        );
+    }
+
+    public function registerSettings(): void
+    {
+        register_setting(
+            'dfb_options',
+            'dfb_options',
+            [
+                'type' => 'object',
+                'description' => 'Donation Form Block Options',
+                'show_in_rest' => [
+                    'schema' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'recaptcha_v2_secret_key' => [
+                                'type' => 'string',
+                            ],
+                            'recaptcha_v2_site_key' => [
+                                'type' => 'string',
+                            ],
+                            'recaptcha_v2_enable' => [
+                                'type' => 'boolean',
+                            ],
+                        ]
+                    ],
+                ],
+                'default' => '',
+            ]
         );
     }
 
@@ -52,8 +82,12 @@ class DonationBlock
 
         <div id="donation-form-block-<?php
         echo esc_html($attributes['formId']); ?>" class="root-donation-block"
-             data-stripe-live-pub-key="<?php esc_html_e($livePublishableKey); ?>"
-             data-stripe-test-pub-key="<?php esc_html_e($testPublishableKey); ?>"
+             data-stripe-live-pub-key="<?php
+             esc_html_e($livePublishableKey); ?>"
+             data-stripe-test-pub-key="<?php
+             esc_html_e($testPublishableKey); ?>"
+             data-recaptcha-enabled="<?php
+             esc_html_e(get_option('dfb_options')['recaptcha_v2_enable']); ?>"
             <?php
             // 🔁 Loop through and set attributes per block.
             foreach ($attributes as $key => $value) :
@@ -67,7 +101,20 @@ class DonationBlock
                 echo esc_html($value); ?>"
             <?php
             endforeach; ?>
-        ></div>
+        >
+            <?php
+            if (!is_ssl()) : ?>
+                <div class="donation-form-block__error"
+                     style="font-size:16px; color: #252121; background: #f4a9a9; border: 1px solid #eb3131; padding: 10px 14px; margin: 0 0 15px; border-radius: 5px;">
+                    <?php
+                    echo esc_html__(
+                        'Your site is not using HTTPS. Please enable HTTPS to use the donation form.',
+                        'donation-form-block'
+                    ); ?>
+                </div>
+            <?php
+            endif; ?>
+        </div>
         <?php
         // return clean buffer
         return ob_get_clean();
@@ -81,6 +128,7 @@ class DonationBlock
             [
                 'profile_preview' => plugin_dir_url(DONATION_BLOCK_FILE) . 'src/images/donation-form-preview.jpg',
                 'can_add_fee' => PaymentIntentRequest::canAddFee(),
+                'enable_recaptcha' => get_option('dfb_options')['recaptcha_v2_enable'],
             ]
         );
     }
