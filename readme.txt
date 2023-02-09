@@ -2,7 +2,7 @@
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
 Tags:              donation, donate, stripe, fundraise, block
 Tested up to:      6.2
-Stable tag:        1.3.0
+Stable tag:        1.3.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,7 +133,7 @@ Not currently. For access to Stripe donation forms with support for recurring do
 == Changelog ==
 
 = 1.3.1 =
-* Fix: Prevent JS error when using the ReCAPTCHA option for the first time. Also resolve noticed in PHP 8.0+.
+* Fix: Prevent JS error when using the ReCAPTCHA option for the first time. Also resolve PHP notice in PHP 8.0+ causing annoyances.
 
 = 1.3.0 =
 * New: 🤖❌ Added an integration with Google reCAPTCHA version 2 to help prevent spam donations.
