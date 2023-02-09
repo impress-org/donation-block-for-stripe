@@ -61,8 +61,6 @@ const DonationForm = (props) => {
     const recaptchaRef = useRef(null);
     const currencyFormatter = new Intl.NumberFormat(window.navigator.language);
 
-    console.log(props.attributes.recaptchaEnabled);
-
     // Update the default amount when changed by admin.
     useEffect(() => {
         setDonationAmount(props.attributes.defaultAmount);
