@@ -110,7 +110,7 @@ const DonationForm = (props) => {
             nonce: window.donationFormBlock.nonce,
         };
 
-        if (props.attributes.recaptchaEnabled) {
+        if (props.attributes.recaptchaEnabled === '1' && props.attributes.recaptchaSitekey !== '') {
             data.recaptchaToken = recaptchaRef.current.getValue();
         }
 
@@ -445,12 +445,14 @@ const DonationForm = (props) => {
                                 }
                                 {errorMessage && <ErrorMessage styles={styles}>{errorMessage}</ErrorMessage>}
 
-                                {(props.attributes.recaptchaEnabled ||
-                                    (props.backend && props.attributes.enableRecaptchaBackend)) && (
+                                {(props.attributes.recaptchaEnabled === '1' ||
+                                    (props.backend &&
+                                        props.attributes.enableRecaptchaBackend &&
+                                        props.attributes.recaptchaSitekey)) && (
                                     <ReCAPTCHA
                                         className={`donation-form-recaptcha ${css(styles.formRecaptcha)}`}
                                         ref={recaptchaRef}
-                                        sitekey={props.attributes.recaptchaSiteKey}
+                                        sitekey={props.attributes.recaptchaSitekey}
                                     />
                                 )}
                             </form>

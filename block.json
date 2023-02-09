@@ -78,11 +78,11 @@
             "type": "integer",
             "default": 0
         },
-        "enableRecaptcha": {
+        "enableRecaptchaBackend": {
             "type": "boolean",
             "default": false
         },
-        "recaptchaSiteKey": {
+        "recaptchaSitekey": {
             "type": "string",
             "default": ""
         },

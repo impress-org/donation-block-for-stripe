@@ -78,6 +78,10 @@ class DonationBlock
         $livePublishableKey = $stripeData->livePublishableKey ?? '';
         $testPublishableKey = $stripeData->testPublishableKey ?? '';
 
+        $pluginOptions = get_option('dfb_options');
+        $recaptchaEnabled = $pluginOptions['recaptcha_v2_enable'] ? 1 : 0;
+        $recaptchaSitekey = $pluginOptions['recaptcha_v2_site_key'] ?? false;
+
         ob_start(); ?>
 
         <div id="donation-form-block-<?php
@@ -87,7 +91,9 @@ class DonationBlock
              data-stripe-test-pub-key="<?php
              esc_html_e($testPublishableKey); ?>"
              data-recaptcha-enabled="<?php
-             esc_html_e(get_option('dfb_options')['recaptcha_v2_enable']); ?>"
+             esc_html_e($recaptchaEnabled); ?>"
+             data-recaptcha-sitekey="<?php
+             esc_html_e($recaptchaSitekey); ?>"
             <?php
             // 🔁 Loop through and set attributes per block.
             foreach ($attributes as $key => $value) :
@@ -128,7 +134,6 @@ class DonationBlock
             [
                 'profile_preview' => plugin_dir_url(DONATION_BLOCK_FILE) . 'src/images/donation-form-preview.jpg',
                 'can_add_fee' => PaymentIntentRequest::canAddFee(),
-                'enable_recaptcha' => get_option('dfb_options')['recaptcha_v2_enable'],
             ]
         );
     }

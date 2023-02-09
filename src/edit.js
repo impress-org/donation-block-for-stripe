@@ -59,7 +59,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         countryCode,
         enableLink,
         enableRecaptchaBackend,
-        recaptchaSiteKey,
+        recaptchaSitekey,
         currencyCode,
         currencySymbol,
         backgroundId,
@@ -83,7 +83,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
 
     const [recaptchaState, setRecaptchaState] = useState({
         enableRecaptchaBackend: false,
-        recaptchaSiteKey: '',
+        recaptchaSitekey: '',
     });
 
     const siteSettings = useSelect((select) => {
@@ -94,12 +94,12 @@ export default function Edit({attributes, setAttributes, instanceId}) {
         if (siteSettings) {
             const {dfb_options} = siteSettings;
             setRecaptchaState({
-                recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
+                recaptchaSitekey: dfb_options.recaptcha_v2_site_key,
                 recaptchaSecretKey: dfb_options.recaptcha_v2_secret_key,
                 enableRecaptchaBackend: dfb_options.recaptcha_v2_enable,
             });
             setAttributes({
-                recaptchaSiteKey: dfb_options.recaptcha_v2_site_key,
+                recaptchaSitekey: dfb_options.recaptcha_v2_site_key,
                 enableRecaptchaBackend: dfb_options.recaptcha_v2_enable,
             });
         }
@@ -112,7 +112,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
             .saveEntityRecord('root', 'site', {
                 dfb_options: {
                     recaptcha_v2_secret_key: recaptchaState.recaptchaSecretKey,
-                    recaptcha_v2_site_key: recaptchaState.recaptchaSiteKey,
+                    recaptcha_v2_site_key: recaptchaState.recaptchaSitekey,
                     recaptcha_v2_enable: true,
                 },
             })
@@ -125,7 +125,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                     }
                 );
                 setAttributes({
-                    recaptchaSiteKey: recaptchaState.recaptchaSiteKey,
+                    recaptchaSitekey: recaptchaState.recaptchaSitekey,
                     enableRecaptchaBackend: true,
                 });
             })
@@ -135,7 +135,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                     isDismissible: true,
                     type: 'snackbar',
                 });
-                setAttributes({recaptchaSiteKey: null, recaptchaSecretKey: null});
+                setAttributes({recaptchaSitekey: null, recaptchaSecretKey: null});
             });
     };
 
@@ -372,10 +372,10 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                     <label className={'dfb-label'}>{__('Site Key', 'donation-form-block')}</label>
                                     <input
                                         className={'dfb-input'}
-                                        value={recaptchaState.recaptchaSiteKey}
+                                        value={recaptchaState.recaptchaSitekey}
                                         type={'password'}
                                         onChange={(e) => {
-                                            setRecaptchaState({...recaptchaState, recaptchaSiteKey: e.target.value});
+                                            setRecaptchaState({...recaptchaState, recaptchaSitekey: e.target.value});
                                         }}
                                     />
                                     <p className={'dfb-help-text'}>

@@ -132,6 +132,9 @@ Not currently. For access to Stripe donation forms with support for recurring do
 
 == Changelog ==
 
+= 1.3.1 =
+* Fix: Prevent JS error when using the ReCAPTCHA option for the first time. Also resolve noticed in PHP 8.0+.
+
 = 1.3.0 =
 * New: 🤖❌ Added an integration with Google reCAPTCHA version 2 to help prevent spam donations.
 * Fix: 🔗 Resolved an issue with Stripe's "Link" always being enabled regardless of the setting selected. 

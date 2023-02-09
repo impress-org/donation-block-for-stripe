@@ -33,8 +33,13 @@ class PaymentIntentRequest
             ]);
         }
 
-        // 🏴‍☠️ Ensure no reCAPTCHA fails
-        if (get_option('dfb_options')['recaptcha_v2_enable'] === true) {
+        $pluginOptions = get_option('dfb_options');
+
+        // 🏴‍☠️ Ensure no reCAPTCHA fails, pull from options.
+        if ($pluginOptions['recaptcha_v2_enable'] === true
+            && $pluginOptions['recaptcha_v2_site_key'] !== ''
+            && $pluginOptions['recaptcha_v2_secret_key'] !== '')
+        {
             $this->validateRecaptcha($data);
         }
 
