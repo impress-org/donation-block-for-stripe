@@ -62,6 +62,9 @@ class DonationBlock
         );
     }
 
+    /**
+     * @unreleased Check if $pluginOptions is array before accessing its properties to prevent fatal error on PHP 8+
+     */
     public function renderBlock($attributes)
     {
         if (!is_admin()) {
@@ -79,8 +82,8 @@ class DonationBlock
         $testPublishableKey = $stripeData->testPublishableKey ?? '';
 
         $pluginOptions = get_option('dfb_options');
-        $recaptchaEnabled = $pluginOptions['recaptcha_v2_enable'] ? 1 : 0;
-        $recaptchaSitekey = $pluginOptions['recaptcha_v2_site_key'] ?? false;
+        $recaptchaEnabled = is_array($pluginOptions) && isset($pluginOptions['recaptcha_v2_enable']) ? ($pluginOptions['recaptcha_v2_enable'] ? 1 : 0) : 0;
+        $recaptchaSitekey = is_array($pluginOptions) && isset($pluginOptions['recaptcha_v2_site_key']) ? $pluginOptions['recaptcha_v2_site_key'] : false;
 
         ob_start(); ?>
 
