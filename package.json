@@ -15,28 +15,30 @@
 		"packages-update": "wp-scripts packages-update"
 	},
 	"dependencies": {
-		"@wordpress/block-editor": "^8.0.13",
-		"@wordpress/blocks": "^11.1.5",
+		"@wordpress/block-editor": "^11.2.0",
+		"@wordpress/blocks": "^12.5.0",
 		"@wordpress/dom-ready": "^3.3.0",
-		"@wordpress/i18n": "^4.2.4",
+		"@wordpress/i18n": "^4.25.0",
 		"aphrodite": "^2.4.0",
 		"axios": "^0.26.0",
 		"classnames": "^2.3.1",
 		"color": "^4.2.0",
 		"lottie-web": "^5.8.1",
+		"react": "^18.2.0",
 		"react-currency-input-field": "^3.6.4",
+		"react-dom": "^18.2.0",
 		"react-google-recaptcha": "^2.1.0",
-		"react-page-visibility": "^6.4.0"
+		"react-page-visibility": "^7.0.0"
 	},
 	"devDependencies": {
 		"@svgr/webpack": "^6.2.1",
-		"@wordpress/components": "^19.3.0",
-		"@wordpress/data": "^6.2.0",
+		"@wordpress/components": "^23.2.0",
+		"@wordpress/data": "^8.2.0",
 		"@wordpress/element": "^4.1.0",
-		"@wordpress/scripts": "^19.2.3",
+		"@wordpress/scripts": "^26.19.0",
 		"prettier": "2.5.1"
 	},
 	"volta": {
-        "node": "18.20.7"
-    }
+		"node": "18.20.7"
+	}
 }
