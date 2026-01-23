@@ -35,5 +35,8 @@
 		"@wordpress/element": "^4.1.0",
 		"@wordpress/scripts": "^19.2.3",
 		"prettier": "2.5.1"
-	}
+	},
+	"volta": {
+        "node": "18.20.7"
+    }
 }
