@@ -13,6 +13,9 @@ use function wp_send_json_error;
 
 class PaymentIntentRequest
 {
+    /**
+     * @unreleased Add default empty array to get_option call to prevent fatal error on PHP 8+
+     */
     public function __invoke()
     {
         $data = $this->getValidatedData();
@@ -33,13 +36,12 @@ class PaymentIntentRequest
             ]);
         }
 
-        $pluginOptions = get_option('dfb_options');
+        $pluginOptions = get_option('dfb_options', []);
 
         // 🏴‍☠️ Ensure no reCAPTCHA fails, pull from options.
         if ($pluginOptions['recaptcha_v2_enable'] === true
             && $pluginOptions['recaptcha_v2_site_key'] !== ''
-            && $pluginOptions['recaptcha_v2_secret_key'] !== '')
-        {
+            && $pluginOptions['recaptcha_v2_secret_key'] !== '') {
             $this->validateRecaptcha($data);
         }
 
@@ -226,5 +228,4 @@ class PaymentIntentRequest
         // No license, no Stripe add-on (active or installed). Add the fee.
         return true;
     }
-
 }
