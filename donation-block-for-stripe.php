@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:       Donation Block for Stripe by GiveWP
  * Plugin URI:        https://go.givewp.com/donation-block-for-stripe
@@ -21,7 +22,7 @@ define('DONATION_BLOCK_FILE', __FILE__);
 define('DONATION_BLOCK_PATH', plugin_dir_path(__FILE__));
 define('DONATION_BLOCK_SCRIPT_ASSET', require(DONATION_BLOCK_PATH . 'build/index.asset.php'));
 
-require_once 'vendor/autoload.php';
+require_once DONATION_BLOCK_PATH . 'vendor/autoload.php';
 
 $bootstrapPlugin = new Bootstrap();
 $bootstrapPlugin->init();

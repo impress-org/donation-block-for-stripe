@@ -62,6 +62,9 @@ class DonationBlock
         );
     }
 
+    /**
+     * @unreleased Add an empty array as default value of $pluginOptions to prevent fatal error on PHP 8+
+     */
     public function renderBlock($attributes)
     {
         if (!is_admin()) {
@@ -78,9 +81,9 @@ class DonationBlock
         $livePublishableKey = $stripeData->livePublishableKey ?? '';
         $testPublishableKey = $stripeData->testPublishableKey ?? '';
 
-        $pluginOptions = get_option('dfb_options');
-        $recaptchaEnabled = $pluginOptions['recaptcha_v2_enable'] ? 1 : 0;
-        $recaptchaSitekey = $pluginOptions['recaptcha_v2_site_key'] ?? false;
+        $pluginOptions = get_option('dfb_options', []);
+        $recaptchaEnabled = isset($pluginOptions['recaptcha_v2_enable']) ? ($pluginOptions['recaptcha_v2_enable'] ? 1 : 0) : 0;
+        $recaptchaSitekey = isset($pluginOptions['recaptcha_v2_site_key']) ? $pluginOptions['recaptcha_v2_site_key'] : false;
 
         ob_start(); ?>
 
