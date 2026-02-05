@@ -1,7 +1,7 @@
 === Donation Form Block for Stripe ===
 Contributors:      givewp, dlocc, jasontheadams, webdevmattcrom
 Tags:              donation, donate, stripe, fundraise, block
-Tested up to:      6.2
+Tested up to:      6.9
 Stable tag:        1.3.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ A beautiful WordPress donation form block for Stripe by GiveWP. Accept Stripe do
 
 Add a Stripe donation form to your website in a few seconds with the WordPress Donation Form Block for Stripe by GiveWP.
 
-This "lite" version of GiveWP provides you with the style and functionality of a GiveWP form without all the setup. Start accepting Stripe donations immediately. [Learn more about how it works in our documentation](https://go.givewp.com/dfb-r-doc). 
+This "lite" version of GiveWP provides you with the style and functionality of a GiveWP form without all the setup. Start accepting Stripe donations immediately. [Learn more about how it works in our documentation](https://go.givewp.com/dfb-r-doc).
 
 Want more? Use the full GiveWP donation plugin which includes full-featured fundraising reports, a donor database, and unlimited donation forms. [Download GiveWP for free from our website](https://go.givewp.com/dfb-r-free).
 
@@ -79,12 +79,12 @@ This plugin does not add any unnecessary top-level menu items to the WordPress a
 
 _In order to maintain and support this plugin, GiveWP collects a 2% fee on all transactions. You can upgrade to the full GiveWP plugin with the Stripe add-on to avoid this transaction fee. [Learn more here](https://go.givewp.com/dfb-r-stripe)_
 
-= 💡 Use-Cases = 
+= 💡 Use-Cases =
 
 * Add a tip jar or buy me a coffee option to your blog
 * Kickstart your business idea with a donation form
-* Give family and friends a simple way to donate for an event 
-* Start fundraising for your nonprofit as quickly as possible 
+* Give family and friends a simple way to donate for an event
+* Start fundraising for your nonprofit as quickly as possible
 * Accept Stripe payments for any reason
 
 = 👩‍💻 Development Notes =
@@ -132,12 +132,15 @@ Not currently. For access to Stripe donation forms with support for recurring do
 
 == Changelog ==
 
+= 1.3.2 =
+* Fix: Resolved an error when saving or loading a page with the Donation Form Block on PHP 8+
+
 = 1.3.1 =
 * Fix: Prevent JS error when using the ReCAPTCHA option for the first time. Also resolve PHP notice in PHP 8.0+ causing annoyances.
 
 = 1.3.0 =
 * New: 🤖❌ Added an integration with Google reCAPTCHA version 2 to help prevent spam donations.
-* Fix: 🔗 Resolved an issue with Stripe's "Link" always being enabled regardless of the setting selected. 
+* Fix: 🔗 Resolved an issue with Stripe's "Link" always being enabled regardless of the setting selected.
 
 = 1.2.0 =
 * New: 🔗 Added integration with [Stripe Link](https://support.stripe.com/questions/link-faq) for faster donations. You can enable this new feature under the block's "Donation Settings" settings panel.
@@ -158,11 +161,11 @@ Not currently. For access to Stripe donation forms with support for recurring do
 = 1.0.3 =
 * 🙅‍ If you're are a GiveWP active license holder this plugin now will remove the 2% Stripe fee.
 * 🎨 Improved the receipt step's user experience by preventing a flash of the default amount and step 1. Step 3 is now immediately displayed and the same confetti animation is used.
-* 😎 Donor's can now edit their donation after moving on to the payment step. The UI also received an improvement. 
+* 😎 Donor's can now edit their donation after moving on to the payment step. The UI also received an improvement.
 * Added app identification for Stripe.
 
 = 1.0.2 =
-* Fixed zip issue preventing the rendering of the block. 
+* Fixed zip issue preventing the rendering of the block.
 
 = 1.0.1 =
 * We removed the Stripe PHP SDK and now the plugin to reduce the overall plugin size and PHP footprint.

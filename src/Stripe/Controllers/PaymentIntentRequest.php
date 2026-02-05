@@ -14,7 +14,7 @@ use function wp_send_json_error;
 class PaymentIntentRequest
 {
     /**
-     * @unreleased Add default empty array to get_option call to prevent fatal error on PHP 8+
+     * @since 1.3.2 Add default empty array to get_option call to prevent fatal error on PHP 8+
      */
     public function __invoke()
     {

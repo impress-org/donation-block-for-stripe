@@ -63,7 +63,7 @@ class DonationBlock
     }
 
     /**
-     * @unreleased Add an empty array as default value of $pluginOptions to prevent fatal error on PHP 8+
+     * @since 1.3.2 Add an empty array as default value of $pluginOptions to prevent fatal error on PHP 8+
      */
     public function renderBlock($attributes)
     {
