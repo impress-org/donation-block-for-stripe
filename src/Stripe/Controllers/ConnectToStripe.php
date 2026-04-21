@@ -8,6 +8,14 @@ class ConnectToStripe
 {
     public function __invoke()
     {
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized', 'Unauthorized', ['response' => 403]);
+        }
+
+        if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'dfb_connect_stripe')) {
+            wp_die('Invalid nonce', 'Forbidden', ['response' => 403]);
+        }
+
         [
             'stripe_access_token' => $stripeLiveAccessToken,
             'stripe_access_token_test' => $stripeTestAccessToken,

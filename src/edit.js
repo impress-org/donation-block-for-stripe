@@ -471,7 +471,7 @@ export default function Edit({attributes, setAttributes, instanceId}) {
                                                 )}
                                             </p>
                                             <a
-                                                href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe`}
+                                                href={`https://connect.givewp.com/stripe/connect.php?stripe_action=connect&return_url=${window.location.origin}?dfb_donation-block-stripe-action=connectToStripe%26_wpnonce=${window.dfbAdminLocalVars.stripe_connect_nonce}`}
                                                 target="_blank"
                                                 className={'dfb-stripe-connect'}
                                                 onClick={() => setStripeConnectionFlow(true)}

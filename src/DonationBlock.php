@@ -137,6 +137,7 @@ class DonationBlock
             [
                 'profile_preview' => plugin_dir_url(DONATION_BLOCK_FILE) . 'src/images/donation-form-preview.jpg',
                 'can_add_fee' => PaymentIntentRequest::canAddFee(),
+                'stripe_connect_nonce' => wp_create_nonce('dfb_connect_stripe'),
             ]
         );
     }
